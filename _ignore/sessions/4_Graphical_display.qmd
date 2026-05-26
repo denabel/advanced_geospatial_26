@@ -2,7 +2,7 @@
 title: "Graphical display of raster data"
 subtitle: "Advanced Geospatial Data Processing for Social Scientists"
 author: "Dennis Abel & Stefan Jünger"
-date: April 28, 2025
+date: June 9, 2026
 execute:
   echo: true
 format:
@@ -41,12 +41,12 @@ course_content |>
 
 In general:
 
-- contribute to a better understanding of your analysis results
+- contribute to a **better understanding** of your analysis results
 - understand your data in the first place
 
 Generating a plot is easy as you will see
 
-... Making good plots, however, can take a while
+... Making **good plots**, however, can take a while
 
 
 ## Visual display of quantitative information
@@ -763,7 +763,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 2)
+          size = 1)
 ```
 :::
 
@@ -784,7 +784,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 2)
+          size = 1)
 ```
 :::
 ::::
@@ -804,7 +804,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 3)+
+          size = 1)+
   scale_fill_viridis_c(option = "magma")
 ```
 :::
@@ -818,7 +818,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 3)+
+          size = 1)+
   scale_fill_viridis_c(option = "magma")
 ```
 :::
@@ -842,7 +842,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   scale_fill_distiller(type = "div", 
                        palette = "PuOr", 
                        limits = c(-max_val, max_val)
@@ -862,7 +862,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   scale_fill_distiller(type = "div", 
                        palette = "PuOr", 
                        limits = c(-max_val, max_val)
@@ -887,7 +887,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   scale_fill_gradient2(
     low = "#2d004b",
     mid = "white",
@@ -907,7 +907,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   scale_fill_gradient2(
     low = "#2d004b",
     mid = "white",
@@ -950,7 +950,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   geom_sf_text(data = extremes, 
                aes(label = GEN), 
                size = 4, 
@@ -974,7 +974,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   geom_sf_text(data = extremes, 
                aes(label = GEN), 
                size = 4, 
@@ -1007,7 +1007,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   geom_label_repel(
     data = extremes, 
     aes(geometry = geometry, label = GEN), 
@@ -1040,7 +1040,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   geom_label_repel(
     data = extremes, 
     aes(geometry = geometry, label = GEN), 
@@ -1080,7 +1080,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   geom_label_repel(
     data = extremes, 
     aes(geometry = geometry, label = GEN), 
@@ -1133,7 +1133,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "black",
-          size = 3)+
+          size = 1)+
   geom_label_repel(
     data = extremes, 
     aes(geometry = geometry, label = GEN), 
@@ -1204,7 +1204,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 8)+
+          size = 1)+
   coord_sf(
     xlim = c(cologne_bbox["xmin"], 
              cologne_bbox["xmax"]),
@@ -1241,7 +1241,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 8)+
+          size = 1)+
   coord_sf(
     xlim = c(cologne_bbox["xmin"], 
              cologne_bbox["xmax"]),
@@ -1278,7 +1278,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 8)+
+          size = 1)+
   coord_sf(
     xlim = c(cologne_bbox["xmin"], 
              cologne_bbox["xmax"]),
@@ -1307,7 +1307,7 @@ ggplot()+
   geom_sf(data = NRW_districts,
           fill = "transparent",
           color = "white",
-          size = 8)+
+          size = 1)+
   coord_sf(
     xlim = c(cologne_bbox["xmin"], 
              cologne_bbox["xmax"]),
