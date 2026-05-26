@@ -2,7 +2,7 @@
 title: "Introduction"
 subtitle: "Advanced Geospatial Data Processing for Social Scientists"
 author: "Dennis Abel & Stefan Jünger"
-date: April 28, 2025
+date: June 9, 2026
 execute:
   echo: true
 format:
@@ -23,17 +23,12 @@ This course will teach you how to exploit `R` and apply its geospatial technique
 
 By the end of this course, you should...
 
--   Be comfortable with using **raster data** in `R`
+-   Be comfortable with using **vector** AND **raster data** in `R`
 -   Including importing and wrangling single **raster layers** as well as **raster stacks and cubes**
 -   Have a fundamental understanding of **spatial geometries** and how these are manipulated in `R`  
 -   Be able to create publication-ready **maps** of raster layers and stacks
 -   Not be afraid to explore access to **remote sensing APIs** for your own research questions
 
-------------------------------------------------------------------------
-
-![](../img/r_first_then.png){.r-stretch fig-align="center"}
-
-Illustration by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)
 
 ## We are (necessarily) selective
 
@@ -69,8 +64,8 @@ We will show the use of packages we exploit in practice
 ## About us (Dennis)
 
 ::::: columns
-::: {.column width="30%"}
-![](../img/Dennis.png){fig-align="center" width="75%"}
+::: {.column width="40%"}
+![](../img/Dennis.png){fig-align="center" width="60%"}
 :::
 
 ::: {.column width="60%"}
@@ -88,7 +83,7 @@ We will show the use of packages we exploit in practice
 
 ::::: columns
 ::: {.column width="40%"}
-![](../img/Stefan.png){fig-align="center" width="75%"}
+![](../img/Stefan.png){fig-align="center" width="60%"}
 :::
 
 ::: {.column width="60%"}
@@ -100,25 +95,6 @@ We will show the use of packages we exploit in practice
     -   Attitudes towards minorities
     -   Environmental attitudes
     -   Reproducible research
-:::
-:::::
-
-## About us (Amelie)
-
-::::: columns
-::: {.column width="40%"}
-![](../img/avatar_amelie.jpg){fig-align="center" width="75%"}
-:::
-
-::: {.column width="60%"}
--   Intern at the Survey Data Augmentation at the GESIS department Survey Data Curation
--   Undergraduate in Geography, University of Bonn
--   Study Interests:
-    -   Geographic Information Systems (GIS)
-    -   Intersectionality of geography and social sciences (e.g. Loss and Damage)
-    -   Biogeography
-    -   Climatology
-    -   Dendrochronology and -ecology
 :::
 :::::
 
@@ -146,6 +122,7 @@ source("course_content.R")
 course_content
 ```
 
+
 ## Now
 
 ```{r}
@@ -153,6 +130,65 @@ course_content
 course_content |> 
   kableExtra::row_spec(1, background = "yellow")
 ```
+
+
+
+## "All things are connected"
+
+**Catchphrase #1: Tobler's Law:** "*I invoke the first law of geography: everything is related to everything else, but near things are more related than distant things.*" (Tobler 1970)[^1]
+
+**Catchphrase #2: Tobler's Addendum:** "*near can take on many meanings in different situations.*" (Tobler 2004)[^2]
+
+$\rightarrow$ "*Space is more than geography*" (Beck et al. 2006)[^3]
+
+<br>
+
+[^1]: Tobler, Waldo R. 1970. A Computer Movie Simulating Urban Growth in the Detroit Region. *Economic Geography* 46, 234-240.
+[^2]: Tobler, Waldo R. 2004. On the First Law of Geography: A Reply. *Annals of the Association of American Geographers* 94(2), 304-310.
+[^3]: Beck, Nathaniel, Kristian Gleditsch, and Kyle Beardsley. 2006. Space Is More than Geography: Using Spatial Econometrics in the Study of Political Economy. *International Studies Quarterly* 50, 27-44.
+
+
+## Spatial Association
+
+![](../img/Konfessionen_Deutschland_Zensus_2022.png){fig-align="center" width="20%"}
+
+
+<small>Source: [Gretarsson based on Zensus 2022](https://de.wikipedia.org/wiki/Religionen_in_Deutschland#/media/Datei:Konfessionen_Deutschland_Zensus_2022.png) </small>
+
+
+## "All things are connected"
+
+A lot of (classic) theories inherently make use of space (e.g., Allport 1954)[^4]
+
+[^4]: Allport, Gordon W. 1954. The Nature of Prejudice. Cambridge, Massachusetts: Addison-Wesley Publishing Company.
+
+-   It's where people interact
+-   It's what people collectively shape
+-   **Space becomes place**
+
+Thus, there's a deep intersection or even embeddedness of space in social science research
+
+-   It's what geographers call "human-environment-system"
+-   But often, these links are even only implicit in our data
+
+
+## Geographic information in social science
+
+::::: columns
+::: {.column width="50%"}
+Exploiting geographic information is not new.
+
+For example, Siegfried (1913)[^5] used soil composition information to explain election results in France.
+
+The book is often seen as foundational for **electoral geography** because it demonstrates that political behavior is embedded in place.
+:::
+
+::: {.column width="50%"}
+![](../img/siegfried.png){fig-align="center" width="50%"}
+:::
+:::::
+
+[^5]: Siegfried, André. 1913. Tableau Politique de La France de l’Ouest Sous La Troisième République. Paris: Collin.
 
 ## Geospatial data in social sciences
 
@@ -177,17 +213,19 @@ identified four major subject areas which have been addressed with EO data recen
 :::::
 
 
-## Geospatial data in social sciences
+## Some recent studies
 
 ::::: columns
 ::: {.column width="50%"}
-[Hoffmann et al. 2022](https://doi.org/10.1038/s41558-021-01263-8) analyse how the experience of climate anomalies and extremes influences environmental attitudes and vote intention in Europe
+[Hoffmann et al. 2022](https://doi.org/10.1038/s41558-021-01263-8) analyse how the **experience of climate anomalies and extremes** influences **environmental attitudes** and **vote intention** in Europe
 
-- Data integration of 1. harmonized Eurobarometer data, 2. EU parliamentary electoral data, and 3. climatological data
-- Aggregation on regional levels (NUTS-2 and NUTS-3)
+<ul style="font-size:.7em;">
+- Data integration of 1. harmonized **Eurobarometer** data, 2. EU parliamentary **electoral** data, and 3. **climatological** data
+- Aggregation on regional levels (**NUTS-2** and **NUTS-3**)
 - Climatological data from ERA5 reanalysis (CS3)
 - Calculations of temperature anomalies and extremes based on reference period (1971-2000) 
 - Findings suggest effect of temperature anomalies (heat, "dry spell") on environmental concern and vote intention
+</ul>
 :::
 
 ::: {.column width="50%"}
@@ -195,7 +233,8 @@ identified four major subject areas which have been addressed with EO data recen
 :::
 :::::
 
-## Geospatial data in social sciences
+
+## Some recent studies
 
 ::::: columns
 ::: {.column width="50%"}
@@ -203,34 +242,42 @@ identified four major subject areas which have been addressed with EO data recen
 :::
 
 ::: {.column width="50%"}
-[García-León et al. 2021](https://doi.org/10.1038/s41467-021-26050-z) investigate historical and future economic impacts of recent heatwaves (2003, 2010, 2015, 2018) in Europe
+[García-León et al. 2021](https://doi.org/10.1038/s41467-021-26050-z) investigate historical and future **economic impacts** of recent **heatwaves** (2003, 2010, 2015, 2018) in Europe
 
+<ul style="font-size:.7em;">
 - Data integration of 1. heatwave data with 2. population data, and 3. worker productivity data, 4. economic accounts from Eurostat.
 - Aggregation on regional levels
-- Temperature data from ERA5 reanalysis
-- Calculations of heatwaves based on reference period (1981-2010) 
-- Findings indicate total estimated damages attributed to heatwaves to 0.3-0.5% of European GDP with high spatial variation (GDP impacts beyond 1% in vulnerable regions)
+- Temperature data from **ERA5 reanalysis**
+- Findings indicate **total estimated damages** attributed to heatwaves to **0.3-0.5% of European GDP** with high **spatial variation** (GDP impacts beyond 1% in vulnerable regions)
+</ul>
 :::
 :::::
 
 
-## Geospatial data in social sciences
+## Some recent studies
 
 ::::: columns
 ::: {.column width="50%"}
-[Jean et al. 2016](https://doi.org/10.1126/science.aaf7894) show how nighttime maps can be utilized as estimates of household consumption and assets
+[Jean et al. 2016](https://doi.org/10.1126/science.aaf7894) show how **nighttime maps** can be utilized as estimates of **household consumption and assets**
 
+<ul style="font-size:.7em;">
 - Economic indicators are hard to measure in poorer countries - satellite imagery could be an alternative proxy for it
-- The authors integrate 1. survey data (World Bank’s Living Standards Measurement Surveys - LSMS; and Demographic and Health Surveys - DHS) with 2. nighttime light data in five African countries - Nigeria, Tanzania, Uganda, Malawi, and Rwanda
+- The authors integrate 1. **survey** data (World Bank’s Living Standards Measurement Surveys - LSMS; and Demographic and Health Surveys - DHS) with 2. **nighttime light** data in five African countries - Nigeria, Tanzania, Uganda, Malawi, and Rwanda
 - ML approach for image feature extraction in nighttime maps
 - Daytime satellite images from Google Static Maps, nighttime lights from US DMSP
 - Model can explain up to 75% of variation in local-level economic outcomes
+</ul>
 :::
 
 ::: {.column width="50%"}
 ![](../img/Jean_et_al_2016.png){fig-align="center" width="80%"}
 :::
 :::::
+
+
+## Our work: Climate risks
+
+![](../img/flood_risk.png){fig-align="center" width="40%"}
 
 
 ## Geospatial data in social sciences
@@ -254,34 +301,26 @@ Better **tools**
 :::
 :::::
 
-## Geospatial data in this course I
 
-In the folder called `./data`, you can find (most of) the data files prepared for all the exercises and slides. The following data are included:
+## The challenge in a nutshell
 
-- Administrative borders of Germany (Prefix *VG250\_*) are provided by the German [Federal Agency for Cartography and Geodesy](http://www.bkg.bund.de) (2018). Check out their [Open Data Portal](https://gdz.bkg.bund.de/index.php/default/open-data.html).
+![](../img/data_structures_1.png){fig-align="center" width="70%"}
 
-- German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We used our colleague [Jonas Lieth](https://www.gesis.org/institut/ueber-uns/mitarbeitendenverzeichnis/person/Jonas.Lieth)'s (experimental)  `R`package [`z22`](https://github.com/JsLth/z22) to gather the data for you. If you're stuck using the data, `z22::z22_categories()` may help you (e.g., `z22::z22_categories("foreigners)`).
+## The challenge in a nutshell
 
+![](../img/data_structures_2.png){fig-align="center" width="70%"}
 
-## Geospatial data in this course II
+## The challenge in a nutshell
 
-- WorldPop data are provided by a [research group based at the University of Southampton](https://www.worldpop.org/), offering high-resolution, open-access data on population distribution and demographics. The datasets combine census information, satellite imagery, and statistical modeling to support research, policy-making, and humanitarian efforts worldwide.
-
-- Nighttime lights are derived from [NASA's Black Marble](https://blackmarble.gsfc.nasa.gov/) (Prefix *VNP46A4_*). The data has been accessed with Robert Marty's and Gabriel Stefanini Vicente's (2025) [blackmarbler](https://worldbank.github.io/blackmarbler/) package.
-
-- ERA5 is provided by the [Copernicus Climate Change Service](https://climate.copernicus.eu/) (C3S) and offers high-resolution, global reanalysis data on atmospheric, land, and oceanic variables. The datasets combine observations with models to produce consistent climate information used for research, forecasting, and environmental monitoring.
+![](../img/data_structures_3.png){fig-align="center" width="70%"}
 
 
-## Geospatial data in this course III
+## Refresher: Geodata basics
 
-- The International Social Survey Programme (ISSP) [available at GESIS](https://search.gesis.org/research_data/ZA7650) is provided by a cross-national collaboration of research organizations, delivering annual survey data on social attitudes and behaviors. The datasets cover a wide range of topics like work, family, environment, and social inequality, supporting comparative social science research worldwide.
-
-- The synthetic survey geocoordinates dataset is a simulated dataset comprising 2,000 spatial coordinates and one synthetic attribute related to migration status. It is designed for training and testing spatial analysis workflows without the constraints of real-world data privacy issues and was created using Stefan's experimental [`geosynth` `R` package](https://github.com/StefanJuenger/geosynth).
-
-**Please make sure that if you reuse any of the provided data to cite the original data sources.**
+![](../img/f5_refresh.png){fig-align="center" width="20%"}
 
 
-## Refresher: What are geospatial data?
+## What are geospatial data?
 
 ::::: columns
 ::: {.column width="50%"}
@@ -305,40 +344,47 @@ Visualizing geometries in different styles depending on format:
 
 ------------------------------------------------------------------------
 
-![](../img/longitude_latitude_meme.jpg){fig-align="center" width="50%"}
+![](../img/longitude_latitude_meme.jpg){fig-align="center" width="30%"}
 
-## Refresher: Types of CRS
+## Coordinate reference system (CRS)
 
+- CRS is a reference system to determine the **precise location** of points in space
+- GIS programs **MUST** know CRS for accurate processing, visualization, and analysis of data
+
+**In practice, what matters most is that two or more layers match when integrating them.**
+
+
+## Coordinate reference system (CRS)
+<ul style="font-size:.8em;">
 You may hear from **geographic**, **geocentric**, **projected**, or **local** CRS.
 
 What's the difference?
 
--   whether 2 dimensional (longitude, latitude) or 3 dimensional (+height) coordinates are used
--   the location of the coordinate system's origin (center of earth or not)
--   projection on a flat surface (transformation of longitudes and latitudes to x and y coordinates)
--   location (the smaller, the more precise the projections)
+-   whether **2 dimensional** (longitude, latitude) or **3 dimensional** (+height) coordinates are used
+-   the location of the coordinate system's **origin** (center of Earth or not)
+-   **projection** on a flat surface (transformation of longitudes and latitudes to x and y coordinates)
+-   **location** (the smaller, the more precise the projections)
 
-*In practice, what matters most is that two or more layers match when integrating them.*
+CRS is based on the:
 
+1. **Geographic Coordinate System** (GCS) +
+2. **Projected Coordinate System** (PCS)
 
-## Refresher: Coordinate reference system (CRS)
+</ul>
 
-- CRS is a reference system to determine the precise location of points in space
-- GIS programs **MUST** know CRS for accurate processing, visualization, and analysis of data
-- CRS is based on the **Geographic Coordinate System** (GCS) + the **Projected Coordinate System** (PCS)
-
-
-## Refresher: Geographic Coordinate System (GCS)
+## Geographic Coordinate System (GCS)
 
 *Necessary to know where exactly on Earth's surface data is located*
 
 ::::: columns
 ::: {.column width="50%"}
+<ul style="font-size:.9em;">
 - GCS uses three-dimensional spherical surface to define locations based on **datum** and **latitude** and **longitude** lines
 - **Datum**: Mathematical model of the Earth that serves as reference point by defining size and shape of Earth
 - **Local datum**: Optimizes fit for particular location (like NAD83)
 - **Geocentric datum**: Optimizes fit for entire Earth (like Word Geodetic Survey 1984 - WGS84)
 - **WGS84** is standard for GPS and many applications
+</ul>
 
 :::
 
@@ -350,13 +396,13 @@ What's the difference?
 :::
 :::::
 
-## Refresher: Projected Coordinate System (PCS)
+## Projected Coordinate System (PCS)
 
 *Necessary to draw the data on a flat map*
 
 ::::: columns
 ::: {.column width="50%"}
-- PCS represents Earth' surface on a flat plane by mathematical transformations (projections)
+- PCS represents Earth' surface on a **flat plane** by mathematical transformations (projections)
 - **Coordinate grid**: Here we talk about **x** and **y** coordinates (= easting and northing)
 - Conversion of degrees of latitude and longitude into measurable units (like meters)
 
@@ -371,56 +417,52 @@ What's the difference?
 :::::
 
 
-## Refresher: Common PCS - UTM
+## Common PCS - UTM
 
 **Universal Transverse Mercator** (UTM) is a global map projection which:
 
+<ul style="font-size:.7em;">
 - Projects globe onto a cylinder tangent to a central meridian
 - Divides it into 60 zones
 - Distortion is minimized within each zone
 - Provides high accuracy for small areas
+</ul>
 
-![](../img/utm.png){fig-align="center" width="90%"}
+![](../img/utm.png){fig-align="center" width="120%"}
 
 <small>[Source](https://support.tribalgis.com/article/29-basics-of-coordinate-systems-and-projections) </small>
 
-## Refresher: Layers Must Match!
 
-::::: columns
-::: {.column width="50%"}
-<p style="text-align: center;">
+## Projections are political
 
-EPSG:3857
+![](../img/trump_greenland.png){fig-align="center" width="40%"}
 
-</p>
+::: aside
+<small>[Source: Deutsche Welle. 2026.](https://www.instagram.com/p/DTU48EIjRAa/) </small>
 :::
 
-::: {.column width="50%"}
-<p style="text-align: center;">
 
-EPSG:3035
+## Projections are political
 
-</p>
+![](../img/greenland_size.png){fig-align="center" width="50%"}
+
+::: aside
+<small>[Source: Joe Hernandez for NPR. 2026.](https://www.npr.org/2026/01/07/nx-s1-5668482/greenland-mercator-map-size-distortion) </small>
 :::
-:::::
-
-![](../img/fig_projections.png){.r-stretch fig-align="center"}
-
-<small>Source: Statistical Office of the European Union Eurostat (2018) / Jünger, 2019</small>
 
 
-## Refresher: Documentation of CRS
+## Documentation of CRS
 
 Every geodata object requires a description of the CRS
 
-- GCS and datum
-- PCS
-- x and y units (like meters)
-- Domain (maximum allowable x and y values)
-- Resolution
+- **GCS** and **datum**
+- **PCS**
+- **x** and **y units** (like meters)
+- **Domain** (maximum allowable x and y values)
+- **Resolution**
 
 
-## Refresher: Old standard: `PROJ.4` strings
+## Old standard: `PROJ.4` strings
 
 This is how your information about the CRS are defined in a classic standard:
 
@@ -433,7 +475,7 @@ This is how your information about the CRS are defined in a classic standard:
 (It's nothing you would type by hand)
 
 
-## Refresher: `WKT` (“Well Known Text”)
+## `WKT` (“Well Known Text”)
 
 <br>
 
@@ -462,17 +504,18 @@ PROJCS["ETRS89 / LAEA Europe",
 
 <small>Source: https://epsg.io/3035</small>
 
-## Refresher: EPSG Codes
+
+## EPSG Codes
 
 ::::: columns
 ::: {.column width="50%"}
 Eventually, working with CRS in `R` will not be as challenging as it may seem since we don't have to use `PROJ.4` or `WKT` strings directly.
 
-Most of the time, it's enough to use so-called EPSG Codes ("European Petroleum Survey Group Geodesy"), a small digit sequence.
+Most of the time, it's enough to use so-called **EPSG Codes** ("European Petroleum Survey Group Geodesy"), a small digit sequence.
 :::
 
 ::: {.column width="50%"}
-![](../img/ImageEPSGlogo.gif){fig-align="center" width="60%"}
+![](../img/ImageEPSGlogo.gif){fig-align="center" width="70%"}
 
 <p align="center">
 
@@ -483,13 +526,38 @@ Most of the time, it's enough to use so-called EPSG Codes ("European Petroleum S
 :::::
 
 
-## Refresher: What is GIS?
+## Layers Must Match!
 
-Most common understanding: **Geographic Information Systems** (GIS) as specific software to process geospatial data for
+::::: columns
+::: {.column width="50%"}
+<p style="text-align: center;">
 
--   Visualization
--   Analysis
--   Interpretation
+EPSG:3857
+
+</p>
+:::
+
+::: {.column width="50%"}
+<p style="text-align: center;">
+
+EPSG:3035
+
+</p>
+:::
+:::::
+
+![](../img/fig_projections.png){.r-stretch fig-align="center"}
+
+<small>Source: Statistical Office of the European Union Eurostat (2018) / Jünger, 2019</small>
+
+
+## So this is GIS!
+
+Most common understanding: **Geographic Information Systems** (GIS) as specific software to **process** geospatial data for
+
+-   **Visualization**
+-   **Analysis**
+-   **Interpretation**
 
 $\rightarrow$ In our case, of course, it is `R`
 
@@ -519,6 +587,41 @@ We will use plenty of different packages during the course, but only a few are o
 -   [`tidyterra`](https://cran.r-project.org/web/packages/tidyterra/index.html)
 -   [`tigris`](https://cran.r-project.org/web/packages/tigris/index.html)
 -   [`units`](https://cran.r-project.org/web/packages/units/index.html)
+
+
+------------------------------------------------------------------------
+
+![](../img/r_first_then.png){.r-stretch fig-align="center"}
+
+Illustration by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)
+
+
+## Geospatial data in this course I
+
+In the folder called `./data`, you can find (most of) the data files prepared for all the exercises and slides. The following data are included:
+
+- Administrative borders of Germany (Prefix *VG250\_*) are provided by the German [Federal Agency for Cartography and Geodesy](http://www.bkg.bund.de) (2018). Check out their [Open Data Portal](https://gdz.bkg.bund.de/index.php/default/open-data.html).
+
+- German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We used our colleague [Jonas Lieth](https://www.gesis.org/institut/ueber-uns/mitarbeitendenverzeichnis/person/Jonas.Lieth)'s (experimental)  `R`package [`z22`](https://github.com/JsLth/z22) to gather the data for you. If you're stuck using the data, `z22::z22_categories()` may help you (e.g., `z22::z22_categories("foreigners)`).
+
+
+## Geospatial data in this course II
+
+- WorldPop data are provided by a [research group based at the University of Southampton](https://www.worldpop.org/), offering high-resolution, open-access data on population distribution and demographics. The datasets combine census information, satellite imagery, and statistical modeling to support research, policy-making, and humanitarian efforts worldwide.
+
+- Nighttime lights are derived from [NASA's Black Marble](https://blackmarble.gsfc.nasa.gov/) (Prefix *VNP46A4_*). The data has been accessed with Robert Marty's and Gabriel Stefanini Vicente's (2025) [blackmarbler](https://worldbank.github.io/blackmarbler/) package.
+
+- ERA5 is provided by the [Copernicus Climate Change Service](https://climate.copernicus.eu/) (C3S) and offers high-resolution, global reanalysis data on atmospheric, land, and oceanic variables. The datasets combine observations with models to produce consistent climate information used for research, forecasting, and environmental monitoring.
+
+
+## Geospatial data in this course III
+
+- The International Social Survey Programme (ISSP) [available at GESIS](https://search.gesis.org/research_data/ZA7650) is provided by a cross-national collaboration of research organizations, delivering annual survey data on social attitudes and behaviors. The datasets cover a wide range of topics like work, family, environment, and social inequality, supporting comparative social science research worldwide.
+
+- The synthetic survey geocoordinates dataset is a simulated dataset comprising 2,000 spatial coordinates and one synthetic attribute related to migration status. It is designed for training and testing spatial analysis workflows without the constraints of real-world data privacy issues and was created using Stefan's experimental [`geosynth` `R` package](https://github.com/StefanJuenger/geosynth).
+
+**Please make sure that if you reuse any of the provided data to cite the original data sources.**
+
 
 
 ## Exercise 1_1: Package Installation

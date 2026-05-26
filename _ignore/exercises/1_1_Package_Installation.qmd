@@ -20,23 +20,28 @@ And here comes our very first exercise (which is not very spatial...):
 ::: callout-note
 ## `r emo::ji("weight_lifting_man")` Exercise 1
 
-Please install all packages that are listed at the end of the Introduction slides ("1_Introduction.html").
+Please install all packages that are listed at the end of the Introduction slides ("1_Introduction.html"). This is the only exercise where we actively encourage you to directly scroll down to the end of this document and copy+paste the solution.
 :::
 
 ::: {.callout-caution collapse="true"}
 ## `r emo::ji("bulb")` Tip
 
 We often recommend using the `easypackages` packages, which can be installed with the command `install.packages("easypackages")`. After loading the package with `library(easypackages)` you can load *and* install packages with the command `easypackages::packages("fancy_package_1", "fancy_package_2", ...)`.
+
+For packages hosted on github, you can use `install.packages(pak)`.
+
 :::
 
 That's it. Please notify us if there are any issues with installing the packages or, more generally, your `R` installation.
 
-...oh, and if you got some time left:
+...oh, and while you are done and the others are still struggling with package installation:
 
 ::: callout-note
 ## `r emo::ji("weight_lifting_man")` OPTIONAL: Exercise 2
 
-Visit the website <https://thetruesize.com/>.
+Visit the website <https://thetruesize.com/> and check out how the (projected) sizes of countries can change depending on their location. 
+
+Find out why projections are political - check out the "Equal Earth projection" developed by researchers from ESRI, US National Park Service and Monash University <https://equal-earth.com/equal-earth-projection.html>. This projection is advocated by campaigns such as "Correct the Map" <https://correctthemap.org/> which lobbies for a more equal representation of the Global South.
 :::
 
 ### Solutions
