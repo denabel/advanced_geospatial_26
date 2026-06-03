@@ -564,7 +564,7 @@ $\rightarrow$ In our case, of course, it is `R`
 But base `R` is limited when it comes to handling geospatial data
 
 
-## Packages in this course I `r emo::ji("package")`
+## Packages in this course I 📦
 
 We will use plenty of different packages during the course, but only a few are our main drivers (e.g., the `terra` package). Here's the list of packages you may need for the exercises:
 
@@ -577,7 +577,7 @@ We will use plenty of different packages during the course, but only a few are o
 -   [`randomForest`](https://cran.r-project.org/web/packages/randomForest/index.html)
 -   [`readr`](https://cran.r-project.org/web/packages/readr/index.html)
 
-## Packages in this course II `r emo::ji("package")`
+## Packages in this course II 📦
 
 
 -   [`scales`](https://cran.r-project.org/web/packages/scales/index.html)
@@ -602,7 +602,11 @@ In the folder called `./data`, you can find (most of) the data files prepared fo
 
 - Administrative borders of Germany (Prefix *VG250\_*) are provided by the German [Federal Agency for Cartography and Geodesy](http://www.bkg.bund.de) (2018). Check out their [Open Data Portal](https://gdz.bkg.bund.de/index.php/default/open-data.html).
 
-- German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We used our colleague [Jonas Lieth](https://www.gesis.org/institut/ueber-uns/mitarbeitendenverzeichnis/person/Jonas.Lieth)'s (experimental)  `R`package [`z22`](https://github.com/JsLth/z22) to gather the data for you. If you're stuck using the data, `z22::z22_categories()` may help you (e.g., `z22::z22_categories("foreigners)`).
+- German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We gathered the data using Jonas Lieth's [`z22` R package](https://cran.r-project.org/package=z22). The data live in `./data/z22/` in two formats:
+  - **`.tif`** files: single-layer rasters (one variable, e.g., `population.tif`, `rent_avg.tif`)
+  - **`.nc`** files: multi-layer rasters (categorical variables with multiple groups, e.g., `age_short.nc` contains age brackets)
+
+  Layer names in `.nc` files can be cryptic — consult the [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes) for documentation, or use `z22::z22_categories()` if you have the package installed.
 
 
 ## Geospatial data in this course II
