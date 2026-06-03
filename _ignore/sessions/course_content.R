@@ -1,23 +1,23 @@
 course_content <-
   tibble::tribble(
     ~Day, ~Time, ~Title,
-    "April 28", "10:00-11:15", "Introduction",
-    "April 28", "11:15-11:30", "Coffee Break",
-    "April 28", "11:30-13:00", "Raster data in R",
-    "April 28", "13:00-14:00", "Lunch Break",
-    "April 28", "14:00-15:15", "Raster data processing",
-    "April 28", "15:15-15:30", "Coffee Break",
-    "April 28", "15:30-17:00", "Graphical display of raster data in maps",
-    "April 29", "10:00-11:15", "Datacube processing I",
-    "April 29", "11:15-11:30", "Coffee Break",
-    "April 29", "11:30-13:00", "Datacube processing II & API access",
-    "April 29", "13:00-14:00", "Lunch Break",
-    "April 29", "14:00-15:15", "Data integration and linking (with survey data)",
-    "April 29", "15:15-15:30", "Coffee Break",
-    "April 29", "15:30-17:00", "Outlook and open session with own application"
+    "June 9",  "10:00–11:15", "Introduction",
+    "June 9",  "11:15–11:30", "Coffee Break",
+    "June 9",  "11:30–13:00", "Raster data in R",
+    "June 9",  "13:00–14:00", "Lunch Break",
+    "June 9",  "14:00–15:15", "Raster data processing",
+    "June 9",  "15:15–15:30", "Coffee Break",
+    "June 9",  "15:30–17:00", "Graphical display of raster data in maps",
+    "June 10", "10:00–11:15", "Datacube processing I",
+    "June 10", "11:15–11:30", "Coffee Break",
+    "June 10", "11:30–13:00", "Datacube processing II & API access",
+    "June 10", "13:00–14:00", "Lunch Break",
+    "June 10", "14:00–15:15", "Data integration and linking (with survey data)",
+    "June 10", "15:15–15:30", "Coffee Break",
+    "June 10", "15:30–17:00", "Outlook and open session with own application"
   ) |>
   knitr::kable() |>
-  kableExtra::kable_styling() |>
+  kableExtra::kable_styling(font_size = 18) |>
   kableExtra::column_spec(1, color = "gray") |>
   kableExtra::column_spec(2, color = "gray") |>
   kableExtra::column_spec(3, bold = TRUE) |>
@@ -27,4 +27,4 @@ course_content <-
   kableExtra::row_spec(9, color = "gray") |>
   kableExtra::row_spec(11, color = "gray") |>
   kableExtra::row_spec(13, color = "gray") |>
-  kableExtra::row_spec(5, extra_css = "border-bottom: 1px solid")
+  kableExtra::row_spec(7, extra_css = "border-bottom: 2px solid")
