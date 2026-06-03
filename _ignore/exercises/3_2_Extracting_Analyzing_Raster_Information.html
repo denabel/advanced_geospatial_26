@@ -2251,7 +2251,7 @@ vertical-align: -.125em;
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Your first task is to import a dataset of synthetic geographic coordinates (<code>synthetic_survey_geocoordinates.rds</code> in <code>./data/</code>) and a raster <code>.tif</code> dataset from the <code>./data/z22/</code> folder.</p>
+<p>Your first task is to import a dataset of synthetic geographic coordinates (<code>synthetic_survey_geocoordinates.rds</code> in <code>./data/survey/</code>) and a raster <code>.tif</code> dataset from the <code>./data/z22/</code> folder.</p>
 <p>After loading both, compare their coordinate reference systems. Do they match? What would you need to do before extracting raster values at the point locations?</p>
 </div>
 </div>
@@ -2369,7 +2369,7 @@ vertical-align: -.125em;
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the synthetic survey coordinates (an sf point dataset)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>coordinates <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;./data/synthetic_survey_geocoordinates.rds&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>coordinates <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;./data/survey/synthetic_survey_geocoordinates.rds&quot;</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect: how many points? which columns? which geometry type?</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(coordinates)</span>
