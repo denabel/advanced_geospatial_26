@@ -45,9 +45,17 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 
 - WorldPop population data are from [WorldPop](https://www.worldpop.org/), University of Southampton.
 
-- Night light data (VNP46A4) are from [NASA's Black Marble](https://blackmarble.gsfc.nasa.gov/) product suite.
+- Night light data (VNP46A4) are from [NASA's Black Marble](https://blackmarble.gsfc.nasa.gov/) product suite. We used Robert Marty's and Gabriel Stefanini Vicente's (2025) [`blackmarbler`](https://worldbank.github.io/blackmarbler/) R package to access the data via the NASA API.
+
+- ERA5-Land Reanalysis temperature data are from the [Copernicus Climate Change Service (C3S)](https://climate.copernicus.eu/). The data were accessed via the Copernicus API using the [`ecmwfr`](https://cran.r-project.org/package=ecmwfr) R package.
+
+- The International Social Survey Programme (ISSP) Environment module data are [available at GESIS](https://search.gesis.org/research_data/ZA7650). The ISSP is a cross-national collaboration of research organizations delivering annual survey data on social attitudes and behaviors.
+
+- The synthetic survey geocoordinates dataset is a simulated dataset comprising 2,000 spatial coordinates and one synthetic attribute. It was created using Stefan's experimental [`geosynth` R package](https://github.com/StefanJuenger/geosynth) for training spatial analysis workflows without data privacy constraints.
 
 - World country boundaries are from [Esri / ArcGIS Hub](https://hub.arcgis.com/datasets/esri::world-countries-generalized/).
+
+- US state and county boundaries are accessed via the [`tigris`](https://cran.r-project.org/package=tigris) R package (Kyle Walker).
 
 **Please make sure that if you reuse any of the provided data to cite the original data sources.**
 
