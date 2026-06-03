@@ -61,13 +61,14 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 
 ## Getting started
 
-To install all R packages needed for the slides and exercises in one go, run:
-
-```r
-source("R/install_packages.R")
-```
-
-The script only installs packages that are not yet on your system.
+1. **Download** the course materials using the link at the top of this page and **unzip** the folder.
+2. **Open `advanced_geospatial_26.Rproj`** in RStudio (double-click the file). This sets your working directory correctly so that all data paths in the exercises work out of the box.
+3. **Install packages** by running:
+    ```r
+    source("R/install_packages.R")
+    ```
+    The script only installs packages that are not yet on your system.
+4. **Write your scripts** in the `scripts/` folder — see [`scripts/START_HERE.md`](scripts/START_HERE.md) for details.
 
 ## Slides
 
