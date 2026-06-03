@@ -24,43 +24,50 @@ Let’s get started and have some fun with spatial data! 🌍✨
 ### Exercises
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 1
+## 🏋️ Exercise 1
 
-Import a polygon vector shapefile from the `./data` folder. After loading, take a moment to explore it: How many features are there? What attributes are included? What is the coordinate reference system (CRS)? Feel free to also plot the data and have a first visual look at it!
+Import a polygon vector shapefile from the `./data` folder. After loading, explore it:
+
+- How many features are there? What attributes are included?
+- What is the coordinate reference system (CRS)?
+- Have a look at the `GF` column — it contains different values. What could they mean, and how many unique geometries do you actually have?
+- Feel free to plot the data for a first visual impression!
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
 Shapefiles include a file with the extension `.shp`. You can use the `sf` package and the `sf::st_read()` function to import the data. Hint: If you want a cleaner output, you can set `quiet = TRUE`.
+
+The `GF` column encodes the geometry type (e.g., land vs. water boundaries). Try `table(data$GF)` to see the distribution — you may want to filter for one type!
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 2
+## 🏋️ Exercise 2
 
 Import the file `synthetic_coordinates.csv` from the `./data` folder. It contains point coordinates, but it’s not yet an `sf` object! After loading, convert it into a proper spatial object by assigning coordinates and a CRS. (Feel free to plot the points afterward if you like!)
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
-First, read the table using `read.csv()` or `readr::read_csv()`. Then use `sf::st_as_sf()` to create a spatial object, specifying the coordinate columns and CRS (e.g., 4326 for WGS84 if needed).
+First, read the table using `read.csv()` or `readr::read_csv()`. Then use `sf::st_as_sf()` to create a spatial object, specifying the coordinate columns and CRS. Hint: check the `crs` column in the CSV — it tells you which EPSG code to use!
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 3
+## 🏋️ Exercise 3
 
 Let’s connect the two datasets you imported! Join the points from `synthetic_coordinates.csv` with the polygons you loaded earlier, adding the `AGS` column from the polygon dataset to the points.
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
 Beware: The coordinate reference systems (CRS) of the two datasets are different! Make sure they match before trying to perform the spatial join — otherwise, you might get an error (and that’s totally fine — part of the learning!).
 
--   Check the CRS of both datasets with `sf::st_crs()`.
--   Use `sf::st_transform()` to bring one dataset into the CRS of the other.
--   For the join, you can use `sf::st_join()`.
+- Check the CRS of both datasets with `sf::st_crs()`.
+- Use `sf::st_transform()` to bring one dataset into the CRS of the other.
+- For the join, you can use `sf::st_join()`.
 
 You could also transform the polygons instead of the points — it depends on what fits better. Always double-check that geometries line up properly after transformation (e.g., by plotting)!
 :::
@@ -68,21 +75,25 @@ You could also transform the polygons instead of the points — it depends on wh
 ### Solutions
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 1
+## ✅ Solution 1
 
 ```{r}
 #| eval: false
 library(sf)
 
-# Load polygon data
-polygon_data <- sf::st_read(".data/VG250_KRS.shp", quiet = TRUE)
+# Load the German districts shapefile
+polygon_data <- sf::st_read("./data/VG250_KRS.shp", quiet = TRUE)
 
-# Explore the object
-print(polygon_data)        # View basic information
-sf::st_crs(polygon_data)        # Check the coordinate system
-nrow(polygon_data)          # Number of features
+# Basic inspection — how big is the dataset?
+print(polygon_data) # overview: columns, geometry type, CRS
+nrow(polygon_data) # number of features (rows)
+sf::st_crs(polygon_data) # coordinate reference system
 
-# Optional: visualize it!
+# The GF column contains geometry type codes
+# GF = 4 means land boundaries (what we usually want)
+table(polygon_data$GF) # how many of each type?
+
+# Visualize the geometry (without attributes)
 plot(sf::st_geometry(polygon_data))
 ```
 
@@ -90,39 +101,40 @@ plot(sf::st_geometry(polygon_data))
 #| echo: false
 library(sf)
 
-# Load polygon data
 polygon_data <- sf::st_read("../../data/VG250_KRS.shp", quiet = TRUE)
 
-# Explore the object
-print(polygon_data)        # View basic information
-sf::st_crs(polygon_data)        # Check the coordinate system
-nrow(polygon_data)          # Number of features
+print(polygon_data)
+nrow(polygon_data)
+sf::st_crs(polygon_data)
 
-# Optional: visualize it!
+table(polygon_data$GF)
+
 plot(sf::st_geometry(polygon_data))
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 2
+## ✅ Solution 2
 
 ```{r}
 #| eval: false
 library(sf)
 library(readr)
 
-# Load the table
-coords_df <- read_csv("./data/synthetic_coordinates.csv")
+# Load as plain data frame — no geometry yet!
+coords_df <- read_csv("./data/synthetic_geocoordinates.csv")
+head(coords_df) # inspect: which columns hold coordinates?
 
-# Convert to sf object
-points_sf <- 
+# Convert to sf: specify coordinate columns and CRS
+# The x/y columns are in EPSG:3035 (ETRS89-LAEA, meters)
+points_sf <-
   sf::st_as_sf(
     coords_df,
-    coords = c("x", "y"),
-    crs = 4326
+    coords = c("x", "y"), # coordinate columns
+    crs = 3035 # ETRS89-LAEA (Europe equal-area)
   )
 
-# Optional: visualize it!
+# Now it's a proper spatial object
 plot(points_sf)
 ```
 
@@ -131,38 +143,37 @@ plot(points_sf)
 library(sf)
 library(readr)
 
-# Load the table
-coords_df <- readr::read_csv("../../data/synthetic_coordinates.csv")
+coords_df <- readr::read_csv("../../data/synthetic_geocoordinates.csv")
 
-# Convert to sf object
-points_sf <- 
+points_sf <-
   sf::st_as_sf(
     coords_df,
     coords = c("x", "y"),
     crs = 3035
   )
 
-# Optional: visualize it!
 plot(points_sf)
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 3
+## ✅ Solution 3
 
 ```{r}
-# Check CRS
-sf::st_crs(points_sf)
-sf::st_crs(polygon_data)
+# Step 1: Check CRS of both datasets — they must match for a join!
+sf::st_crs(points_sf)$epsg # points: EPSG 3035 (ETRS89-LAEA)
+sf::st_crs(polygon_data)$epsg # polygons: different CRS
 
-# Transform points to match polygons
-points_transformed <- 
+# Step 2: Reproject points to match the polygon CRS
+# (We transform the points because they're lighter than polygons)
+points_transformed <-
   sf::st_transform(points_sf, crs = sf::st_crs(polygon_data))
 
-# Spatial join
+# Step 3: Spatial join — adds AGS (district code) to each point
+# based on which polygon it falls into
 points_with_AGS <- sf::st_join(points_transformed, polygon_data[, "AGS"])
 
-# Check result
+# Check: each point should now have an AGS value
 head(points_with_AGS)
 ```
 :::

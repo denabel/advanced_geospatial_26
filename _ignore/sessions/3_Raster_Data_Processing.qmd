@@ -2,7 +2,7 @@
 title: "Raster Data Processing"
 subtitle: "Advanced Geospatial Data Processing for Social Scientists"
 author: "Dennis Abel & Stefan Jünger"
-date: April 28, 2025
+date: June 9, 2026
 execute:
   echo: true
 format:
@@ -48,6 +48,15 @@ In this session, you will learn
 - Manipulating the raster values
 - How to converse from one format into the other
 
+## Quick reminder: Census data documentation
+
+We'll continue using Census 2022 rasters from `./data/z22/` throughout this session. If you're unsure what a variable represents:
+
+- **In R**: `z22::z22_features()` lists all features; `z22::z22_categories()` decodes `.nc` layer names
+- **Online**: [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes)
+
+The data were downloaded with the [`z22` package](https://cran.r-project.org/package=z22) — see `R/download_z22.R` in the course repo for the exact script.
+
 ## Subsetting {.center style="text-align: center;"}
 
 ## Cropping raster data
@@ -60,24 +69,24 @@ The easiest way (in my opinion) to create a bounding box in `R` is to use the `s
 
 ```{r}
 #| eval: false
-bbox_east <- 
-  sf::st_read("./data/VG250_LAN.shp") |> 
-  dplyr::filter(SN_L %in% 11:16, GF == 4) |> 
-  sf::st_transform(25832) |> 
-  sf::st_bbox() |> 
-  sf::st_as_sfc(crs = 25832)
+bbox_east <-
+  sf::st_read("./data/VG250_LAN.shp") |>
+  dplyr::filter(SN_L %in% 11:16, GF == 4) |> # Eastern states
+  sf::st_transform(3035) |> # reproject
+  sf::st_bbox() |> # bounding box
+  sf::st_as_sfc(crs = 3035) # as geometry
 
 bbox_east
 ```
 
 ```{r}
 #| echo: false
-bbox_east <- 
-  sf::st_read("../../data/VG250_LAN.shp") |> 
-  dplyr::filter(SN_L %in% 11:16, GF == 4) |> 
-  sf::st_transform(25832) |> 
-  sf::st_bbox() |> 
-  sf::st_as_sfc(crs = 25832)
+bbox_east <-
+  sf::st_read("../../data/VG250_LAN.shp") |>
+  dplyr::filter(SN_L %in% 11:16, GF == 4) |> # Eastern states
+  sf::st_transform(3035) |> # reproject
+  sf::st_bbox() |> # bounding box
+  sf::st_as_sfc(crs = 3035) # as geometry
 
 bbox_east
 ```
@@ -90,20 +99,20 @@ Now, cropping is easy using the `terra::crop()` function.
 #| eval: false
 pop_grid_2022 <- terra::rast("./data/z22/population.tif")
 
-pop_grid_2022_crop <- terra::crop(pop_grid_2022, bbox_east)
+pop_grid_2022_crop <- terra::crop(pop_grid_2022, bbox_east) # crop to bbox
 
-terra::ext(pop_grid_ger_2020)
-terra::ext(pop_grid_ger_2020_crop)
+terra::ext(pop_grid_2022) # full extent
+terra::ext(pop_grid_2022_crop) # cropped extent
 ```
 
 ```{r}
 #| echo: false
 pop_grid_2022 <- terra::rast("../../data/z22/population.tif")
 
-pop_grid_2022_crop <- terra::crop(pop_grid_2022, bbox_east)
+pop_grid_2022_crop <- terra::crop(pop_grid_2022, bbox_east) # crop to bbox
 
-terra::ext(pop_grid_2022)
-terra::ext(pop_grid_2022_crop)
+terra::ext(pop_grid_2022) # full extent
+terra::ext(pop_grid_2022_crop) # cropped extent
 ```
 
 Note the different spatial extents.
@@ -128,7 +137,7 @@ terra::plot(pop_grid_2022_crop)
 
 ## Wait a minute...
 
-...does these data only include Eastern German states? Let's have a look at their shapes.
+...do these data only include Eastern German states? Let's have a look at their shapes.
 
 :::: columns
 ::: {.column width="50%"}
@@ -137,20 +146,21 @@ terra::plot(pop_grid_2022_crop)
 #| message: false
 #| warning: false
 #| fig-asp: .8
-east_german_states <- 
+east_german_states <-
   sf::st_read(
     "./data/VG250_LAN.shp",
     quiet = TRUE
-  ) |> 
-  dplyr::filter(SN_L %in% 11:16, GF == 4)
+  ) |>
+  sf::st_transform(3035) |> 
+  dplyr::filter(SN_L %in% 11:16, GF == 4) # subset
 
-plot(pop_grid_ger_2020_crop)
+plot(pop_grid_2022_crop) # raster base layer
 plot(
-  sf::st_geometry(east_german_states), 
-  border = "white", 
-  col = scales::alpha("white", .2), 
-  lwd = 4, 
-  add = TRUE
+  sf::st_geometry(east_german_states),
+  border = "white",
+  col = scales::alpha("white", .2),
+  lwd = 4,
+  add = TRUE # overlay borders
 )
 ```
 :::
@@ -161,20 +171,21 @@ plot(
 #| message: false
 #| warning: false
 #| fig-asp: .8
-east_german_states <- 
+east_german_states <-
   sf::st_read(
     "../../data/VG250_LAN.shp",
     quiet = TRUE
-  ) |> 
-  dplyr::filter(SN_L %in% 11:16, GF == 4) 
+  ) |>
+  sf::st_transform(3035) |> 
+  dplyr::filter(SN_L %in% 11:16, GF == 4) # subset 
 
-plot(pop_grid_2022_crop)
+plot(pop_grid_2022_crop) # raster base layer
 plot(
-  sf::st_geometry(east_german_states), 
-  border = "black", 
-  col = scales::alpha("white", .2), 
-  lwd = 4, 
-  add = TRUE
+  sf::st_geometry(east_german_states),
+  border = "black",
+  col = scales::alpha("white", .2),
+  lwd = 4,
+  add = TRUE # overlay borders
 )
 ```
 :::
@@ -188,25 +199,29 @@ Masking is similar to cropping, yet values outside the extent are set to missing
 ::: {.column width="50%"}
 ```{r}
 #| eval: false
-#| fig.asp: .8
-pop_grid_2022_mask <- 
+#| fig.asp: .7
+pop_grid_2022_mask <-
   terra::mask(
-    pop_grid_2022, 
-    terra::vect(east_german_states) # !
+    pop_grid_2022,
+    terra::vect(east_german_states) # mask boundary
   )
 
 plot(pop_grid_2022_mask)
 ```
 :::
 
+::: {.callout-note}
+Raster data often contain `NA` cells (e.g., water bodies, areas outside borders). Most functions require `na.rm = TRUE` to handle them — you'll see this argument throughout this session. Keep it in mind whenever you work with raster data!
+:::
+
 ::: {.column width="50%"}
 ```{r}
 #| echo: false
 #| fig.asp: .8
-pop_grid_2022_mask <- 
+pop_grid_2022_mask <-
   terra::mask(
-    pop_grid_2022, 
-    terra::vect(east_german_states) # !
+    pop_grid_2022,
+    terra::vect(east_german_states) # mask boundary
   )
 
 plot(pop_grid_2022_mask)
@@ -224,9 +239,9 @@ plot(pop_grid_2022_mask)
 pop_grid_2022_crop <- 
   terra::mask(
     pop_grid_2022, 
-    terra::vect(east_german_states) # !
-  ) |> 
-  terra::crop(east_german_states)
+    terra::vect(east_german_states) # mask boundary
+  ) |>
+  terra::crop(east_german_states) # trim extent
 
 plot(pop_grid_2022_crop)
 ```
@@ -239,9 +254,9 @@ plot(pop_grid_2022_crop)
 pop_grid_2022_crop <- 
   terra::mask(
     pop_grid_2022, 
-    terra::vect(east_german_states) # !
-  ) |> 
-  terra::crop(east_german_states)
+    terra::vect(east_german_states) # mask boundary
+  ) |>
+  terra::crop(east_german_states) # trim extent
 
 plot(pop_grid_2022_crop)
 ```
@@ -261,7 +276,7 @@ If we only want to add one attribute from a vector dataset `Y` to another vector
 Raster data are helpful when we aim to
 
 - Apply calculations that are the same for all geometries in the dataset
-- **Extract information from the raster fast and efficient**
+- **Extract information from the raster fast and efficiently**
 
 ## Pulling in some data
 
@@ -271,12 +286,11 @@ For this effort, we re-import the synthetic survey geocoordinates. We sample 100
 ::: {.column width="50%"}
 ```{r}
 #| eval: false
-points <- 
+points <-
   readRDS(
-    "./data/synthetic_survey_coordinates.rds"
-  ) |> 
-  dplyr::sample_n(size = 100) |> 
-  sf::st_transform(25832)
+    "./data/synthetic_survey_geocoordinates.rds"
+  ) |>
+  dplyr::sample_n(size = 100) # random subset
 
 points
 ```
@@ -286,12 +300,11 @@ points
 ```{r}
 #| echo: false
 #| fig-asp: .7
-points <- 
+points <-
   readRDS(
-    "../../data/synthetic_survey_coordinates.rds"
-  ) |> 
-  dplyr::sample_n(size = 100) |> 
-  sf::st_transform(25832)
+    "../../data/synthetic_survey_geocoordinates.rds"
+  ) |>
+  dplyr::sample_n(size = 100) # random subset
 
 points
 ```
@@ -303,16 +316,20 @@ points
 We use the following to extract the raster values at a specific point by location.
 
 ```{r}
-terra::extract(pop_grid_2022, points, ID = FALSE) |> 
+terra::extract(pop_grid_2022, points, ID = FALSE) |> # extract at point locations
   head(10)
 ```
+
+::: {.callout-warning}
+Make sure your raster and vector data share the same CRS before extracting — `terra::extract()` will not always warn you if they don't, and results may be silently wrong!
+:::
 
 ## Add results to existing dataset
 
 This information can be added to an existing dataset (our points in this example).
 
 ```{r}
-points$pop <- 
+points$pop <- # add as new column
   terra::extract(pop_grid_2022, points, ID = FALSE)[[1]]
 
 points
@@ -336,13 +353,13 @@ We can use spatial buffers of different sizes to extract information about our s
 ```{r}
 #| code-line-numbers: "3"
 terra::extract(
-  pop_grid_2022, 
-  sf::st_buffer(points, 2500),
+  pop_grid_2022,
+  sf::st_buffer(points, 2500), # 2.5km buffer
   fun = mean,
   na.rm = TRUE,
   ID = FALSE,
   raw = TRUE
-) |> 
+) |>
   head(10)
 ```
 :::
@@ -351,13 +368,13 @@ terra::extract(
 ```{r}
 #| code-line-numbers: "3"
 terra::extract(
-  pop_grid_2022, 
-  sf::st_buffer(points, 5000),
+  pop_grid_2022,
+  sf::st_buffer(points, 5000), # 5km buffer
   fun = mean,
   na.rm = TRUE,
   ID = FALSE,
   raw = TRUE
-) |> 
+) |>
   head(10)
 ```
 :::
@@ -378,14 +395,14 @@ Let's see how the values differ when we apply the option or not.
 ```{r}
 #| code-line-numbers: "6"
 terra::extract(
-  pop_grid_2022, 
+  pop_grid_2022,
   sf::st_buffer(points, 2500),
   fun = mean,
   na.rm = TRUE,
-  touches = FALSE,
+  touches = FALSE, # strict: cells inside only
   ID = FALSE,
   raw = TRUE
-) |> 
+) |>
   head(10)
 ```
 :::
@@ -394,14 +411,14 @@ terra::extract(
 ```{r}
 #| code-line-numbers: "6"
 terra::extract(
-  pop_grid_2022, 
+  pop_grid_2022,
   sf::st_buffer(points, 2500),
   fun = mean,
   na.rm = TRUE,
-  touches = TRUE,
+  touches = TRUE, # also touching cells
   ID = FALSE,
   raw = TRUE
-) |> 
+) |>
   head(10)
 ```
 :::
@@ -416,14 +433,14 @@ Often, we default to the mean of raster cell values to be extracted. In our exam
 ```{r}
 #| code-line-numbers: "4"
 terra::extract(
-  pop_grid_2022, 
+  pop_grid_2022,
   sf::st_buffer(points, 2500),
-  fun = sum,
+  fun = sum, # total population
   na.rm = TRUE,
   touches = FALSE,
   ID = FALSE,
   raw = TRUE
-) |> 
+) |>
   head(10)
 ```
 :::
@@ -432,14 +449,14 @@ terra::extract(
 ```{r}
 #| code-line-numbers: "4"
 terra::extract(
-  pop_grid_2022, 
+  pop_grid_2022,
   sf::st_buffer(points, 2500),
-  fun = max,
+  fun = max, # peak population
   na.rm = TRUE,
   touches = TRUE,
   ID = FALSE,
   raw = TRUE
-) |> 
+) |>
   head(10)
 ```
 :::
@@ -452,9 +469,9 @@ We can even define custom functions.
 ```{r}
 #| code-line-numbers: "4"
 terra::extract(
-  pop_grid_2022, 
+  pop_grid_2022,
   sf::st_buffer(points, 2500),
-  fun = function (x) {max(x, na.rm = TRUE) / sum(x, na.rm = TRUE)},
+  fun = function (x) {max(x, na.rm = TRUE) / sum(x, na.rm = TRUE)}, # max/sum ratio
   touches = FALSE,
   ID = FALSE,
   raw = TRUE
@@ -471,23 +488,21 @@ We can use the same procedure to aggregate a raster dataset into a vector polygo
 ```{r}
 #| eval: false
 #| fig.asp: .8
-german_districts <- 
+german_districts <-
   sf::st_read(
     "./data/VG250_KRS.shp",
     quiet = TRUE
-  ) |> 
-  sf::st_transform(3035)
+  ) |>
+  sf::st_transform(3035) # match raster CRS
 
 gender_ratios_2020 <-
   terra::rast("./data/gender_ratio_2020.tif")
 
-plot(gender_ratios_2020)
+plot(gender_ratios_2020) # raster base layer
 plot(
-  sf::st_geometry(german_districts), 
-  border = "white", 
-  col = NA, 
-  lwd = .5, 
-  add = TRUE
+  sf::st_geometry(german_districts),
+  border = "white", col = NA,
+  lwd = .5, add = TRUE # overlay districts
 )
 ```
 :::
@@ -496,23 +511,21 @@ plot(
 ```{r}
 #| echo: false
 #| fig.asp: .8
-german_districts <- 
+german_districts <-
   sf::st_read(
     "../../data/VG250_KRS.shp",
     quiet = TRUE
-  ) |> 
-  sf::st_transform(3035)
+  ) |>
+  sf::st_transform(3035) # match raster CRS
 
 gender_ratios_2020 <-
   terra::rast("../../data/gender_ratio_2020.tif")
 
-plot(gender_ratios_2020)
+plot(gender_ratios_2020) # raster base layer
 plot(
-  sf::st_geometry(german_districts), 
-  border = "white", 
-  col = NA, 
-  lwd = .5, 
-  add = TRUE
+  sf::st_geometry(german_districts),
+  border = "white", col = NA,
+  lwd = .5, add = TRUE # overlay districts
 )
 ```
 :::
@@ -529,13 +542,13 @@ Again, we use `terra::extract()` to create the aggregated data, which we can add
 #| fig.asp: .8
 german_districts$gender_ratios_2020 <-
   terra::extract(
-    gender_ratios_2020, 
-    german_districts, 
-    fun = mean, 
-    na.rm = TRUE, 
+    gender_ratios_2020,
+    german_districts, # aggregate into polygons
+    fun = mean,
+    na.rm = TRUE,
     ID = FALSE
-  ) |> 
-  unlist()
+  ) |>
+  unlist() # extract returns df → vector
 
 plot(german_districts["gender_ratios_2020"])
 ```
@@ -547,13 +560,13 @@ plot(german_districts["gender_ratios_2020"])
 #| fig.asp: .8
 german_districts$gender_ratios_2020 <-
   terra::extract(
-    gender_ratios_2020, 
-    german_districts, 
-    fun = mean, 
-    na.rm = TRUE, 
+    gender_ratios_2020,
+    german_districts, # aggregate into polygons
+    fun = mean,
+    na.rm = TRUE,
     ID = FALSE
-  ) |> 
-  unlist()
+  ) |>
+  unlist() # extract returns df → vector
 
 plot(german_districts["gender_ratios_2020"])
 ```
@@ -568,7 +581,7 @@ The previous steps are efforts that work on the raw raster cell values data. How
 
 ## Creating a quick 'heat map'
 
-Population counts for the whole of Germany help us to identify urban and rural clusters. But there may be applications where we need to zoom in on a specific city to identify within-city variations regarding specific attributes like foreigner shares. Let's do that for the German capital Berlin. For this purpose, we subset the district data and mask and crop data on foreigner shares from the German census.
+Population counts for the whole of Germany help us to identify urban and rural clusters. But there may be applications where we need to zoom in on a specific city to identify within-city variations regarding specific attributes like average rent levels. Let's do that for the German capital Berlin. For this purpose, we subset the district data and mask and crop data on average rent prices from the German census.
 
 :::: columns
 ::: {.column width="50%"}
@@ -576,16 +589,16 @@ Population counts for the whole of Germany help us to identify urban and rural c
 #| eval: false
 #| fig.asp: .7
 berlin <-
-  german_districts |> 
-  dplyr::filter(AGS == "11000")
+  german_districts |>
+  dplyr::filter(AGS == "11000") # Berlin district
 
-foreigners_berlin <-
-  terra::rast("./data/z22/foreigners.tif") |> 
-  terra::project("EPSG:3035") |> 
-  terra::mask(terra::vect(berlin)) |> 
-  terra::crop(berlin)
+rent_berlin <-
+  terra::rast("./data/z22/rent_avg.tif") |>
+  terra::project("EPSG:3035") |> # reproject
+  terra::mask(terra::vect(berlin)) |> # clip to Berlin
+  terra::crop(berlin) # trim extent
 
-plot(foreigners_berlin)
+plot(rent_berlin)
 ```
 :::
 
@@ -594,16 +607,16 @@ plot(foreigners_berlin)
 #| echo: false
 #| fig.asp: .7
 berlin <-
-  german_districts |> 
-  dplyr::filter(AGS == "11000")
+  german_districts |>
+  dplyr::filter(AGS == "11000") # Berlin district
 
-foreigners_berlin <-
-  terra::rast("../../data/z22/foreigners.tif") |> 
-  terra::project("EPSG:3035") |> 
-  terra::mask(terra::vect(berlin)) |> 
-  terra::crop(berlin)
+rent_berlin <-
+  terra::rast("../../data/z22/rent_avg.tif") |>
+  terra::project("EPSG:3035") |> # reproject
+  terra::mask(terra::vect(berlin)) |> # clip to Berlin
+  terra::crop(berlin) # trim extent
 
-plot(foreigners_berlin)
+plot(rent_berlin)
 ```
 :::
 ::::
@@ -617,15 +630,15 @@ Although we can identify some clusters using the raw data, some smoothing may be
 ```{r}
 #| eval: false
 #| fig.asp: .7
-foreigners_berlin_smooth <- 
+rent_berlin_smooth <-
   terra::focal(
-    foreigners_berlin, 
-    w = matrix(1, 5, 5), 
-    fun = mean, 
+    rent_berlin,
+    w = matrix(1, 5, 5), # 5x5 moving window
+    fun = mean,
     na.rm = TRUE
   )
 
-plot(foreigners_berlin_smooth)
+plot(rent_berlin_smooth)
 ```
 :::
 
@@ -633,20 +646,22 @@ plot(foreigners_berlin_smooth)
 ```{r}
 #| echo: false
 #| fig.asp: .7
-foreigners_berlin_smooth <- 
+rent_berlin_smooth <-
   terra::focal(
-    foreigners_berlin, 
-    w = matrix(1, 5, 5), 
-    fun = mean, 
+    rent_berlin,
+    w = matrix(1, 5, 5), # 5x5 moving window
+    fun = mean,
     na.rm = TRUE
   )
 
-plot(foreigners_berlin_smooth)
+plot(rent_berlin_smooth)
 ```
 :::
 ::::
 
 ## 'Real' point pattern analysis
+
+So far, we used grid-cell-level Census data for our heat map. But what if we only have point observations, e.g., from a survey? We can create a similar density surface from scratch using `terra::rasterize()`. Let's demonstrate this with the synthetic survey coordinates.
 
 Usually, when we talk about heat maps, we mean analyzing point patterns and whether they spatially cluster. `terra` might not be your best choice regarding more elaborated techniques to estimate density kernels and distance base bandwidths between points to draw clusters. For this purpose, packages such as `spatstat` are better suited but require [learning about other data structures](https://r-spatial.org/book/11-PointPattern.html). That said, densities are more advanced ways of counting things in raster grid cells, and we can mimic this behavior also with `terra`. So, let's stick to this package and crop all of our points to the extent of Berlin.
 
@@ -655,16 +670,13 @@ Usually, when we talk about heat maps, we mean analyzing point patterns and whet
 ```{r}
 #| eval: false
 #| fig.asp: .5
-points_berlin <- 
+points_berlin <-
   readRDS(
-    "../../data/synthetic_survey_coordinates.rds"
-  ) |>  
-  sf::st_crop(berlin)
+    "./data/synthetic_survey_geocoordinates.rds"
+  ) |>
+  sf::st_crop(berlin) # subset to Berlin
 
-plot(
-  points_berlin["foreigner"], 
-  col = c("black", "green")
-)
+plot(sf::st_geometry(points_berlin)) # point locations
 ```
 :::
 
@@ -672,36 +684,32 @@ plot(
 ```{r}
 #| echo: false
 #| fig.asp: .5
-points_berlin <- 
+points_berlin <-
   readRDS(
-    "../../data/synthetic_survey_coordinates.rds"
-  ) |>  
-  sf::st_crop(berlin)
+    "../../data/synthetic_survey_geocoordinates.rds"
+  ) |>
+  sf::st_crop(berlin) # subset to Berlin
 
-plot(
-  points_berlin["foreigner"], 
-  col = c("black", "green")
-)
+plot(sf::st_geometry(points_berlin)) # point locations
 ```
 :::
 ::::
 
 ## Creating a raster density template
 
-Next, we simply want to count points with the attribute `foreigner = 1` in raster grid cells for our density estimation. However, our points are sparse compared to our comprehensive raster dataset. We cannot initially rely on 1 km² grid cells as with the Census grid data. But 5 km² may be a good compromise. Let's do that!
+Next, we simply want to count survey respondent locations in raster grid cells for our density estimation. However, our points are sparse compared to our comprehensive raster dataset. We cannot initially rely on 1 km² grid cells as with the Census grid data. But 5 km² may be a good compromise. Let's do that!
 
 ```{r}
 raster_template <-
-  points_berlin |> 
-  dplyr::filter(foreigner == 1) |> 
-  sf::st_bbox() |> 
-  terra::ext() |> 
-  terra::rast(resolution = 5000, crs = "EPSG:3035")
+  points_berlin |>
+  sf::st_bbox() |> # extent of points
+  terra::ext() |> # as terra extent
+  terra::rast(resolution = 5000, crs = "EPSG:3035") # 5km grid
 
 raster_template
 ```
 
-## Why the hassle?
+## Rasterize: counting points in grid cells
 
 You may wonder why we are doing that. The answer is simple: We want to count the number of points in each grid cell. We use the function `terra::rasterize()` as a simple technique.
 
@@ -710,13 +718,13 @@ You may wonder why we are doing that. The answer is simple: We want to count the
 ```{r}
 #| eval: false
 #| fig.asp: .8
-points_berlin_density <- 
+points_berlin_density <-
   terra::rasterize(
-    points_berlin, 
-    raster_template, 
-    fun = "sum", 
-    background = 0
-  ) 
+    points_berlin,
+    raster_template, # target grid
+    fun = "sum", # count per cell
+    background = 0 # empty cells = 0
+  )
 
 plot(points_berlin_density)
 ```
@@ -726,20 +734,20 @@ plot(points_berlin_density)
 ```{r}
 #| echo: false
 #| fig.asp: .8
-points_berlin_density <- 
+points_berlin_density <-
   terra::rasterize(
-    points_berlin, 
-    raster_template, 
-    fun = "sum", 
-    background = 0
-  ) 
+    points_berlin,
+    raster_template, # target grid
+    fun = "sum", # count per cell
+    background = 0 # empty cells = 0
+  )
 
 plot(points_berlin_density)
 ```
 :::
 ::::
 
-## Again, why the hassle?
+## Reproject to a finer grid
 
 Now, this is not very pleasant. These data looks... not good. But fear not, working with raster data is powerful, as we now use a function you already know for projecting one CRS into another: `terra::project()`. This function can also be used to aggregate and disaggregate data based on the structure of another dataset. So, while we could not initially use 1 km² grid cells for our density 'estimation', we can reproject our 5 km² onto a 1 km² grid like our Census grid data. A bit of masking also helps get rid of cells that are not within the Berlin border.
 
@@ -749,9 +757,9 @@ Now, this is not very pleasant. These data looks... not good. But fear not, work
 #| eval: false
 #| fig.asp: .55
 points_berlin_density <-
-  points_berlin_density |> 
-  terra::project(foreigners_berlin) |> 
-  terra::mask(foreigners_berlin)
+  points_berlin_density |>
+  terra::project(rent_berlin) |> # match 1km grid
+  terra::mask(rent_berlin) # clip to Berlin
 
 plot(points_berlin_density)
 ```
@@ -762,36 +770,36 @@ plot(points_berlin_density)
 #| echo: false
 #| fig.asp: .55
 points_berlin_density <-
-  points_berlin_density |> 
-  terra::project(foreigners_berlin) |> 
-  terra::mask(foreigners_berlin)
+  points_berlin_density |>
+  terra::project(rent_berlin) |> # match 1km grid
+  terra::mask(rent_berlin) # clip to Berlin
 
 plot(points_berlin_density)
 ```
 :::
 ::::
 
-## Smoothing
+## Smoothing: 5×5 window
 
 We can also apply smoothing as with the population grid data.
 
 :::: columns
 ::: {.column width="50%"}
 ```{r}
-#| fig.asp: ..6
+#| fig.asp: .6
 terra::focal(
-  foreigners_berlin, 
-  w = matrix(1, 5, 5), 
-  fun = mean, 
+  rent_berlin,
+  w = matrix(1, 5, 5),
+  fun = mean,
   na.rm = TRUE
-) |> 
+) |>
   plot()
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r}
-#| fig.asp: ..6
+#| fig.asp: .6
 focal(
   points_berlin_density, 
   w = matrix(1, 5, 5), 
@@ -804,18 +812,20 @@ focal(
 ::::
 
 
-## Playing with the smoothing
+## Smoothing: 3×3 window
+
+We can adjust the smoothing to a smaller degree.
 
 :::: columns
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
 terra::focal(
-  foreigners_berlin, 
-  w = matrix(1, 3, 3), 
-  fun = mean, 
+  rent_berlin,
+  w = matrix(1, 3, 3),
+  fun = mean,
   na.rm = TRUE
-) |> 
+) |>
   plot()
 ```
 :::
@@ -834,18 +844,20 @@ focal(
 :::
 ::::
 
-## Playing with the smoothing
+## Smoothing: 9×9 window
+
+We can also adjust the smoothing to a higher degree.
 
 :::: columns
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
 terra::focal(
-  foreigners_berlin, 
-  w = matrix(1, 9, 9), 
-  fun = mean, 
+  rent_berlin,
+  w = matrix(1, 9, 9),
+  fun = mean,
   na.rm = TRUE
-) |> 
+) |>
   plot()
 ```
 :::
@@ -863,6 +875,8 @@ focal(
 ```
 :::
 ::::
+
+Larger windows produce smoother surfaces but lose local detail — choose based on your research question.
 
 ## What is this argument `w`?
 
@@ -881,44 +895,44 @@ matrix(1, 5, 5)
 But we can change that however we want:
 
 ```{r}
-weighted_w <- matrix(c(rep(.5, 12), 1, rep(.5, 12)), 5, 5)
+weighted_w <- matrix(c(rep(.5, 12), 1, rep(.5, 12)), 5, 5) # center weighted
 
 weighted_w
 ```
 
-## Applying it to the foreigners grid data
+## Applying it to the rent grid data
 
 :::: columns
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
 terra::focal(
-  foreigners_berlin, 
-  w = matrix(1, 5, 5), 
-  fun = mean, 
+  rent_berlin,
+  w = matrix(1, 5, 5),
+  fun = mean,
   na.rm = TRUE
-) |> 
+) |>
   plot()
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r}
-#| fig.asp: .7 
+#| fig.asp: .7
 focal(
-  foreigners_berlin, 
-  w = weighted_w, 
+  rent_berlin,
+  w = weighted_w,
   fun = mean,
   na.rm = TRUE
-) |> 
+) |>
   plot()
 ```
 :::
 ::::
 
-## Real life example: Edges of immigrant rates
+## Real life example: Detecting spatial boundaries
 
-In ethnic diversity research, whether sudden changes in the neighborhood composition may increase the potential for conflicts between groups is a relevant question. Researchers use edge detection algorithms from image processing to investigate such changes spatially.
+Edge detection algorithms from image processing can be applied to raster data to identify sudden spatial changes. For instance, Legewie & Schaeffer (2016) used this technique to study ethnic neighborhood boundaries. We can apply the same idea to detect rent price boundaries — areas where average rents change abruptly, which may indicate gentrification fronts or distinct housing submarkets.
 
 ![](../img/legewie_schaeffer_2016.png){.r-stretch fig-align="center"}
 
@@ -951,26 +965,26 @@ $$r_x = \begin{bmatrix}1 & 0 & -1 \\2 & 0 & -2 \\1 & 0 & -1\end{bmatrix} \times 
 
 ```{r}
 sobel <- function(r) {
-  fy <- matrix(c(1, 0, -1, 2, 0, -2, 1, 0, -1), nrow = 3)
-  fx <- matrix(c(-1, -2, -1, 0, 0, 0, 1, 2, 1) , nrow = 3)
-  rx <- terra::focal(r, fx)
-  ry <- terra::focal(r, fy)
-  sqrt(rx^2 + ry^2)
+  fy <- matrix(c(1, 0, -1, 2, 0, -2, 1, 0, -1), nrow = 3) # vertical kernel
+  fx <- matrix(c(-1, -2, -1, 0, 0, 0, 1, 2, 1) , nrow = 3) # horizontal kernel
+  rx <- terra::focal(r, fx) # horizontal gradient
+  ry <- terra::focal(r, fy) # vertical gradient
+  sqrt(rx^2 + ry^2) # gradient magnitude
 }
 
-foreigners_berlin_edges <- sobel(foreigners_berlin_smooth)
+rent_berlin_edges <- sobel(rent_berlin_smooth) # apply to smoothed rents
 ```
 
 ## Comparison
 
-We can now clearly display the edges of sudden changes in neighborhood composition within Berlin.
+We can now clearly display the edges of sudden changes in rent levels within Berlin.
 
 ```{r}
 #| echo: true
 #| layout-ncol: 2
 #| fig.asp: .6
-plot(foreigners_berlin_smooth)
-plot(foreigners_berlin_edges)
+plot(rent_berlin_smooth)
+plot(rent_berlin_edges)
 ```
 
 ## Exercise 3_2: Extracting and Analyzing Raster Information
@@ -978,6 +992,16 @@ plot(foreigners_berlin_edges)
 ![](../img/cat_quality.webp){width="45%" fig-align="center"}
 
 ## Conversion {.center style="text-align: center;"}
+
+## Why convert?
+
+Sometimes we need to switch between raster and vector representations:
+
+- **Raster → Points**: When you need to treat grid cells as individual observations for statistical analysis
+- **Points → Raster**: When you want to create a continuous surface from point measurements
+- **Raster → Polygons**: When you need to join raster information into a vector-based workflow (e.g., for spatial joins with `sf`)
+
+All conversions are straightforward with `terra`.
 
 ## Raster to points
 
@@ -987,8 +1011,8 @@ plot(foreigners_berlin_edges)
 #| eval: false
 #| fig.asp: 1
 raster_now_points <-
-  foreigners_berlin |> 
-  terra::as.points()
+  rent_berlin |>
+  terra::as.points() # each cell → point
 
 plot(raster_now_points)
 ```
@@ -999,8 +1023,8 @@ plot(raster_now_points)
 #| echo: false
 #| fig.asp: 1
 raster_now_points <-
-  foreigners_berlin |> 
-  terra::as.points()
+  rent_berlin |>
+  terra::as.points() # each cell → point
 
 plot(raster_now_points)
 ```
@@ -1014,15 +1038,15 @@ plot(raster_now_points)
 ```{r}
 #| eval: false
 #| fig.asp: 1
-raster_target_layer <- 
-  terra::ext(raster_now_points) |> 
-  terra::rast(res = 1000)
+raster_target_layer <-
+  terra::ext(raster_now_points) |>
+  terra::rast(res = 1000) # empty 1km target grid
 
-points_now_raster <- 
-  raster_now_points |> 
+points_now_raster <-
+  raster_now_points |>
   terra::rasterize(
-    raster_target_layer, 
-    field = "cat_0", 
+    raster_target_layer,
+    field = "cat_0", # value column
     fun = "mean",
     background = 0
   )
@@ -1035,15 +1059,15 @@ plot(points_now_raster)
 ```{r}
 #| echo: false
 #| fig.asp: 1
-raster_target_layer <- 
-  terra::ext(raster_now_points) |> 
-  terra::rast(res = 1000)
+raster_target_layer <-
+  terra::ext(raster_now_points) |>
+  terra::rast(res = 1000) # empty 1km target grid
 
-points_now_raster <- 
-  raster_now_points |> 
+points_now_raster <-
+  raster_now_points |>
   terra::rasterize(
-    raster_target_layer, 
-    field = "cat_0", 
+    raster_target_layer,
+    field = "cat_0", # value column
     fun = "mean",
     background = 0
   )
@@ -1061,9 +1085,9 @@ plot(points_now_raster)
 #| eval: false
 #| fig.asp: 1
 polygon_raster <-
-  foreigners_berlin |>  
-  terra::as.polygons() |> 
-  sf::st_as_sf()
+  rent_berlin |>
+  terra::as.polygons() |> # each cell → polygon
+  sf::st_as_sf() # convert to sf
 
 plot(polygon_raster)
 ```
@@ -1074,9 +1098,9 @@ plot(polygon_raster)
 #| echo: false
 #| fig.asp: 1
 polygon_raster <-
-  foreigners_berlin |>  
-  terra::as.polygons() |> 
-  sf::st_as_sf()
+  rent_berlin |>
+  terra::as.polygons() |> # each cell → polygon
+  sf::st_as_sf() # convert to sf
 
 plot(polygon_raster)
 ```

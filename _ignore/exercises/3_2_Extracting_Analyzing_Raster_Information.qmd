@@ -17,32 +17,32 @@ editor_options:
 
 In this set of exercises, you'll focus on linking raster data, aggregating them to a coarser resolution, creating heatmaps using spatial smoothing, and linking processed raster data with your synthetic geocoordinates. You will:
 
--   Aggregate raster data to a larger grid (e.g., 5 km resolution).
--   Use a focal operation to create a heatmap and visualize spatial patterns.
--   Link the aggregated raster back to your geocoordinates for further analysis.
+- Aggregate raster data to a larger grid (e.g., 5 km resolution).
+- Use a focal operation to create a heatmap and visualize spatial patterns.
+- Link the aggregated raster back to your geocoordinates for further analysis.
+
+You'll work with Census 2022 rasters from `./data/z22/`. Not sure what a file contains? File names match Census variable names — check the [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes) for documentation, or use `z22::z22_features()` if you have the [`z22` package](https://cran.r-project.org/package=z22) installed.
 
 ### Exercises
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 1
+## 🏋️ Exercise 1
 
-Your first task is to import a dataset of synthetic geographic coordinates. The file is called `synthetic_geocoordinates.rds` and it’s located in the `./data/` folder.
+Your first task is to import a dataset of synthetic geographic coordinates (`synthetic_survey_geocoordinates.rds` in `./data/`) and a raster `.tif` dataset from the `./data/z22/` folder.
 
-Next, choose another raster `.tif` dataset from the `./data/z22/` folder to use in subsequent tasks.
-
-This exercise will lay the foundation for combining vector and raster data in the next steps.
+After loading both, compare their coordinate reference systems. Do they match? What would you need to do before extracting raster values at the point locations?
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
--   Use `readRDS()` to load the `.rds` file.
--   To load a raster, use `terra::rast()`.
--   After loading the data, inspect the structure of the synthetic coordinates, e.g., with `str()` and check the raster’s properties with `plot()`.
+- Use `readRDS()` to load the `.rds` file and `terra::rast()` for the raster.
+- Check the CRS of the points with `sf::st_crs()` and of the raster with `terra::crs(..., describe = TRUE)`.
+- After loading, inspect the structure with `str()` and visualize with `plot()`.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 2
+## 🏋️ Exercise 2
 
 In this exercise, you’ll extract raster values at the locations of the synthetic coordinates you loaded previously. But here’s the twist: Think about the surrounding area!
 
@@ -52,129 +52,152 @@ Important: You may notice that the CRS of the points and the CRS of the raster d
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
--   You can use `terra::extract()` to pull raster values at specific coordinates.
--   To consider the surrounding area, use `terra::focal()` to apply a spatial filter or create buffers with `sf::st_buffer()` around your points.
--   Be creative: What size buffer makes sense for your data? Should you use a large or small neighborhood around the points? How do the values change within this window?
+- You can use `terra::extract()` to pull raster values at specific coordinates.
+- To consider the surrounding area, use `terra::focal()` to apply a spatial filter or create buffers with `sf::st_buffer()` around your points.
+- Be creative: What size buffer makes sense for your data? Should you use a large or small neighborhood around the points? How do the values change within this window?
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 3
+## 🏋️ Exercise 3
 
-In this exercise, you’ll aggregate the raster data to a coarser grid, for example, a 5 km grid. Then, use a focal operation to create a heatmap, smoothing the values and representing the intensity of the raster data across the area.
+In this exercise, you’ll explore how spatial resolution affects your results.
 
-Finally, link the aggregated raster data with your synthetic geocoordinates again. This will help you to understand the spatial patterns of the raster values at different resolutions.
+- Aggregate the raster to **two different resolutions** (e.g., a 5 km and a 10 km grid).
+- Apply a focal smoothing operation to both aggregated rasters to create heatmaps.
+- Extract values at your synthetic coordinates from both versions.
+- Compare the extracted values: How much do they differ? Plot both heatmaps side by side. At which resolution do you start losing important spatial patterns?
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
--   To aggregate raster data, use `terra::aggregate()`, where you can specify the cell size.
--   Use `terra::focal()` to apply a focal operation like a moving window average, which helps smooth the data and create a heatmap effect.
--   After aggregation and smoothing, make sure to link the newly created raster back to your synthetic coordinates using `terra::extract()`.
+- To aggregate raster data, use `terra::aggregate()` with different `fact` values (e.g., `fact = 5` for 5 km, `fact = 10` for 10 km).
+- Use `terra::focal()` to apply a moving window average for the heatmap effect.
+- Use `par(mfrow = c(1, 2))` to plot both heatmaps side by side.
+- After aggregation and smoothing, link both rasters back to your coordinates using `terra::extract()` and compare.
 :::
 
 ### Solutions
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 1
+## ✅ Solution 1
 
 ```{r}
 #| eval: false
 library(terra)
 
-# Load the synthetic coordinates data
-coordinates <- readRDS("./data/synthetic_survey_coordinates.rds")
+# Load the synthetic survey coordinates (an sf point dataset)
+coordinates <- readRDS("./data/synthetic_survey_geocoordinates.rds")
 
-# Inspect the coordinates structure
+# Inspect: how many points? which columns? which geometry type?
 str(coordinates)
 
-# Load a raster dataset from the ./data/z22 folder
-foreigners <- terra::rast("./data/z22/foreigners.tif") 
+# Load a raster dataset — pick any .tif from ./data/z22/
+rent_avg <- terra::rast("./data/z22/rent_avg.tif")
 
-# Check the raster's properties by plotting
-plot(foreigners)
+# Visualize the raster to get a first impression
+plot(rent_avg)
+
+# Key step: compare the CRS of both datasets
+# Points use EPSG from the survey, raster uses the Census grid CRS
+sf::st_crs(coordinates)$epsg # CRS of the point data
+terra::crs(rent_avg, describe = TRUE)$code # CRS of the raster
+
+# They don't match! Before extracting raster values at point locations,
+# we'll need to reproject one to match the other using sf::st_transform().
 ```
 
 ```{r}
 #| echo: false
 library(terra)
 
-# Load the synthetic coordinates data
-coordinates <- readRDS("../../data/synthetic_survey_coordinates.rds")
-
-# Inspect the coordinates structure
+coordinates <- readRDS("../../data/synthetic_survey_geocoordinates.rds")
 str(coordinates)
 
-# Load a raster dataset from the ./data/z22 folder
-foreigners <- terra::rast("../../data/z22/foreigners.tif") 
+rent_avg <- terra::rast("../../data/z22/rent_avg.tif")
+plot(rent_avg)
 
-# Check the raster's properties by plotting
-plot(foreigners)
+sf::st_crs(coordinates)$epsg
+terra::crs(rent_avg, describe = TRUE)$code
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 2
+## ✅ Solution 2
 
 ```{r}
 library(terra)
 
+# Step 1: Fix the CRS mismatch we found in Exercise 1
+# We reproject the points to match the raster's CRS
 crs_points <- sf::st_crs(coordinates)$epsg
-crs_raster <- terra::crs(foreigners, describe = TRUE)$code
+crs_raster <- terra::crs(rent_avg, describe = TRUE)$code
 
-# If CRS do not match, project the points to the raster's CRS
 if (crs_points != crs_raster) {
   coordinates <- sf::st_transform(coordinates, crs = as.numeric(crs_raster))
 }
 
-# Create a buffer around each point (optional: adjust buffer size)
-buffer <- sf::st_buffer(coordinates, 5000)  # 500 meters buffer
+# Step 2: Create buffers around each point
+# 5000 = 5 km in projected CRS (units are meters)
+buffer <- sf::st_buffer(coordinates, 5000)
 
-# Plot the buffer to see the area
+# Quick check: do buffers look reasonable?
 plot(sf::st_geometry(buffer))
-plot(foreigners)
+plot(rent_avg)
 
-# Extract raster values at the original points
-foreigners_buffer_values <- terra::extract(foreigners, coordinates)
+# Step 3a: Extract raster values directly at point locations (1:1)
+rent_buffer_values <- terra::extract(rent_avg, coordinates)
 
-# Extract surrounding raster information using a focal filter (example with a 3x3 window)
-foreigners_focal <- 
-  terra::focal(foreigners, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
+# Step 3b: Alternative — smooth the raster first with a focal window,
+# then extract. This captures the neighborhood context.
+rent_focal <-
+  terra::focal(rent_avg, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
 
-foreigners_focal_values <- 
-  terra::extract(foreigners_focal, coordinates)
+rent_focal_values <-
+  terra::extract(rent_focal, coordinates)
 
-# View extracted values for points and surrounding context
-head(foreigners_buffer_values)
-head(foreigners_focal_values)
+# Compare: point extraction vs. focal-smoothed extraction
+# The focal values should be less extreme (smoothed towards neighbors)
+head(rent_buffer_values)
+head(rent_focal_values)
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 3
+## ✅ Solution 3
 
 ```{r}
-# Aggregate the raster to a 5 km grid (adjusting the cell size)
-foreigners_aggregated <- 
-  terra::aggregate(foreigners, fact = 5, na.rm = TRUE)
+# Step 1: Aggregate the original raster to two resolutions
+# fact = 5 combines 5x5 cells → ~5 km; fact = 10 → ~10 km
+rent_5km <- terra::aggregate(rent_avg, fact = 5, na.rm = TRUE)
+rent_10km <- terra::aggregate(rent_avg, fact = 10, na.rm = TRUE)
 
-# Create a heatmap effect by applying a focal operation (e.g., 5x5 moving average)
-foreigners_heatmap <- 
-  terra::focal(
-    foreigners_aggregated, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE
-    )
+# Step 2: Smooth both with a focal window to create heatmaps
+# Same window size (5x5), but applied to different base resolutions
+rent_heatmap_5km <-
+  terra::focal(rent_5km, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
+rent_heatmap_10km <-
+  terra::focal(rent_10km, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
 
-# Plot the heatmap
-plot(foreigners_heatmap, main = "'Heatmap' of Aggregated Raster")
+# Step 3: Visual comparison — plot side by side
+# Notice how the 10 km version loses local patterns (e.g., city centers)
+par(mfrow = c(1, 2))
+plot(rent_heatmap_5km, main = "Heatmap (5 km)")
+plot(rent_heatmap_10km, main = "Heatmap (10 km)")
+par(mfrow = c(1, 1))
 
-# Link the aggregated raster with the synthetic geocoordinates
-aggregated_values <- terra::extract(foreigners_heatmap, coordinates)
+# Step 4: Extract values at our survey coordinates from both
+values_5km <- terra::extract(rent_heatmap_5km, coordinates)
+values_10km <- terra::extract(rent_heatmap_10km, coordinates)
 
-# Inspect the extracted values for the points
-head(aggregated_values)
-head(foreigners_buffer_values)
-head(foreigners_focal_values)
+# Inspect: the 10 km values should be more uniform (less variation)
+head(values_5km)
+head(values_10km)
+
+# Quantify the difference: mean absolute difference per point
+# Higher values = more information lost at coarser resolution
+mean(abs(values_5km[[2]] - values_10km[[2]]), na.rm = TRUE)
 ```
 :::

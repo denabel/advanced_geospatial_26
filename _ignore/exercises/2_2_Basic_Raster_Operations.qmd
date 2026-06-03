@@ -24,63 +24,74 @@ Let’s jump in!
 ### Exercises
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 1
+## 🏋️ Exercise 1
 
-In this exercise, you’ll import a raster `.tif` file from the `./data/z22` folder. Once loaded, take a moment to explore the raster's dimensions, resolution, and other key properties. Feel free to visualize it to get an initial sense of its content!
+Import a raster `.tif` file from the `./data/z22` folder. Once loaded, explore its dimensions, resolution, and CRS.
+
+Then think about the resolution: What area does a single grid cell cover in km²? (Hint: check the resolution units and do the math!)
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
 You can use the `terra` package to load raster files. With the `terra::rast()` function, you’ll be able to load your `.tif` file and start working with it.
+
+Use `terra::res()` to get the cell size. If the CRS uses meters, a 1000 × 1000 m cell = 1 km².
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 2
+## 🏋️ Exercise 2
 
-In this exercise, you’ll import a NetCDF file (`.nc`) from the `./data/z22` folder. Once you’ve successfully loaded it, check out the dimensions and variables within the file. This is a great chance to get familiar with different raster data file formats!
+Now import a NetCDF file (`.nc`) from the `./data/z22` folder. Compare it to the `.tif` you loaded in Exercise 1: Do they have the same dimensions, resolution, and CRS? What differences do you notice between the two file formats?
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
-To work with `.nc` files, you can also use the `terra` package. The `terra::rast()` function works for NetCDF files, just like for raster TIF files.
+`terra::rast()` also works for `.nc` files — same function, different format. Compare `dim()`, `terra::res()`, and `terra::crs()` between the two rasters. Pay attention to the CRS — NetCDF files sometimes use a different one than GeoTIFFs!
+
+Note: Layer names in `.nc` files may look cryptic (e.g., `age_short_Z1=1`). To find out what each layer represents, check the [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes) or — if you have the `z22` package installed — try `z22::z22_categories("age_short")`.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 3
+## 🏋️ Exercise 3
 
-Now it’s time to get creative! 🎨 You’ve already imported both a TIF file and a NetCDF file. In this exercise, combine these two datasets to create a new raster layer. You can experiment by performing basic operations like adding, multiplying, or averaging the values from the two layers.
+Now it’s time to get creative! 🎨 Combine your two rasters to create a new, meaningful layer. Think about what operation makes sense given the variables you loaded — e.g., if you have population counts and a percentage, what could you calculate?
+
+Give your result a meaningful variable name that reflects what it represents.
 :::
 
 ::: {.callout-caution collapse="true"}
-## `r emo::ji("bulb")` Tip
+## 💡 Tip
 
 However, beware: Since the CRS of the two datasets might not match, you could encounter a warning. Take a moment to investigate and correct it!
 
--   Check the CRS of both datasets with `terra::crs()`.
--   If necessary, use `terra::project()` to align the CRS of both layers.
--   Once aligned, you can perform mathematical operations like +, -, \*, or / on the two layers.
+- Check the CRS of both datasets with `terra::crs()`.
+- If necessary, use `terra::project()` to align the CRS of both layers.
+- Once aligned, you can perform mathematical operations like +, -, \*, or / on the two layers.
 :::
 
 ### Solutions
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 1
+## ✅ Solution 1
 
 ```{r}
 #| eval: false
 library(terra)
 
-# Load the raster data
+# Load a raster — here: share of population aged 65+
 age_65_tif <- terra::rast("./data/z22/age_from_65.tif")
 
-# Explore the raster
-print(age_65_tif)                 # Check basic info
-dim(age_65_tif)                   # Check dimensions
-terra::res(age_65_tif)            # Resolution
+# Inspect metadata
+print(age_65_tif) # dimensions, resolution, CRS, value range
+dim(age_65_tif) # rows, columns, layers
+terra::res(age_65_tif) # cell size (in CRS units)
 
-# Optional: visualize it
+# Cell area: resolution is 1000 × 1000 m = 1 km² per cell
+terra::res(age_65_tif)[1] * terra::res(age_65_tif)[2] / 1e6 # in km²
+
+# Visualize
 plot(age_65_tif)
 ```
 
@@ -88,68 +99,89 @@ plot(age_65_tif)
 #| echo: false
 library(terra)
 
-# Load the raster data
 age_65_tif <- terra::rast("../../data/z22/age_from_65.tif")
 
-# Explore the raster
-print(age_65_tif)                 # Check basic info
-dim(age_65_tif)                   # Check dimensions
-terra::res(age_65_tif)            # Resolution
+print(age_65_tif)
+dim(age_65_tif)
+terra::res(age_65_tif)
+terra::res(age_65_tif)[1] * terra::res(age_65_tif)[2] / 1e6
 
-# Optional: visualize it
 plot(age_65_tif)
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 2
+## ✅ Solution 2
 
 ```{r}
 #| eval: false
-# Load the NetCDF file
-population_nc <- terra::rast("./data/z22/population.nc")
+# Load a NetCDF — unlike .tif, these can hold multiple layers
+age_groups_nc <- terra::rast("./data/z22/age_short.nc")
 
-# Explore the NetCDF file
-print(population_nc)             # Check basic info
-dim(population_nc)               # View dimensions
-names(population_nc)             # Check variable names
+# Compare with the .tif from Exercise 1
+print(age_groups_nc) # notice: multiple layers!
+dim(age_groups_nc) # rows, cols, layers — more layers than the .tif
+terra::nlyr(age_groups_nc) # how many layers (= age groups)?
+terra::res(age_groups_nc) # resolution — same as the .tif?
+terra::crs(age_groups_nc, describe = TRUE)$code # CRS — same?
 
-# Optional: visualize one of the variables
-plot(population_nc[[1]])         # Plot the first variable
+# Each layer is a different age group
+names(age_groups_nc) # what age groups are inside?
+
+# Visualize the first layer
+plot(age_groups_nc[[1]])
 ```
 
 ```{r}
 #| echo: false
-# Load the NetCDF file
-population_nc <- terra::rast("../../data/z22/population.nc")
+age_groups_nc <- terra::rast("../../data/z22/age_short.nc")
 
-# Explore the NetCDF file
-print(population_nc)             # Check basic info
-dim(population_nc)               # View dimensions
-names(population_nc)             # Check variable names
+print(age_groups_nc)
+dim(age_groups_nc)
+terra::nlyr(age_groups_nc)
+terra::res(age_groups_nc)
+terra::crs(age_groups_nc, describe = TRUE)$code
+names(age_groups_nc)
 
-# Optional: visualize one of the variables
-plot(population_nc[[1]])         # Plot the first variable
+plot(age_groups_nc[[1]])
 ```
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 3
+## ✅ Solution 3
 
 ```{r}
-# Check the CRS of both datasets
-crs_age_65_tif <- terra::crs(age_65_tif)
-crs_population_nc <- terra::crs(population_nc)
+#| eval: false
+# Load a second .tif to combine with our age_65 layer
+population_tif <- terra::rast("./data/z22/population.tif") # absolute counts
 
-# If CRS don't match, align them
-if (crs_age_65_tif != crs_population_nc) {
-  age_65_tif <- terra::project(age_65_tif, population_nc)
+# Step 1: Check CRS — they must match for raster math!
+terra::crs(age_65_tif, describe = TRUE)$code # age_65 CRS
+terra::crs(population_tif, describe = TRUE)$code # population CRS
+
+# Step 2: If CRS differ, reproject one to match the other
+if (terra::crs(age_65_tif) != terra::crs(population_tif)) {
+  age_65_tif <- terra::project(age_65_tif, population_tif)
 }
 
-# Combine the layers (example: calculate number of people >= 65 years)
-old_peeps <- population_nc * (age_65_tif / 100)
+# Step 3: Raster algebra — create something meaningful
+# age_65_tif is a percentage (0–100), population_tif is an absolute count
+# Multiply to get the number of people aged 65+ per cell
+older_population <- population_tif * (age_65_tif / 100)
 
-# Explore the new raster layer
-plot(old_peeps)
+# Visualize — where do most older people live?
+plot(older_population)
+```
+
+```{r}
+#| echo: false
+population_tif <- terra::rast("../../data/z22/population.tif")
+
+if (terra::crs(age_65_tif) != terra::crs(population_tif)) {
+  age_65_tif <- terra::project(age_65_tif, population_tif)
+}
+
+older_population <- population_tif * (age_65_tif / 100)
+plot(older_population)
 ```
 :::
