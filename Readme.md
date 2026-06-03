@@ -51,6 +51,16 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 
 **Please make sure that if you reuse any of the provided data to cite the original data sources.**
 
+## Getting started
+
+To install all R packages needed for the slides and exercises in one go, run:
+
+```r
+source("R/install_packages.R")
+```
+
+The script only installs packages that are not yet on your system.
+
 ## Slides
 
 ### Day 1
