@@ -18,7 +18,7 @@ callout-appearance: minimal
 In our first mapping exercise, we have created a map of the population distribution in the US in 2020. We now want to create a second graph which zooms into Texas. Instead of visualizing the population at one point in time, we are aiming at describing changes in population between 2000 and 2020.
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 1
+## 🏋️ Exercise 1
 
 What data we require: We need the two population raster layers for Texas in 2000 and 2020 (`./data/US-TX_ppp_2000_1km.tif` and `./data/US-TX_ppp_2020_1km.tif`). We also need county shapefiles for Texas, which can be downloaded with the `tigris` package (`tigris::counties("TX")`). 
 
@@ -26,7 +26,7 @@ After loading the three objects, create a simple plot of the counties shapefile.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 2
+## 🏋️ Exercise 2
 
 In order to study population dynamics in Texas, let's calculate simple differences between 2000 and 2020 for each grid cell based on our two raster layers for Texas. Store the result in a new raster file and visualize a simple plot of it. 
 
@@ -34,7 +34,7 @@ Texas is one of the US states with the highest population increase in the last d
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 3
+## 🏋️ Exercise 3
 
 Before we combine our new raster file with our counties shapefile, we want our raster and vector data to have matching CRS. "NAD83 / Texas Centric Mapping System Albers Equal Area" is specifically projected for Texas.
 
@@ -43,19 +43,19 @@ Before we combine our new raster file with our counties shapefile, we want our r
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 4
+## 🏋️ Exercise 4
 
 Let's use `ggplot` to create a plot which contains the shapefile and raster file. Adjust the color scheme by utilizing `scale_fill_viridis_c`, `scale_fill_distiller`, or `scale_fill_gradient2`.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 5
+## 🏋️ Exercise 5
 
 We want to point out counties which experience high population growth. Please attach labels to the top three counties by population growth. You can utilize `slice_head(n = 3)` after ordering the data in descending order to select only those three observations. Add this as an additional layer to the plot as text or text labels.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 6
+## 🏋️ Exercise 6
 
 What else could enhance your map? Polish it for publication, for example, by:
 
@@ -68,7 +68,7 @@ What else could enhance your map? Polish it for publication, for example, by:
 ### Solutions
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 1
+## ✅ Solution 1
 
 ```{r}
 #| eval: false
@@ -112,7 +112,7 @@ plot(st_geometry(TX_counties))
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 2
+## ✅ Solution 2
 
 ```{r}
 # Let's calculate the deviation
@@ -125,7 +125,7 @@ terra::plot(TX_pop_diff)
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 3
+## ✅ Solution 3
 
 ```{r}
 TX_pop_diff <- terra::project(TX_pop_diff, "EPSG:3081")
@@ -134,7 +134,7 @@ TX_counties <- sf::st_transform(TX_counties, crs = "EPSG:3081")
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 4
+## ✅ Solution 4
 
 ```{r}
 # Let's adjust color palette to account for diverging values
@@ -174,7 +174,7 @@ ggplot()+
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 5
+## ✅ Solution 5
 
 ```{r}
 # Identify growing and shrinking counties
@@ -206,7 +206,7 @@ ggplot()+
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 6
+## ✅ Solution 6
 
 ```{r}
 # Final polishing

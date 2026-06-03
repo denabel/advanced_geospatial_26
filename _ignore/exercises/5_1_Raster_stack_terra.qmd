@@ -18,31 +18,31 @@ callout-appearance: minimal
 Building on our previous mapping exercise with Texas data, we want to continue to work with that region. Our aim is to create a raster stack (`SpatRaster`) for Texas population data between 2017 and 2020.
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 1
+## 🏋️ Exercise 1
 
 Load the four population raster layers for Texas 2017-2020 (`./data/US-TX_ppp_2017_1km.tif`-`./data/US-TX_ppp_2020_1km.tif`) with `terra::rast()` and integrate these into one raster stack. Either do this in two steps or by creating a file list and directly read these GeoTiffs as a stack.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 2
+## 🏋️ Exercise 2
 
 Adjust the variable names (`names()`) and time (`time()`) of the raster stack.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 3
+## 🏋️ Exercise 3
 
 Similar to the previous exercise, let's reproject our Texas data to EPSG:3081.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 4
+## 🏋️ Exercise 4
 
 Visualize all four years with a spatial window of `x = 0:1000` and `y = 0:1000`.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 5
+## 🏋️ Exercise 5
 
 Export your `SpatRaster` with `writeRaster()` as GeoTiff to your local storage.
 :::
@@ -50,7 +50,7 @@ Export your `SpatRaster` with `writeRaster()` as GeoTiff to your local storage.
 ### Solutions
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 1
+## ✅ Solution 1
 
 ```{r}
 #| eval: false
@@ -84,7 +84,7 @@ TX_pop_stack
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 2
+## ✅ Solution 2
 
 ```{r}
 # Adjust variable time
@@ -99,7 +99,7 @@ print(TX_pop_stack)
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 3
+## ✅ Solution 3
 
 ```{r}
 TX_pop_stack <- terra::project(TX_pop_stack, "EPSG:3081")
@@ -108,7 +108,7 @@ TX_pop_stack <- terra::project(TX_pop_stack, "EPSG:3081")
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 4
+## ✅ Solution 4
 
 ```{r}
 # Plot a single layer
@@ -120,7 +120,7 @@ terra::plot(TX_pop_stack[0:1000,
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 5
+## ✅ Solution 5
 
 ```{r}
 #| eval: false

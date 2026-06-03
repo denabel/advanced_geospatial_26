@@ -18,7 +18,7 @@ callout-appearance: minimal
 Now that we know how to map several layers simultaneously with `ggplot()`, we want to explore the population in Texas in the four years 2017-2020. We will plot both `terra` and `stars` objects.
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 1
+## 🏋️ Exercise 1
 
 In the previous session, we have created a raster stack and a raster cube for the four years in Texas. If these are not in your environment anymore, please load both (`./data/TX_pop_stack.tif` and `./data/TX_pop_cube.rds`). 
 
@@ -26,7 +26,7 @@ In addition, load the county shapefiles for Texas with the `tigris` package. Rep
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 2
+## 🏋️ Exercise 2
 
 You are already proficient in creating publication-ready maps. Please create two plots - one for the `terra` object and another one for the `stars` object. Utilize the `facet_wrap()` command to separate the plot along the four years of the data.
 
@@ -34,25 +34,25 @@ Polish it as much as you like (NAs transparent, theme, titles, and North arrow a
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 3
+## 🏋️ Exercise 3
 
 Add your Texas counties shapefile to the plots with `geom_sf()`. 
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 4
+## 🏋️ Exercise 4
 
 Let's use `ggplot` to create a plot which contains the shapefile and raster file. Adjust the color scheme by utilizing `scale_fill_viridis_c`, `scale_fill_distiller`, or `scale_fill_gradient2`.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 5
+## 🏋️ Exercise 5
 
 We want to point out counties which experience high population growth. Please attach labels to the top three counties by population growth. You can utilize `slice_head(n = 3)` after ordering the data in descending order to select only those three observations. Add this as an additional layer to the plot as text or text labels.
 :::
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 6
+## 🏋️ Exercise 6
 
 What else could enhance your map? Polish it for publication, for example, by:
 
@@ -65,7 +65,7 @@ What else could enhance your map? Polish it for publication, for example, by:
 ### Solutions
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 1
+## ✅ Solution 1
 
 ```{r}
 #| eval: false
@@ -119,7 +119,7 @@ TX_counties <- TX_counties |>
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 2
+## ✅ Solution 2
 
 ```{r}
 library(ggspatial)
@@ -180,7 +180,7 @@ ggplot() +
 :::
 
 ::: {.callout-tip collapse="true"}
-## `r emo::ji("white_check_mark")` Solution 3
+## ✅ Solution 3
 
 ```{r}
 library(ggspatial)

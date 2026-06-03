@@ -18,7 +18,7 @@ callout-appearance: minimal
 This is our last exercise - you can apply many of the discussed processing steps from the last two days now.
 
 ::: callout-note
-## `r emo::ji("weight_lifting_man")` Exercise 1
+## 🏋️ Exercise 1
 
 This is an open exercise. We challenge you to apply your knowledge on spatial vector and raster processing to create your own spatial raster stack or cube on nighttime lights with the spatial and temporal resolution of your choice. Here are some ideas you could apply:
 
