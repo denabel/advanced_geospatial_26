@@ -1,0 +1,284 @@
+---
+title: "Exercise 7_1: Data Integration"
+subtitle: 'Advanced Geospatial Data Processing for Social Scientists'
+author: Dennis Abel & Stefan Jünger
+format:
+  html:
+    embed-resources: true
+    code-copy: true
+execute:
+  echo: true
+editor: visual
+callout-icon: false
+callout-appearance: minimal
+editor_options:
+  chunk_output_type: console
+---
+
+In this session, we walked through a full research workflow — from accessing Earth observation data to linking it with survey data. Now it's your turn! Choose one of two paths:
+
+- **Path A** is open-ended: formulate your own spatial research question and tell a "spatial story" using the course data.
+- **Path B** provides a structured step-by-step exercise if you prefer clear guidance.
+
+Both paths practice the core skill of this session: **combining multi-layer geospatial data with tabular data through spatial aggregation and joins.**
+
+## Path A: Spatial Story (open-ended) {.unnumbered}
+
+::: callout-note
+## 🏋️ Your task
+
+**Tell a spatial story using at least two data sources from this course.**
+
+Formulate a research question and answer it with data. Your analysis must:
+
+1.  Use at least one **multi-layer dataset** (a `.nc` Census cube, a raster stack, or a time series)
+2.  Include a **linkage** between data sources (spatial join, raster extraction, or tabular join)
+3.  Produce at least one **visualization** of the result
+
+Prepare 2–3 sentences interpreting what you found — and whether you trust the result.
+:::
+
+::: {.callout-caution collapse="true"}
+## 💡 Inspiration
+
+Here are some questions you could explore (or invent your own!):
+
+- **Age structure × nighttime lights**: Does the age distribution (from `age_short.nc`) differ between bright and dark areas? Extract nighttime lights and age groups per district, compare.
+- **Housing × population change**: Is there a relationship between vacancy rates (`vacancies.tif`) and population trends from the WorldPop time series (2017–2020)?
+- **Citizenship × survey context**: Extract citizenship composition (`citizenship.nc`) around the synthetic survey coordinates. Does the neighborhood composition differ by respondents' citizenship status?
+- **Heating × rent**: Do districts with more renewable heating (`building_heat_src.nc`) have higher or lower rents (`rent_avg.tif`)?
+- **Your own data**: If you brought your own dataset, this is the time to try integrating it with the Census or WorldPop data!
+
+Remember: Layer names in `.nc` files can be cryptic — use `z22::z22_categories()` or the [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes) to decode them.
+:::
+
+## Path B: Neighborhood profiles from Census cubes (structured) {.unnumbered}
+
+In this exercise, you'll build **neighborhood context profiles** from Census data cubes and link them to the synthetic survey respondents. This mirrors the session workflow — but at a finer spatial scale and with multi-layer data.
+
+### Exercises
+
+::: callout-note
+## 🏋️ Exercise 1 — Explore a Census data cube
+
+Load a `.nc` file from `./data/z22/` — for example, `age_short.nc`. Inspect it:
+
+- How many layers does it have?
+- What do the layer names mean? Decode them using `z22::z22_categories("age_short")` or the [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes).
+- Plot the individual layers side by side. What spatial patterns do you see?
+:::
+
+::: {.callout-caution collapse="true"}
+## 💡 Tip
+
+`terra::rast()` handles `.nc` files just like `.tif` — but returns multiple layers. Use `terra::nlyr()` to count them, `names()` to see their names, and `terra::plot()` to visualize all layers at once.
+:::
+
+::: callout-note
+## 🏋️ Exercise 2 — Extract neighborhood context for survey respondents
+
+Load the synthetic survey coordinates (`synthetic_survey_geocoordinates.rds`). Extract the values of **all layers** of your Census cube at the respondent locations.
+
+Do this twice:
+
+1.  **Point extraction** — direct 1:1 extraction at each coordinate
+2.  **Buffer extraction** — using a 5 km buffer around each point, averaging across cells
+
+Compare the results: How much do the two approaches differ? Why might you prefer one over the other in practice?
+:::
+
+::: {.callout-caution collapse="true"}
+## 💡 Tip
+
+- Watch out for CRS mismatches! Check `sf::st_crs()` and `terra::crs()` before extracting.
+- For the buffer approach, use `sf::st_buffer(points, 5000)` (assuming meters) and pass it to `terra::extract(..., fun = mean, na.rm = TRUE)`.
+- `terra::extract()` works on multi-layer rasters — it returns one column per layer automatically.
+:::
+
+::: callout-note
+## 🏋️ Exercise 3 — Link and compare groups
+
+The synthetic survey coordinates contain an attribute on citizenship status. Use it to compare the **neighborhood profiles** between the two groups:
+
+- Compute the mean of each Census cube layer per group (citizenship status × age bracket)
+- Visualize the difference — for example, as a grouped barplot of age shares by citizenship status
+- Discuss: Does the spatial context differ between groups? And: since the data are synthetic, can we interpret this as a "real" finding — or is it an artifact?
+:::
+
+::: {.callout-caution collapse="true"}
+## 💡 Tip
+
+- After `terra::extract()`, bind the results to the citizenship column — not the full points dataset! The points have other columns with different types that will cause problems during pivoting. Use e.g. `dplyr::tibble(citizenship = points$citizenship) |> dplyr::bind_cols(extracted_values)`.
+- Use `tidyr::pivot_longer()` to reshape the wide extraction results into a long format suitable for `ggplot2`.
+- For the barplot, `ggplot2::geom_col(position = "dodge")` with `facet_wrap()` by age group works well.
+- The critical reflection is part of the exercise — synthetic data are designed to have spatial structure, so patterns you find are intentional but not empirically "real".
+:::
+
+### Solutions
+
+::: {.callout-tip collapse="true"}
+## ✅ Solution 1
+
+```{r}
+#| eval: false
+library(terra)
+
+# Load the Census data cube
+age_cube <- terra::rast("./data/z22/age_short.nc")
+
+# How many layers?
+terra::nlyr(age_cube)
+
+# What are they called?
+names(age_cube)
+
+# Decode the layer names — what does each layer represent?
+# Option 1: z22 package (if installed)
+# z22::z22_categories("age_short")
+# Option 2: check https://ergebnisse.zensus2022.de/datenbank/online/themes
+
+# Inspect the metadata
+print(age_cube)
+
+# Plot all layers — each shows a different age group's share
+terra::plot(age_cube)
+```
+
+```{r}
+#| echo: false
+library(terra)
+
+age_cube <- terra::rast("../../data/z22/age_short.nc")
+terra::nlyr(age_cube)
+names(age_cube)
+print(age_cube)
+terra::plot(age_cube)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## ✅ Solution 2
+
+```{r}
+#| eval: false
+library(sf)
+
+# Load survey coordinates
+points <- readRDS("./data/synthetic_survey_geocoordinates.rds")
+
+# Check CRS of both datasets
+sf::st_crs(points)$epsg
+terra::crs(age_cube, describe = TRUE)$code
+
+# Reproject points to match the raster CRS
+points <- sf::st_transform(points, terra::crs(age_cube))
+
+# --- Point extraction (1:1) ---
+extracted_point <- terra::extract(age_cube, points, ID = FALSE)
+head(extracted_point)
+
+# --- Buffer extraction (5 km neighborhood) ---
+buffers <- sf::st_buffer(points, 5000)
+extracted_buffer <- terra::extract(
+  age_cube, buffers, fun = mean, na.rm = TRUE, ID = FALSE
+)
+head(extracted_buffer)
+
+# --- Compare the two approaches ---
+# The buffer values should be smoother (less extreme)
+# because they average over multiple grid cells
+summary(extracted_point)
+summary(extracted_buffer)
+```
+
+```{r}
+#| echo: false
+library(sf)
+
+points <- readRDS("../../data/synthetic_survey_geocoordinates.rds")
+points <- sf::st_transform(points, terra::crs(age_cube))
+
+extracted_point <- terra::extract(age_cube, points, ID = FALSE)
+head(extracted_point)
+
+buffers <- sf::st_buffer(points, 5000)
+extracted_buffer <- terra::extract(
+  age_cube, buffers, fun = mean, na.rm = TRUE, ID = FALSE
+)
+head(extracted_buffer)
+
+summary(extracted_point)
+summary(extracted_buffer)
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## ✅ Solution 3
+
+```{r}
+#| eval: false
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Combine extraction results with the citizenship attribute
+points_enriched <-
+  dplyr::tibble(citizenship = points$citizenship) |>  # keep only grouping variable
+  dplyr::bind_cols(extracted_buffer) |>               # add extracted values
+  tidyr::pivot_longer(                                # reshape to long format
+    cols = -citizenship,                              # pivot only the age layers
+    names_to = "age_group",
+    values_to = "share"
+  )
+
+# Compute group means
+group_profiles <- points_enriched |>
+  dplyr::group_by(citizenship, age_group) |>
+  dplyr::summarize(mean_share = mean(share, na.rm = TRUE), .groups = "drop")
+
+# Visualize
+ggplot(group_profiles, aes(x = age_group, y = mean_share, fill = factor(citizenship))) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Neighborhood age profiles by citizenship status",
+    x = "Age group (Census cube layer)",
+    y = "Mean share in 5 km buffer",
+    fill = "Citizenship\nstatus"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+#| echo: false
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+points_enriched <-
+  dplyr::tibble(citizenship = points$citizenship) |>
+  dplyr::bind_cols(extracted_buffer) |>
+  tidyr::pivot_longer(
+    cols = -citizenship,
+    names_to = "age_group",
+    values_to = "share"
+  )
+
+group_profiles <- points_enriched |>
+  dplyr::group_by(citizenship, age_group) |>
+  dplyr::summarize(mean_share = mean(share, na.rm = TRUE), .groups = "drop")
+
+ggplot(group_profiles, aes(x = age_group, y = mean_share, fill = factor(citizenship))) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Neighborhood age profiles by citizenship status",
+    x = "Age group (Census cube layer)",
+    y = "Mean share in 5 km buffer",
+    fill = "Citizenship\nstatus"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The synthetic data were designed to have spatial structure, so any pattern we find is "built in" by the data generation process — not evidence for a real-world association. In a real analysis, this is exactly where you'd discuss ecological fallacy, selection effects, and whether the spatial scale of your buffer matches your theoretical mechanism.
+:::
