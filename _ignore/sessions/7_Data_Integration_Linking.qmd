@@ -2,13 +2,13 @@
 title: "Data integration and linking (with survey data)"
 subtitle: "Advanced Geospatial Data Processing for Social Scientists"
 author: "Dennis Abel & Stefan Jünger"
-date: April 29, 2025
+date: June 10, 2026
 execute:
   echo: true
 format:
   revealjs:
     embed-resources: true
-    theme: [simple, tweaks.css]
+    theme: [simple, tweaks.css, tweaks_code.css]
     smaller: true
     scrollable: true
     slide-number: "c/t"
@@ -35,6 +35,22 @@ source("course_content.R")
 course_content |> 
   kableExtra::row_spec(12, background = "yellow")
 ```
+
+## Our plan
+
+So far, we have learned how to
+
+- Load, inspect, and subset raster data
+- Extract and aggregate raster values to points and polygons
+- Work with raster stacks and data cubes
+
+In this session, we put it all together in a **real research workflow**:
+
+- Introduce a social science survey dataset (ISSP)
+- Access Earth observation data via an API (Copernicus ERA5)
+- Aggregate gridded climate data to the country level
+- Link survey and EO data to investigate: **Do temperature anomalies relate to climate concern?**
+
 
 ## Survey data: ISSP Environment (1993-2020)
 
@@ -72,6 +88,21 @@ likert_plot_2020
 ```
 :::
 ::::
+
+## The research design
+
+Our question: **Are people in countries that experienced unusual warming more concerned about climate change?**
+
+Why *anomalies* instead of absolute temperatures? A hot country isn't automatically more concerned — but a country that is *unusually* hot compared to its own history might be. The anomaly captures the deviation from "normal".
+
+Here's the workflow we'll follow:
+
+1. **Survey data** (ISSP) → climate concern per country & year
+2. **EO data** (ERA5) → annual mean temperature per country & year
+3. **Baseline** (1961–1990) → long-term "normal" temperature per country
+4. **Anomaly** = focal year temperature − baseline
+5. **Join & compare** — do anomalies track with concern?
+
 
 ## EO indicators
 
@@ -168,8 +199,14 @@ keyring::key_set_with_value(service = "wf_api_key", password = api_key)
 
 Now we can access the data. We loop the download over the four years of the survey program (1993, 2000, 2010, 2020) to create four separate files.
 
+::: {.callout-note}
+## 📦 Data already included
+The ERA5 files are pre-downloaded in `./data/EO_data/C3S_data/`. The following slides show how we obtained them so you understand the workflow — **you don't need to run this code yourself**.
+:::
+
 ## Downloading the data
 
+<smaller>
 ```{r}
 #| eval: false
 # API access looped over four years
@@ -205,6 +242,7 @@ for (yr in c("1993", "2000", "2010", "2020")) {
     )
 }
 ```
+</smaller>
 
 ## Importing the data
 
@@ -249,7 +287,9 @@ plot(temp_2020[[1]])
 
 Now, we can aggregate the monthly values by year and country. If necessary, we will check that our country polygons and the raster files have the same CRS and align.
 
+<smaller>
 ```{r}
+#| message: false
 for (yr in c("1993", "2000", "2010", "2020")) {
   temp_data <- get(paste0("temp_", yr))
   
@@ -276,6 +316,7 @@ for (yr in c("1993", "2000", "2010", "2020")) {
   world[paste0("temp_", yr)] <- country_values[, 2]
 }
 ```
+</smaller>
 
 ## The result
 
@@ -289,7 +330,7 @@ head(world, 2)
 ::: {.column width="50%"}
 ```{r}
 #| eval: false
-#| fig.asp: .4
+#| fig.asp: .3
 plot(world["temp_2020"])
 ```
 :::
@@ -297,7 +338,7 @@ plot(world["temp_2020"])
 ::: {.column width="50%"}
 ```{r}
 #| echo: false
-#| fig.asp: .4
+#| fig.asp: .3
 plot(world["temp_2020"])
 ```
 :::
@@ -305,8 +346,9 @@ plot(world["temp_2020"])
 
 ## Gathering the baseline data
 
-Now that we have the focal values for all four survey years, we redo the process for the baseline period (1961-1990).
+Now that we have the focal values for all four survey years, we redo the process for the baseline period (1961-1990). (Again, this data is already pre-downloaded — the code is shown for reference.)
 
+<smaller>
 ```{r}
 #| eval: false
 # Specify API request
@@ -333,6 +375,7 @@ file_path <-
     verbose = FALSE
   )
 ```
+</smaller>
 
 ## Importing the data
 
@@ -473,87 +516,29 @@ ggplot(data = world) +
 :::
 ::::
 
-## Let's use these data
+## Restructuring the temperature data
 
-Remember, our question was whether temperature deviations from a baseline period (1961-1990) in the survey year correspond with the overall climate concern within a country. We can assess this question, e.g., by aggregating the survey data as follows. Note that we create a within-country z-standardized measure for climate concern along the way.
-
-:::: columns
-::: {.column width="50%"}
-```{r}
-#| eval: false
-issp_aggregated <-
-  issp |> 
-  dplyr::mutate(
-    country = 
-      ifelse(
-        country == "USA", 
-        "United States of America", 
-        country
-      )
-  ) |> 
-  dplyr::group_by(country) |> 
-  dplyr::mutate(concern = scale(concern)) |> 
-  dplyr::group_by(country, year) |> 
-  dplyr::summarize(
-    concern = mean(concern, na.rm = TRUE), 
-    .groups = "drop"
-  )
-
-issp_aggregated
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-issp_aggregated <-
-  issp |> 
-  dplyr::mutate(
-    country = 
-      ifelse(
-        country == "USA", 
-        "United States of America", 
-        country
-      )
-  ) |> 
-  dplyr::group_by(country) |> 
-  dplyr::mutate(concern = scale(concern)) |> 
-  dplyr::group_by(country, year) |> 
-  dplyr::summarize(
-    concern = mean(concern, na.rm = TRUE), 
-    .groups = "drop"
-  )
-
-issp_aggregated
-```
-:::
-::::
-
-## Structurally harmonzing the world data
-
-Formally, the ISSP data are now in an aggregated long format. We have to wrangle our world data, including the temperature measures, to harmonize both datasets. Note that we z-standardize temperature differences across the whole period and countries this time, as they do not differ within countries in a specific year.
+First, we reshape the temperature anomalies into long format — one row per country and year, keeping the raw values in Kelvin. No standardization needed.
 
 :::: columns
 ::: {.column width="50%"}
 ```{r}
 #| eval: false
-#| fig.asp: 1
 world_restructured <-
-  world |> 
-  sf::st_drop_geometry() |> 
+  world |>
+  sf::st_drop_geometry() |>
   dplyr::select(
-    country = admin, 
+    country = admin,
     dplyr::contains("diff_")
-  ) |> 
+  ) |>
   tidyr::pivot_longer(
     cols = dplyr::contains("diff_"),
     values_to = "temp_diff",
     names_to = "diff"
-  ) |> 
+  ) |>
   dplyr::mutate(
-    year = rep(c(1993, 2000, 2010, 2020), 242)
-  ) |> 
-  dplyr::mutate(temp_diff = scale(temp_diff))
+    year = as.numeric(stringr::str_extract(diff, "\\d{4}"))
+  )
 
 world_restructured
 ```
@@ -562,53 +547,346 @@ world_restructured
 ::: {.column width="50%"}
 ```{r}
 #| echo: false
-#| fig.asp: 1
 world_restructured <-
-  world |> 
-  sf::st_drop_geometry() |> 
+  world |>
+  sf::st_drop_geometry() |>
   dplyr::select(
-    country = admin, 
+    country = admin,
     dplyr::contains("diff_")
-  ) |> 
+  ) |>
   tidyr::pivot_longer(
     cols = dplyr::contains("diff_"),
     values_to = "temp_diff",
     names_to = "diff"
-  ) |> 
+  ) |>
   dplyr::mutate(
-    year = rep(c(1993, 2000, 2010, 2020), 242)
-  ) |> 
-  dplyr::mutate(temp_diff = scale(temp_diff))
+    year = as.numeric(stringr::str_extract(diff, "\\d{4}"))
+  )
 
 world_restructured
 ```
 :::
 ::::
 
-## Linking the data
+## Linking at the individual level
 
-We can now link both datasets to retrieve a final dataset we can analyze. We also converted it to a long format for plotting.
+Remember `terra::extract()` from Session 3? We used it to link raster values to points and polygons. That's exactly what we did earlier — aggregating gridded temperatures to country polygons. Now we join the anomalies directly to **every individual respondent** via country name and year. This is the core pattern: **spatial aggregation** (raster → polygons) followed by a **tabular join** (via `dplyr::left_join()`).
 
+:::: columns
+::: {.column width="50%"}
 ```{r}
+#| eval: false
 issp_linked <-
+  issp |>
+  dplyr::mutate(
+    country = ifelse(
+      country == "USA",
+      "United States of America",
+      country
+    )
+  ) |>
   dplyr::left_join(
-    issp_aggregated, world_restructured, by = c("country", "year")
-  ) |> 
-  tidyr::pivot_longer(
-    cols = c("concern", "temp_diff"), names_to = "variable"
+    world_restructured,
+    by = c("country", "year")
   )
 
 issp_linked
 ```
+:::
 
-## The analysis result
+::: {.column width="50%"}
+```{r}
+#| echo: false
+issp_linked <-
+  issp |>
+  dplyr::mutate(
+    country = ifelse(
+      country == "USA",
+      "United States of America",
+      country
+    )
+  ) |>
+  dplyr::left_join(
+    world_restructured,
+    by = c("country", "year")
+  )
+
+issp_linked
+```
+:::
+::::
+
+## Individual-level view: The full picture
+
+We group countries by the size of their temperature anomaly — **cooler than baseline** (≤ 0 K), **slightly warmer** (0–1 K), or **clearly warmer** (> 1 K) — and show how individual concern responses (1–5) are distributed within each group. This is the raw data before any aggregation.
 
 ```{r}
 #| echo: false
-issp_linked |> 
-  ggplot(aes(x = year, y = value, color = variable)) +
-  geom_line() +
-  facet_wrap(~country) +
-  scale_x_continuous(breaks = issp_linked$year) +
+#| fig.asp: .7
+#| fig-align: center
+issp_linked |>
+  dplyr::filter(!is.na(concern), !is.na(temp_diff)) |>
+  dplyr::mutate(
+    warming = cut(
+      temp_diff,
+      breaks = c(-Inf, 0, 1, Inf),
+      labels = c("≤ 0 K", "0–1 K", "> 1 K")
+    ),
+    concern = factor(concern, labels = c("1 (low)", "2", "3", "4", "5 (high)"))
+  ) |>
+  dplyr::count(year, warming, concern) |>
+  dplyr::group_by(year, warming) |>
+  dplyr::mutate(prop = n / sum(n)) |>
+  ggplot(aes(x = warming, y = concern, fill = prop)) +
+  geom_tile(color = "white", linewidth = .5) +
+  geom_text(aes(label = scales::percent(prop, accuracy = 1),
+                color = prop > .20),
+            size = 3, show.legend = FALSE) +
+  scale_color_manual(values = c("TRUE" = "white", "FALSE" = "black")) +
+  facet_wrap(~year, nrow = 1) +
+  scale_fill_viridis_c(labels = scales::percent, option = "inferno", direction = -1) +
+  labs(
+    x = "Temperature anomaly group",
+    y = "Climate concern",
+    fill = "Share"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom", panel.grid = element_blank())
+```
+
+## Now let's aggregate — what changes?
+
+We deliberately move from individuals to country means — using the **same anomaly groups** as above. Compare the full concern distributions in the heatmap with these boxplots: the enormous individual variation collapses into a narrow band of country means.
+
+```{r}
+#| echo: false
+#| fig.asp: .6
+#| fig-align: center
+issp_country <-
+  issp_linked |>
+  dplyr::filter(!is.na(concern), !is.na(temp_diff)) |>
+  dplyr::mutate(
+    warming = cut(
+      temp_diff,
+      breaks = c(-Inf, 0, 1, Inf),
+      labels = c("≤ 0 K", "0–1 K", "> 1 K")
+    )
+  ) |>
+  dplyr::group_by(country, year, warming, temp_diff) |>
+  dplyr::summarize(
+    concern = mean(concern, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ggplot(issp_country, aes(x = warming, y = concern)) +
+  geom_boxplot(outlier.shape = NA, fill = "grey90") +
+  geom_jitter(alpha = .5, width = .15, size = 1.5) +
+  facet_wrap(~year, nrow = 1) +
+  labs(
+    x = "Temperature anomaly group",
+    y = "Mean climate concern\n(country average, 1–5)"
+  ) +
+  theme_bw()
+```
+
+## Country trajectories: Who moves where?
+
+Each line is one country traced through the survey years it participated in. The x-axis is the temperature anomaly, the y-axis is mean concern. Most countries move **rightward** (growing anomalies), but their concern trajectories diverge.
+
+```{r}
+#| echo: false
+#| fig.asp: .7
+#| fig-align: center
+# Highlighted countries: diverse regions, trajectories, and dev. levels
+highlight_countries <- c(
+  "Germany", "Russia", "Japan",
+  "United States of America", "Philippines", "South Africa"
+)
+
+# Short labels for the plot
+country_labels <- c(
+  "Germany" = "Germany", "Russia" = "Russia", "Japan" = "Japan",
+  "United States of America" = "USA", "Philippines" = "Philippines",
+  "South Africa" = "South Africa"
+)
+
+plot_data <- issp_country |>
+  dplyr::group_by(country) |>
+  dplyr::filter(dplyr::n() > 1) |>
+  dplyr::ungroup() |>
+  dplyr::mutate(highlight = country %in% highlight_countries)
+
+hl_data <- plot_data |>
+  dplyr::filter(highlight) |>
+  dplyr::mutate(
+    short = country_labels[country],
+    label = ifelse(year == max(year), short, NA_character_)
+  )
+
+bg_data <- plot_data |> dplyr::filter(!highlight)
+
+ggplot(mapping = aes(x = temp_diff, y = concern)) +
+  # Background: all other countries (grey)
+  geom_path(data = bg_data, aes(group = country),
+            alpha = .3, linewidth = .4, color = "grey50") +
+  geom_point(data = bg_data, aes(group = country),
+             alpha = .3, size = 1.2, color = "grey50") +
+  # Highlighted countries: colored by short name
+  geom_path(data = hl_data, aes(group = country, color = short),
+            linewidth = 1, alpha = .8) +
+  geom_point(data = hl_data, aes(color = short), size = 2.5) +
+  ggrepel::geom_text_repel(
+    data = hl_data, aes(label = label, color = short),
+    size = 3, fontface = "bold", max.overlaps = 20, seed = 42,
+    show.legend = FALSE
+  ) +
+  scale_color_brewer(palette = "Dark2", guide = "none") +
+  labs(
+    x = "Temperature anomaly (K, vs. 1961–1990 baseline)",
+    y = "Mean climate concern (1–5)"
+  ) +
+  theme_bw()
+```
+
+## What do we see? (1/2)
+
+**Individual-level heatmap**
+
+- The concern distribution looks remarkably similar across all three anomaly groups — people in "clearly warmer" countries are not systematically more concerned
+- Over time, the "> 1 K" group grows (more countries experience large anomalies), but the concern distribution within each group stays fairly stable
+- This is the full individual variation — something we lose entirely when we aggregate
+
+**Aggregated boxplot**
+
+- Country-level means compress the enormous individual variation into a narrow band
+- The boxes barely differ across anomaly groups — the "signal" we might hope for is not there
+- This is the **ecological fallacy** made visible: even if there were a country-level pattern, it would not reflect individual-level reality
+
+## What do we see? (2/2)
+
+**Country trajectories**
+
+- Almost all countries move rightward: anomalies grow from 1993 to 2020
+- But concern trajectories are idiosyncratic — some countries grow more concerned, others less
+- This suggests that country-specific factors (media, politics, economic context) matter more than temperature alone
+
+**Limitations**
+
+- Only 4 time points — too few for robust trend analysis
+- No causal claim possible: many confounding factors
+- Finer spatial resolution (e.g., NUTS-2 regions) would strengthen the analysis
+
+$\rightarrow$ But as a **workflow demonstration**, this shows how survey and EO data can be integrated end-to-end using the tools we've learned in this course.
+
+## Exercise 7_1: Data Integration
+
+![](../img/cat_quality.webp){width="45%" fig-align="center"}
+
+## Appendix: Plot code {.appendix .smaller}
+
+The following code produces the three analysis plots shown earlier. It is provided as a reference — you don't need to type it during the session.
+
+## Individual-level heatmap
+
+```{r}
+#| eval: false
+issp_linked |>
+  dplyr::filter(!is.na(concern), !is.na(temp_diff)) |>
+  dplyr::mutate(
+    warming = cut(
+      temp_diff,
+      breaks = c(-Inf, 0, 1, Inf),
+      labels = c("≤ 0 K", "0–1 K", "> 1 K")
+    ),
+    concern = factor(concern, labels = c("1 (low)", "2", "3", "4", "5 (high)"))
+  ) |>
+  dplyr::count(year, warming, concern) |>
+  dplyr::group_by(year, warming) |>
+  dplyr::mutate(prop = n / sum(n)) |>
+  ggplot(aes(x = warming, y = concern, fill = prop)) +
+  geom_tile(color = "white", linewidth = .5) +
+  geom_text(aes(label = scales::percent(prop, accuracy = 1),
+                color = prop > .20),
+            size = 3, show.legend = FALSE) +
+  scale_color_manual(values = c("TRUE" = "white", "FALSE" = "black")) +
+  facet_wrap(~year, nrow = 1) +
+  scale_fill_viridis_c(labels = scales::percent, option = "inferno", direction = -1) +
+  labs(x = "Temperature anomaly group", y = "Climate concern", fill = "Share") +
+  theme_minimal() +
+  theme(legend.position = "bottom", panel.grid = element_blank())
+```
+
+## Aggregated boxplot
+
+```{r}
+#| eval: false
+issp_country <-
+  issp_linked |>
+  dplyr::filter(!is.na(concern), !is.na(temp_diff)) |>
+  dplyr::mutate(
+    warming = cut(
+      temp_diff,
+      breaks = c(-Inf, 0, 1, Inf),
+      labels = c("≤ 0 K", "0–1 K", "> 1 K")
+    )
+  ) |>
+  dplyr::group_by(country, year, warming, temp_diff) |>
+  dplyr::summarize(concern = mean(concern, na.rm = TRUE), .groups = "drop")
+
+ggplot(issp_country, aes(x = warming, y = concern)) +
+  geom_boxplot(outlier.shape = NA, fill = "grey90") +
+  geom_jitter(alpha = .5, width = .15, size = 1.5) +
+  facet_wrap(~year, nrow = 1) +
+  labs(x = "Temperature anomaly group",
+       y = "Mean climate concern\n(country average, 1–5)") +
+  theme_bw()
+```
+
+## Country trajectories
+
+```{r}
+#| eval: false
+highlight_countries <- c(
+  "Germany", "Russia", "Japan",
+  "United States of America", "Philippines", "South Africa"
+)
+
+country_labels <- c(
+  "Germany" = "Germany", "Russia" = "Russia", "Japan" = "Japan",
+  "United States of America" = "USA", "Philippines" = "Philippines",
+  "South Africa" = "South Africa"
+)
+
+plot_data <- issp_country |>
+  dplyr::group_by(country) |>
+  dplyr::filter(dplyr::n() > 1) |>
+  dplyr::ungroup() |>
+  dplyr::mutate(highlight = country %in% highlight_countries)
+
+hl_data <- plot_data |>
+  dplyr::filter(highlight) |>
+  dplyr::mutate(
+    short = country_labels[country],
+    label = ifelse(year == max(year), short, NA_character_)
+  )
+
+bg_data <- plot_data |> dplyr::filter(!highlight)
+
+ggplot(mapping = aes(x = temp_diff, y = concern)) +
+  geom_path(data = bg_data, aes(group = country),
+            alpha = .3, linewidth = .4, color = "grey50") +
+  geom_point(data = bg_data, aes(group = country),
+             alpha = .3, size = 1.2, color = "grey50") +
+  geom_path(data = hl_data, aes(group = country, color = short),
+            linewidth = 1, alpha = .8) +
+  geom_point(data = hl_data, aes(color = short), size = 2.5) +
+  ggrepel::geom_text_repel(
+    data = hl_data, aes(label = label, color = short),
+    size = 3, fontface = "bold", max.overlaps = 20, seed = 42,
+    show.legend = FALSE
+  ) +
+  scale_color_brewer(palette = "Dark2", guide = "none") +
+  labs(x = "Temperature anomaly (K, vs. 1961–1990 baseline)",
+       y = "Mean climate concern (1–5)") +
   theme_bw()
 ```
