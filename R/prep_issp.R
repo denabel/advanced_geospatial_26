@@ -1,39 +1,59 @@
-library(haven) # For working with SPSS datafiles
-library(sjlabelled) # To remove labels from STATA datafiles
-library(tidyverse) # For so much
+# ──────────────────────────────────────────────────────────────────────────────
+# Prepare ISSP Environment module data for Session 7
+# "Advanced Geospatial Data Processing for Social Scientists"
+#
+# This script is sourced by the Session 7 slides (Data Integration & Linking).
+# It loads the ISSP cumulation file, selects the climate concern item, recodes
+# country identifiers to readable names, and reverses the concern scale so that
+# higher values = higher concern. It also produces a Likert-style bar chart
+# for the 2020 wave.
+#
+# Input:  ./data/ZA8793_v1-0-0.dta  (ISSP Environment cumulation, Stata format)
+# Output: objects `issp` (tibble) and `likert_plot_2020` (ggplot) in the
+#         calling environment
+# ──────────────────────────────────────────────────────────────────────────────
 
-issp <- 
-  haven::read_dta("./data/ZA8793_v1-0-0.dta") |> 
-  sjlabelled::remove_all_labels() |> 
+library(haven)       # Import Stata .dta files
+library(sjlabelled)  # Strip SPSS/Stata value labels
+library(tidyverse)   # dplyr, ggplot2, forcats, tidyr, …
+
+# --- Load and recode ISSP data ------------------------------------------------
+
+issp <-
+  haven::read_dta("./data/ZA8793_v1-0-0.dta") |>
+  sjlabelled::remove_all_labels() |>
   dplyr::select(
-    year, 
-    country, 
-    concern = v42
-  ) |> 
+    year,
+    country,
+    concern = v42       # "Rise in world's temperature dangerous for environment"
+  ) |>
   dplyr::mutate(
-    country = 
+    # Map numeric country codes to readable names
+    country =
       factor(
-        country, 
+        country,
         levels = c(
-          36, 40, 100, 124, 152, 158, 191, 203, 208, 246, 250, 276, 348, 352, 
-          372, 376, 380, 392, 410, 428, 440, 484, 528, 554, 578, 608, 620, 643, 
+          36, 40, 100, 124, 152, 158, 191, 203, 208, 246, 250, 276, 348, 352,
+          372, 376, 380, 392, 410, 428, 440, 484, 528, 554, 578, 608, 620, 643,
           703, 705, 710, 724, 752, 756, 826, 840, 82602
-        ), 
+        ),
         labels = c(
-          "Australia", "Austria", "Bulgaria", "Canada", "Chile", "Taiwan", 
+          "Australia", "Austria", "Bulgaria", "Canada", "Chile", "Taiwan",
           "Croatia", "Czechia", "Denmark", "Finland", "France", "Germany",
-          "Hungary", "Iceland", "Ireland", "Israel", "Italy", "Japan", 
+          "Hungary", "Iceland", "Ireland", "Israel", "Italy", "Japan",
           "South Korea", "Latvia", "Lithuania", "Mexico", "Netherlands",
-          "New Zealand", "Norway", "Philippines", "Portugal", "Russia", 
-          "Slovakia", "Slovenia", "South Africa", "Spain", "Sweden", 
+          "New Zealand", "Norway", "Philippines", "Portugal", "Russia",
+          "Slovakia", "Slovenia", "South Africa", "Spain", "Sweden",
           "Switzerland", "Great Britain", "United States", "Northern Ireland"
         )
       ),
+    # Merge Great Britain and Northern Ireland into United Kingdom
     country = dplyr::case_when(
-      country == "Great Britain" | country == "Northern Ireland" ~ 
+      country == "Great Britain" | country == "Northern Ireland" ~
         "United Kingdom",
       TRUE ~ country
     ),
+    # Reverse scale so that 5 = high concern, 1 = low concern
     concern = dplyr::case_match(
       concern,
       1 ~ 5,
@@ -44,12 +64,13 @@ issp <-
     )
   )
 
-# Define Likert-theme
+# --- Likert plot for 2020 wave ------------------------------------------------
+
 likert_theme <- theme_gray() +
   theme(text = element_text(size = 12, face = "bold"),
         plot.title = element_text(size = 13, face = "bold",
-                                  margin = margin(10, 0, 10, 0)), 
-        plot.margin = unit(c(.4,0,.4,.4), "cm"),
+                                  margin = margin(10, 0, 10, 0)),
+        plot.margin = unit(c(.4, 0, .4, .4), "cm"),
         plot.subtitle = element_text(face = "italic"),
         legend.title = element_blank(),
         legend.key.size = unit(1, "line"),
@@ -61,34 +82,33 @@ likert_theme <- theme_gray() +
         panel.background = element_blank(),
         strip.text = element_text(size = 12, face = "bold"))
 
-# Let's look at 2020 only
-issp_2020 <- 
-  issp |> 
+issp_2020 <-
+  issp |>
   dplyr::filter(year == "2020")
 
-# Plot
 likert_plot_2020 <-
   issp_2020 |>
   filter(!is.na(concern)) |>
-  mutate(country = forcats::fct_reorder(country, concern, 
-                                            .fun=mean, .desc=FALSE)) |> 
+  mutate(country = forcats::fct_reorder(country, concern,
+                                            .fun = mean, .desc = FALSE)) |>
   arrange(country) |>
   group_by(country, concern) |>
   summarize(count = n()) |>
-  group_by(country) |> 
+  group_by(country) |>
   mutate(prop_value = count / sum(count)) |>
   ggplot() +
   geom_bar(mapping = aes(x = country,
                          y = prop_value,
                          fill = forcats::fct_rev(factor(concern))),
            position = "fill",
-           stat = "identity")+
-  geom_text(aes(x = country, y = prop_value, label = round(100*prop_value)), 
-            position = position_stack(vjust = 0.5), 
+           stat = "identity") +
+  geom_text(aes(x = country, y = prop_value, label = round(100 * prop_value)),
+            position = position_stack(vjust = 0.5),
             fontface = "bold") +
   scale_fill_brewer(type = "div", palette = "PRGn", direction = -1,
-                    labels = c("5 - High concern", "4", "3", "2", "1 - No concern")) +
+                    labels = c("5 - High concern", "4", "3",
+                               "2", "1 - No concern")) +
   coord_flip() +
   likert_theme +
   theme(legend.position = "bottom") +
-  guides(fill = guide_legend(reverse = TRUE, nrow =1))
+  guides(fill = guide_legend(reverse = TRUE, nrow = 1))
