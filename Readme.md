@@ -37,7 +37,7 @@ This page comprises the official workshop repository with the most recent change
 to our materials. You can find all the course data, slides, and exercises here. 
 The section below links the slides and exercises that will open them directly in 
 the browser as HTML files. They are also stored in the folders `./slides/` and 
-`./exercises`. You can also find all the data in the folder `./data`. They comprise the following official (Open Data) sources:
+`./exercises`. You can also find all the data in the folder `./data`, organized by source into subfolders (`boundaries/`, `worldpop/`, `nightlights/`, `era5/`, `issp/`, `survey/`, `z22/`, etc.). They comprise the following official (Open Data) sources:
 
 - Administrative borders of Germany (Prefix *VG250_*) are provided by the German [Federal Agency for Cartography and Geodesy](http://www.bkg.bund.de) (2018). Check out their [Open Data Portal](https://gdz.bkg.bund.de/index.php/default/open-data.html).
 

@@ -201,7 +201,7 @@ Now we can access the data. We loop the download over the four years of the surv
 
 ::: {.callout-note}
 ## 📦 Data already included
-The ERA5 files are pre-downloaded in `./data/EO_data/C3S_data/`. The following slides show how we obtained them so you understand the workflow — **you don't need to run this code yourself**.
+The ERA5 files are pre-downloaded in `./data/era5/`. The following slides show how we obtained them so you understand the workflow — **you don't need to run this code yourself**.
 :::
 
 ## Downloading the data
@@ -237,7 +237,7 @@ for (yr in c("1993", "2000", "2010", "2020")) {
     ecmwfr::wf_request(
       request = request,
       transfer = TRUE,
-      path = "./data/EO_data/C3S_data",
+      path = "./data/era5",
       verbose = FALSE
     )
 }
@@ -250,18 +250,18 @@ Importing the data into `R` should feel natural to us right now. We simply use `
 
 ```{r}
 #| eval: false
-temp_1993 <- terra::rast("./data/EO_data/C3S_data/era5_temperature1993.grib")
-temp_2000 <- terra::rast("./data/EO_data/C3S_data/era5_temperature2000.grib")
-temp_2010 <- terra::rast("./data/EO_data/C3S_data/era5_temperature2010.grib")
-temp_2020 <- terra::rast("./data/EO_data/C3S_data/era5_temperature2020.grib")
+temp_1993 <- terra::rast("./data/era5/era5_temperature1993.grib")
+temp_2000 <- terra::rast("./data/era5/era5_temperature2000.grib")
+temp_2010 <- terra::rast("./data/era5/era5_temperature2010.grib")
+temp_2020 <- terra::rast("./data/era5/era5_temperature2020.grib")
 ```
 
 ```{r}
 #| echo: false
-temp_1993 <- terra::rast("../../data/EO_data/C3S_data/era5_temperature1993.grib")
-temp_2000 <- terra::rast("../../data/EO_data/C3S_data/era5_temperature2000.grib")
-temp_2010 <- terra::rast("../../data/EO_data/C3S_data/era5_temperature2010.grib")
-temp_2020 <- terra::rast("../../data/EO_data/C3S_data/era5_temperature2020.grib")
+temp_1993 <- terra::rast("../../data/era5/era5_temperature1993.grib")
+temp_2000 <- terra::rast("../../data/era5/era5_temperature2000.grib")
+temp_2010 <- terra::rast("../../data/era5/era5_temperature2010.grib")
+temp_2020 <- terra::rast("../../data/era5/era5_temperature2020.grib")
 ```
 
 ## Inspecting the data
@@ -371,7 +371,7 @@ file_path <-
   ecmwfr::wf_request(
     request = request,
     transfer = TRUE,
-    path = "./data/EO_data/C3S_data",
+    path = "./data/era5",
     verbose = FALSE
   )
 ```
@@ -384,13 +384,13 @@ Again, we use `terra::rast()` to import the data.
 ```{r}
 #| eval: false
 temp_base <- 
-  terra::rast("./data/EO_data/C3S_data/era5_temperature1961-1990.grib")
+  terra::rast("./data/era5/era5_temperature1961-1990.grib")
 ```
 
 ```{r}
 #| echo: false
 temp_base <- 
-  terra::rast("../../data/EO_data/C3S_data/era5_temperature1961-1990.grib")
+  terra::rast("../../data/era5/era5_temperature1961-1990.grib")
 ```
 
 
@@ -434,7 +434,7 @@ if(!identical(terra::crs(world), terra::crs(temp_base))) {
 
 # Collapse all into one layer by averaging across months and years
 annual_values_base <- 
-  readRDS("../../data/EO_data/C3S_data/annual_values_base.rds")
+  readRDS("../../data/era5/annual_values_base.rds")
 
 # Aggregate by country
 country_values <- 

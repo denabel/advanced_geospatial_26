@@ -128,11 +128,11 @@ Load the data
 ```{r}
 #| eval: false
 # load district shapefile
-german_districts <- sf::read_sf("./data/VG250_KRS.shp")
+german_districts <- sf::read_sf("./data/boundaries/VG250_KRS.shp")
 
 # load district attributes
 attributes_districts <- 
-  readr::read_csv2("./data/attributes_districts.csv") |> 
+  readr::read_csv2("./data/misc/attributes_districts.csv") |> 
   dplyr::mutate(ecar_share = as.numeric(ecar_share))
 
 # join data
@@ -141,17 +141,17 @@ german_districts_enhanced <-
   dplyr::left_join(attributes_districts, by = "AGS")
 
 # load states shapefile
-german_states <- sf::read_sf("./data/VG250_LAN.shp")
+german_states <- sf::read_sf("./data/boundaries/VG250_LAN.shp")
 ```
 
 ```{r}
 #| echo: false
 # load district shapefile
-german_districts <- sf::read_sf("../../data/VG250_KRS.shp")
+german_districts <- sf::read_sf("../../data/boundaries/VG250_KRS.shp")
 
 # load district attributes
 attributes_districts <- 
-  readr::read_csv2("../../data/attributes_districts.csv") |> 
+  readr::read_csv2("../../data/misc/attributes_districts.csv") |> 
   dplyr::mutate(ecar_share = as.numeric(ecar_share))
 
 # join data
@@ -160,7 +160,7 @@ german_districts_enhanced <-
   dplyr::left_join(attributes_districts, by = "AGS")
 
 # load states shapefile
-german_states <- sf::read_sf("../../data/VG250_LAN.shp")
+german_states <- sf::read_sf("../../data/boundaries/VG250_LAN.shp")
 ```
 
 
@@ -475,7 +475,7 @@ Let's explore the suitability of `ggplot2` in combination with `tidyterra` with 
 
 ```{r}
 # Example with worldpop data for Germany 2020
-ger_pop_2020 <- terra::rast("../../data/deu_ppp_2020_1km_Aggregated.tif")
+ger_pop_2020 <- terra::rast("../../data/worldpop/deu_ppp_2020_1km_Aggregated.tif")
 
 ger_pop_2020
 ```
@@ -675,7 +675,7 @@ ggplot()+
 We will now dig deeper into population dynamics. We load a **second layer** which records the population size twenty years earlier - in 2000. We compare dimensions of both layers: they match.
 
 ```{r}
-ger_pop_2000 <- terra::rast("../../data/deu_ppp_2000_1km_Aggregated.tif") |> 
+ger_pop_2000 <- terra::rast("../../data/worldpop/deu_ppp_2000_1km_Aggregated.tif") |> 
   terra::project("EPSG:25832")
   
 ger_pop_2000
@@ -719,7 +719,7 @@ The state (Bundesland) of North Rhine-Westphalia looks quite interesting. The st
 ```{r}
 #| eval: false
 #| fig.asp: 0.8
-NRW_districts <- sf::read_sf("../../data/VG250_KRS.shp") |> 
+NRW_districts <- sf::read_sf("../../data/boundaries/VG250_KRS.shp") |> 
   filter(SN_L == "05")
   
 ggplot(NRW_districts)+
@@ -731,7 +731,7 @@ ggplot(NRW_districts)+
 ```{r}
 #| echo: false
 #| fig.asp: 0.8
-NRW_districts <- sf::read_sf("../../data/VG250_KRS.shp") |> 
+NRW_districts <- sf::read_sf("../../data/boundaries/VG250_KRS.shp") |> 
   filter(SN_L == "05")
   
 ggplot(NRW_districts)+

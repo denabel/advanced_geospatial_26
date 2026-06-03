@@ -150,7 +150,7 @@ library(sf)
 
 # load data
 # source: https://hub.arcgis.com/datasets/esri::world-countries-generalized/
-hello_world <- sf::read_sf("../../data/World_Countries.geojson")
+hello_world <- sf::read_sf("../../data/boundaries/World_Countries.geojson")
 ```
 
 ```{r}
@@ -160,7 +160,7 @@ library(sf)
 
 # load data
 # source: https://hub.arcgis.com/datasets/esri::world-countries-generalized/
-hello_world <- sf::read_sf("./data/World_Countries.geojson")
+hello_world <- sf::read_sf("./data/boundaries/World_Countries.geojson")
 ```
 
 ## We can already plot it
@@ -228,7 +228,7 @@ Often, we want to combine geospatial datasets from different sources. The choice
 #| eval: false
 german_districts <-
   sf::st_read(
-    "./data/VG250_KRS.shp",
+    "./data/boundaries/VG250_KRS.shp",
     as_tibble = TRUE # returns tibble, not plain df
   )
 
@@ -241,7 +241,7 @@ plot(german_districts["AGS"]) # plot by district code
 #| include: false
 german_districts <-
   sf::st_read(
-    "../../data/VG250_KRS.shp",
+    "../../data/boundaries/VG250_KRS.shp",
     as_tibble = TRUE
   )
 
@@ -268,7 +268,7 @@ Using the synthetic survey geocoordinates, we can craft a toy example to demonst
 #| eval: false
 points <-
   readRDS(
-    "./data/synthetic_survey_gecoordinates.rds"
+    "./data/survey/synthetic_survey_gecoordinates.rds"
   ) |>
   sf::st_transform(sf::st_crs(german_districts)) # match CRS
 
@@ -282,7 +282,7 @@ plot(sf::st_geometry(points)) # point locations
 #| fig-asp: .9
 points <-
   readRDS(
-    "../../data/synthetic_survey_geocoordinates.rds"
+    "../../data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   sf::st_transform(sf::st_crs(german_districts)) # match CRS
 

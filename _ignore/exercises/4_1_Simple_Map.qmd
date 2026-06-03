@@ -20,7 +20,7 @@ We are now focussing on creating a first map based on raster data in `ggplot`. W
 ::: callout-note
 ## 🏋️ Exercise 1
 
-Load the WorldPop file for the USA in 2020 (`./data/usa_ppp_2020_1km_Aggregated.tif`). Create a simple plot with `terra::plot()` to inspect the data.
+Load the WorldPop file for the USA in 2020 (`./data/worldpop/usa_ppp_2020_1km_Aggregated.tif`). Create a simple plot with `terra::plot()` to inspect the data.
 :::
 
 ::: callout-note
@@ -118,7 +118,7 @@ library(terra)
 library(tidyterra)
 
 # Load the data
-USA_pop_2020 <- terra::rast("./data/usa_ppp_2020_1km_Aggregated.tif")
+USA_pop_2020 <- terra::rast("./data/worldpop/usa_ppp_2020_1km_Aggregated.tif")
 
 # Inspect it
 terra::plot(USA_pop_2020)
@@ -135,7 +135,7 @@ library(terra)
 library(tidyterra)
 
 # Load the data
-USA_pop_2020 <- terra::rast("../../data/usa_ppp_2020_1km_Aggregated.tif")
+USA_pop_2020 <- terra::rast("../../data/worldpop/usa_ppp_2020_1km_Aggregated.tif")
 
 # Inspect it
 terra::plot(USA_pop_2020)

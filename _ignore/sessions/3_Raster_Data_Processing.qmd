@@ -70,7 +70,7 @@ The easiest way (in my opinion) to create a bounding box in `R` is to use the `s
 ```{r}
 #| eval: false
 bbox_east <-
-  sf::st_read("./data/VG250_LAN.shp") |>
+  sf::st_read("./data/boundaries/VG250_LAN.shp") |>
   dplyr::filter(SN_L %in% 11:16, GF == 4) |> # Eastern states
   sf::st_transform(3035) |> # reproject
   sf::st_bbox() |> # bounding box
@@ -82,7 +82,7 @@ bbox_east
 ```{r}
 #| echo: false
 bbox_east <-
-  sf::st_read("../../data/VG250_LAN.shp") |>
+  sf::st_read("../../data/boundaries/VG250_LAN.shp") |>
   dplyr::filter(SN_L %in% 11:16, GF == 4) |> # Eastern states
   sf::st_transform(3035) |> # reproject
   sf::st_bbox() |> # bounding box
@@ -148,7 +148,7 @@ terra::plot(pop_grid_2022_crop)
 #| fig-asp: .8
 east_german_states <-
   sf::st_read(
-    "./data/VG250_LAN.shp",
+    "./data/boundaries/VG250_LAN.shp",
     quiet = TRUE
   ) |>
   sf::st_transform(3035) |> 
@@ -173,7 +173,7 @@ plot(
 #| fig-asp: .8
 east_german_states <-
   sf::st_read(
-    "../../data/VG250_LAN.shp",
+    "../../data/boundaries/VG250_LAN.shp",
     quiet = TRUE
   ) |>
   sf::st_transform(3035) |> 
@@ -288,7 +288,7 @@ For this effort, we re-import the synthetic survey geocoordinates. We sample 100
 #| eval: false
 points <-
   readRDS(
-    "./data/synthetic_survey_geocoordinates.rds"
+    "./data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   dplyr::sample_n(size = 100) # random subset
 
@@ -302,7 +302,7 @@ points
 #| fig-asp: .7
 points <-
   readRDS(
-    "../../data/synthetic_survey_geocoordinates.rds"
+    "../../data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   dplyr::sample_n(size = 100) # random subset
 
@@ -490,13 +490,13 @@ We can use the same procedure to aggregate a raster dataset into a vector polygo
 #| fig.asp: .8
 german_districts <-
   sf::st_read(
-    "./data/VG250_KRS.shp",
+    "./data/boundaries/VG250_KRS.shp",
     quiet = TRUE
   ) |>
   sf::st_transform(3035) # match raster CRS
 
 gender_ratios_2020 <-
-  terra::rast("./data/gender_ratio_2020.tif")
+  terra::rast("./data/worldpop/gender_ratio_2020.tif")
 
 plot(gender_ratios_2020) # raster base layer
 plot(
@@ -513,13 +513,13 @@ plot(
 #| fig.asp: .8
 german_districts <-
   sf::st_read(
-    "../../data/VG250_KRS.shp",
+    "../../data/boundaries/VG250_KRS.shp",
     quiet = TRUE
   ) |>
   sf::st_transform(3035) # match raster CRS
 
 gender_ratios_2020 <-
-  terra::rast("../../data/gender_ratio_2020.tif")
+  terra::rast("../../data/worldpop/gender_ratio_2020.tif")
 
 plot(gender_ratios_2020) # raster base layer
 plot(
@@ -672,7 +672,7 @@ Usually, when we talk about heat maps, we mean analyzing point patterns and whet
 #| fig.asp: .5
 points_berlin <-
   readRDS(
-    "./data/synthetic_survey_geocoordinates.rds"
+    "./data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   sf::st_crop(berlin) # subset to Berlin
 
@@ -686,7 +686,7 @@ plot(sf::st_geometry(points_berlin)) # point locations
 #| fig.asp: .5
 points_berlin <-
   readRDS(
-    "../../data/synthetic_survey_geocoordinates.rds"
+    "../../data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   sf::st_crop(berlin) # subset to Berlin
 

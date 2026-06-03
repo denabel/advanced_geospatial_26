@@ -28,7 +28,7 @@ You'll work with Census 2022 rasters from `./data/z22/`. Not sure what a file co
 ::: callout-note
 ## 🏋️ Exercise 1
 
-Your first task is to import a dataset of synthetic geographic coordinates (`synthetic_survey_geocoordinates.rds` in `./data/`) and a raster `.tif` dataset from the `./data/z22/` folder.
+Your first task is to import a dataset of synthetic geographic coordinates (`synthetic_survey_geocoordinates.rds` in `./data/survey/`) and a raster `.tif` dataset from the `./data/z22/` folder.
 
 After loading both, compare their coordinate reference systems. Do they match? What would you need to do before extracting raster values at the point locations?
 :::
@@ -89,7 +89,7 @@ In this exercise, you’ll explore how spatial resolution affects your results.
 library(terra)
 
 # Load the synthetic survey coordinates (an sf point dataset)
-coordinates <- readRDS("./data/synthetic_survey_geocoordinates.rds")
+coordinates <- readRDS("./data/survey/synthetic_survey_geocoordinates.rds")
 
 # Inspect: how many points? which columns? which geometry type?
 str(coordinates)
@@ -113,7 +113,7 @@ terra::crs(rent_avg, describe = TRUE)$code # CRS of the raster
 #| echo: false
 library(terra)
 
-coordinates <- readRDS("../../data/synthetic_survey_geocoordinates.rds")
+coordinates <- readRDS("../../data/survey/synthetic_survey_geocoordinates.rds")
 str(coordinates)
 
 rent_avg <- terra::rast("../../data/z22/rent_avg.tif")

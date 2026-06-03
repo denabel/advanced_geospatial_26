@@ -20,7 +20,7 @@ Building on our previous mapping exercise with Texas data, we want to continue t
 ::: callout-note
 ## 🏋️ Exercise 1
 
-Load the four population raster layers for Texas 2017-2020 (`./data/US-TX_ppp_2017_1km.tif`-`./data/US-TX_ppp_2020_1km.tif`) with `terra::rast()` and integrate these into one raster stack. Either do this in two steps or by creating a file list and directly read these GeoTiffs as a stack.
+Load the four population raster layers for Texas 2017-2020 (`./data/worldpop/US-TX_ppp_2017_1km.tif`-`./data/worldpop/US-TX_ppp_2020_1km.tif`) with `terra::rast()` and integrate these into one raster stack. Either do this in two steps or by creating a file list and directly read these GeoTiffs as a stack.
 :::
 
 ::: callout-note
@@ -60,7 +60,7 @@ library(terra)
 library(tidyterra)
 
 # Load the raster data
-files <- list.files("./data", pattern = "US-TX_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
+files <- list.files("./data/worldpop", pattern = "US-TX_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
 
 TX_pop_stack <- terra::rast(files)
 
@@ -75,7 +75,7 @@ library(terra)
 library(tidyterra)
 
 # Load the raster data
-files <- list.files("../../data", pattern = "US-TX_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
+files <- list.files("../../data/worldpop", pattern = "US-TX_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
 
 TX_pop_stack <- terra::rast(files)
 
@@ -127,7 +127,7 @@ terra::plot(TX_pop_stack[0:1000,
 # Export
 writeRaster(
   TX_pop_stack,
-  "./data/TX_pop_stack.tif",
+  "./data/stacks/TX_pop_stack.tif",
   overwrite=TRUE,
   gdal=c("COMPRESS=LZW","BIGTIFF=YES")
 )
@@ -138,7 +138,7 @@ writeRaster(
 # Export
 writeRaster(
   TX_pop_stack,
-  "../../data/TX_pop_stack.tif",
+  "../../data/stacks/TX_pop_stack.tif",
   overwrite=TRUE,
   gdal=c("COMPRESS=LZW","BIGTIFF=YES")
 )

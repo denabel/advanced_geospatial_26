@@ -20,7 +20,7 @@ Now that we know how to map several layers simultaneously with `ggplot()`, we wa
 ::: callout-note
 ## 🏋️ Exercise 1
 
-In the previous session, we have created a raster stack and a raster cube for the four years in Texas. If these are not in your environment anymore, please load both (`./data/TX_pop_stack.tif` and `./data/TX_pop_cube.rds`). 
+In the previous session, we have created a raster stack and a raster cube for the four years in Texas. If these are not in your environment anymore, please load both (`./data/stacks/TX_pop_stack.tif` and `./data/stacks/TX_pop_cube.rds`). 
 
 In addition, load the county shapefiles for Texas with the `tigris` package. Reproject it to the CRS of your raster files.
 :::
@@ -78,10 +78,10 @@ library(tigris)
 library(stars)
 
 # Load the raster data
-TX_pop_stack <- terra::rast("./data/TX_pop_stack.tif")
+TX_pop_stack <- terra::rast("./data/stacks/TX_pop_stack.tif")
 
 # Load the raster cube
-TX_pop_cube <- readRDS("./data/TX_pop_cube.rds")
+TX_pop_cube <- readRDS("./data/stacks/TX_pop_cube.rds")
 
 # Load Texas county data
 TX_counties <- tigris::counties("TX", progress_bar = FALSE)
@@ -103,10 +103,10 @@ library(tigris)
 library(stars)
 
 # Load the raster data
-TX_pop_stack <- terra::rast("../../data/TX_pop_stack.tif")
+TX_pop_stack <- terra::rast("../../data/stacks/TX_pop_stack.tif")
 
 # Load the raster cube
-TX_pop_cube <- readRDS("../../data/TX_pop_cube.rds")
+TX_pop_cube <- readRDS("../../data/stacks/TX_pop_cube.rds")
 
 # Load Texas county data
 TX_counties <- tigris::counties("TX", progress_bar = FALSE)

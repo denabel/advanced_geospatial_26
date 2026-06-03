@@ -128,10 +128,10 @@ We load four layers of population data for California for the years 2017-2020.
 
 ```{r}
 #| eval: false
-CA_pop_2017 <- terra::rast("./data/US-CA_ppp_2017_1km.tif")
-CA_pop_2018 <- terra::rast("./data/US-CA_ppp_2018_1km.tif")
-CA_pop_2019 <- terra::rast("./data/US-CA_ppp_2019_1km.tif")
-CA_pop_2020 <- terra::rast("./data/US-CA_ppp_2020_1km.tif")
+CA_pop_2017 <- terra::rast("./data/worldpop/US-CA_ppp_2017_1km.tif")
+CA_pop_2018 <- terra::rast("./data/worldpop/US-CA_ppp_2018_1km.tif")
+CA_pop_2019 <- terra::rast("./data/worldpop/US-CA_ppp_2019_1km.tif")
+CA_pop_2020 <- terra::rast("./data/worldpop/US-CA_ppp_2020_1km.tif")
 
 class(CA_pop_2017)
 
@@ -140,10 +140,10 @@ CA_pop_2017
 
 ```{r}
 #| echo: false
-CA_pop_2017 <- terra::rast("../../data/US-CA_ppp_2017_1km.tif")
-CA_pop_2018 <- terra::rast("../../data/US-CA_ppp_2018_1km.tif")
-CA_pop_2019 <- terra::rast("../../data/US-CA_ppp_2019_1km.tif")
-CA_pop_2020 <- terra::rast("../../data/US-CA_ppp_2020_1km.tif")
+CA_pop_2017 <- terra::rast("../../data/worldpop/US-CA_ppp_2017_1km.tif")
+CA_pop_2018 <- terra::rast("../../data/worldpop/US-CA_ppp_2018_1km.tif")
+CA_pop_2019 <- terra::rast("../../data/worldpop/US-CA_ppp_2019_1km.tif")
+CA_pop_2020 <- terra::rast("../../data/worldpop/US-CA_ppp_2020_1km.tif")
 
 class(CA_pop_2017)
 
@@ -171,7 +171,7 @@ We can integrate reading and stacking into one step by providing a list of raste
 ```{r}
 #| eval: false
 # Stacking more automated
-files <- list.files("./data", pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
+files <- list.files("./data/worldpop", pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
 CA_pop_stack <- terra::rast(files)
 
 CA_pop_stack
@@ -180,7 +180,7 @@ CA_pop_stack
 ```{r}
 #| echo: false
 # Stacking more automated
-files <- list.files("../../data", pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
+files <- list.files("../../data/worldpop", pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
 CA_pop_stack <- terra::rast(files)
 
 CA_pop_stack
@@ -590,7 +590,7 @@ Exporting your object is the same for raster stacks.
 # Export
 writeRaster(
   CA_pop_stack,
-  "./data/CA_pop_stack.tif",
+  "./data/stacks/CA_pop_stack.tif",
   overwrite=TRUE,
   gdal=c("COMPRESS=LZW","BIGTIFF=YES")
 )
@@ -601,7 +601,7 @@ writeRaster(
 # Export
 writeRaster(
   CA_pop_stack,
-  "../../data/CA_pop_stack.tif",
+  "../../data/stacks/CA_pop_stack.tif",
   overwrite=TRUE,
   gdal=c("COMPRESS=LZW","BIGTIFF=YES")
 )
@@ -619,10 +619,10 @@ We will now repeat this process with `stars`. We load four layers of population 
 
 ```{r}
 #| eval: false
-CA_pop_2017 <- read_stars("./data/US-CA_ppp_2017_1km.tif")
-CA_pop_2018 <- read_stars("./data/US-CA_ppp_2018_1km.tif")
-CA_pop_2019 <- read_stars("./data/US-CA_ppp_2019_1km.tif")
-CA_pop_2020 <- read_stars("./data/US-CA_ppp_2020_1km.tif")
+CA_pop_2017 <- read_stars("./data/worldpop/US-CA_ppp_2017_1km.tif")
+CA_pop_2018 <- read_stars("./data/worldpop/US-CA_ppp_2018_1km.tif")
+CA_pop_2019 <- read_stars("./data/worldpop/US-CA_ppp_2019_1km.tif")
+CA_pop_2020 <- read_stars("./data/worldpop/US-CA_ppp_2020_1km.tif")
 
 class(CA_pop_2017)
 
@@ -631,10 +631,10 @@ print(CA_pop_2017)
 
 ```{r}
 #| echo: false
-CA_pop_2017 <- read_stars("../../data/US-CA_ppp_2017_1km.tif")
-CA_pop_2018 <- read_stars("../../data/US-CA_ppp_2018_1km.tif")
-CA_pop_2019 <- read_stars("../../data/US-CA_ppp_2019_1km.tif")
-CA_pop_2020 <- read_stars("../../data/US-CA_ppp_2020_1km.tif")
+CA_pop_2017 <- read_stars("../../data/worldpop/US-CA_ppp_2017_1km.tif")
+CA_pop_2018 <- read_stars("../../data/worldpop/US-CA_ppp_2018_1km.tif")
+CA_pop_2019 <- read_stars("../../data/worldpop/US-CA_ppp_2019_1km.tif")
+CA_pop_2020 <- read_stars("../../data/worldpop/US-CA_ppp_2020_1km.tif")
 
 class(CA_pop_2017)
 
@@ -663,7 +663,7 @@ Again, integrating these steps is more efficient.
 
 ```{r}
 #| eval: false
-files <- list.files("./data",
+files <- list.files("./data/worldpop",
                     pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
                     full.names = TRUE)
 CA_pop_cube <- read_stars(files)
@@ -673,7 +673,7 @@ print(CA_pop_cube)
 
 ```{r}
 #| echo: false
-files <- list.files("../../data",
+files <- list.files("../../data/worldpop",
                     pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
                     full.names = TRUE)
 CA_pop_cube <- read_stars(files)
@@ -710,7 +710,7 @@ A more straightforward approach is to read the layers directly into one object b
 
 ```{r}
 #| eval: false
-files <- list.files("./data",
+files <- list.files("./data/worldpop",
                     pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
                     full.names = TRUE)
 
@@ -722,7 +722,7 @@ print(CA_pop_cube)
 
 ```{r}
 #| echo: false
-files <- list.files("../../data",
+files <- list.files("../../data/worldpop",
                     pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
                     full.names = TRUE)
 
@@ -870,7 +870,7 @@ There is also a native export function for `stars` objects.
 ```{r}
 #| eval: false
 write_stars(CA_pop_cube,
-            "./data/CA_pop_cube.tif",
+            "./data/stacks/CA_pop_cube.tif",
             driver = "GTiff",
             options = c("COMPRESS=LZW", "BIGTIFF=YES")
             )
@@ -879,7 +879,7 @@ write_stars(CA_pop_cube,
 ```{r}
 #| echo: false
 write_stars(CA_pop_cube,
-            "../../data/CA_pop_cube.tif",
+            "../../data/stacks/CA_pop_cube.tif",
             driver = "GTiff",
             options = c("COMPRESS=LZW", "BIGTIFF=YES")
             )
@@ -892,19 +892,19 @@ The **GeoTIFF** format will store the most important data on cell values, x, y, 
 
 ```{r}
 #| eval: false
-saveRDS(CA_pop_cube, "./data/CA_pop_cube.rds")
+saveRDS(CA_pop_cube, "./data/stacks/CA_pop_cube.rds")
 
 write_stars(CA_pop_cube, 
-            "./data/CA_pop_cube.nc",
+            "./data/stacks/CA_pop_cube.nc",
             driver = "netCDF")
 ```
 
 ```{r}
 #| echo: false
-saveRDS(CA_pop_cube, "../../data/CA_pop_cube.rds")
+saveRDS(CA_pop_cube, "../../data/stacks/CA_pop_cube.rds")
 
 write_stars(CA_pop_cube, 
-            "../../data/CA_pop_cube.nc",
+            "../../data/stacks/CA_pop_cube.nc",
             driver = "netCDF")
 ```
 

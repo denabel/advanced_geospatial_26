@@ -62,14 +62,14 @@ We will start with our `terra` `SpatRaster` and load the raster stack created in
 
 ```{r}
 #| eval: false
-CA_pop_stack <- terra::rast("./data/CA_pop_stack.tif")
+CA_pop_stack <- terra::rast("./data/stacks/CA_pop_stack.tif")
 
 CA_pop_stack
 ```
 
 ```{r}
 #| echo: false
-CA_pop_stack <- terra::rast("../../data/CA_pop_stack.tif")
+CA_pop_stack <- terra::rast("../../data/stacks/CA_pop_stack.tif")
 
 CA_pop_stack
 ```
@@ -353,14 +353,14 @@ Now we turn towards our `stars` datacubes and explore the visualization options.
 
 ```{r}
 #| eval: false
-CA_pop_cube <- readRDS("./data/CA_pop_cube.rds")
+CA_pop_cube <- readRDS("./data/stacks/CA_pop_cube.rds")
 
 CA_pop_cube
 ```
 
 ```{r}
 #| echo: false
-CA_pop_cube <- readRDS("../../data/CA_pop_cube.rds")
+CA_pop_cube <- readRDS("../../data/stacks/CA_pop_cube.rds")
 
 CA_pop_cube
 ```
@@ -646,7 +646,7 @@ In the previous step, we wrote the data to the disk. Let's load a single layer f
 
 ```{r}
 #| eval: false
-CA_nl_2020 <- terra::rast("./data/VNP46A4_NearNadir_Composite_Snow_Free_qflag_t2020.tif")
+CA_nl_2020 <- terra::rast("./data/nightlights/VNP46A4_NearNadir_Composite_Snow_Free_qflag_t2020.tif")
 
 print(CA_nl_2020)
 
@@ -654,7 +654,7 @@ print(CA_nl_2020)
 
 ```{r}
 #| echo: false
-CA_nl_2020 <- terra::rast("../../data/VNP46A4_NearNadir_Composite_Snow_Free_qflag_t2020.tif")
+CA_nl_2020 <- terra::rast("../../data/nightlights/VNP46A4_NearNadir_Composite_Snow_Free_qflag_t2020.tif")
 
 print(CA_nl_2020)
 
@@ -762,7 +762,7 @@ Having our spatial `sf` file properly set up, we can now prep our two raster fil
 ```{r}
 #| eval: false
 # Create LA raster files for population and night lights in 2020
-LA_pop_2020 <- terra::rast("./data/US-CA_ppp_2020_1km.tif") |> 
+LA_pop_2020 <- terra::rast("./data/worldpop/US-CA_ppp_2020_1km.tif") |> 
   terra::mask(terra::vect(LA_county)) |> 
   terra::crop(LA_county)
 
@@ -776,7 +776,7 @@ LA_nl_2020 <- terra::mask(CA_nl_2020,
 ```{r}
 #| echo: false
 # Create LA raster files for population and night lights in 2020
-LA_pop_2020 <- terra::rast("../../data/US-CA_ppp_2020_1km.tif") |> 
+LA_pop_2020 <- terra::rast("../../data/worldpop/US-CA_ppp_2020_1km.tif") |> 
   terra::mask(terra::vect(LA_county)) |> 
   terra::crop(LA_county)
 

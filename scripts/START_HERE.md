@@ -23,7 +23,7 @@ pop <- terra::rast("./data/z22/population.tif")
 3. **Use paths exactly as shown in the slides and exercises**, e.g.:
    ```r
    terra::rast("./data/z22/population.tif")
-   sf::read_sf("./data/VG250_KRS.shp")
+   sf::read_sf("./data/boundaries/VG250_KRS.shp")
    ```
    These work because RStudio runs your code from the project root, not from the script's location.
 

@@ -164,7 +164,7 @@ terra::plot(age_cube)
 library(sf)
 
 # Load survey coordinates
-points <- readRDS("./data/synthetic_survey_geocoordinates.rds")
+points <- readRDS("./data/survey/synthetic_survey_geocoordinates.rds")
 
 # Check CRS of both datasets
 sf::st_crs(points)$epsg
@@ -195,7 +195,7 @@ summary(extracted_buffer)
 #| echo: false
 library(sf)
 
-points <- readRDS("../../data/synthetic_survey_geocoordinates.rds")
+points <- readRDS("../../data/survey/synthetic_survey_geocoordinates.rds")
 points <- sf::st_transform(points, terra::crs(age_cube))
 
 extracted_point <- terra::extract(age_cube, points, ID = FALSE)

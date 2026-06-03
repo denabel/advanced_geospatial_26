@@ -20,7 +20,7 @@ In our first mapping exercise, we have created a map of the population distribut
 ::: callout-note
 ## 🏋️ Exercise 1
 
-What data we require: We need the two population raster layers for Texas in 2000 and 2020 (`./data/US-TX_ppp_2000_1km.tif` and `./data/US-TX_ppp_2020_1km.tif`). We also need county shapefiles for Texas, which can be downloaded with the `tigris` package (`tigris::counties("TX")`). 
+What data we require: We need the two population raster layers for Texas in 2000 and 2020 (`./data/worldpop/US-TX_ppp_2000_1km.tif` and `./data/worldpop/US-TX_ppp_2020_1km.tif`). We also need county shapefiles for Texas, which can be downloaded with the `tigris` package (`tigris::counties("TX")`). 
 
 After loading the three objects, create a simple plot of the counties shapefile.
 :::
@@ -80,8 +80,8 @@ library(tidyterra)
 library(tigris)
 
 # Load the raster data
-TX_pop_2020 <- terra::rast("./data/US-TX_ppp_2020_1km.tif")
-TX_pop_2000 <- terra::rast("./data/US-TX_ppp_2000_1km.tif")
+TX_pop_2020 <- terra::rast("./data/worldpop/US-TX_ppp_2020_1km.tif")
+TX_pop_2000 <- terra::rast("./data/worldpop/US-TX_ppp_2000_1km.tif")
 
 # Load Texas county data
 TX_counties <- tigris::counties("TX", progress_bar = FALSE)
@@ -100,8 +100,8 @@ library(tidyterra)
 library(tigris)
 
 # Load the raster data
-TX_pop_2020 <- terra::rast("../../data/US-TX_ppp_2020_1km.tif")
-TX_pop_2000 <- terra::rast("../../data/US-TX_ppp_2000_1km.tif")
+TX_pop_2020 <- terra::rast("../../data/worldpop/US-TX_ppp_2020_1km.tif")
+TX_pop_2000 <- terra::rast("../../data/worldpop/US-TX_ppp_2000_1km.tif")
 
 # Load Texas county data
 TX_counties <- tigris::counties("TX", progress_bar = FALSE)

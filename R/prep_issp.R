@@ -8,7 +8,7 @@
 # higher values = higher concern. It also produces a Likert-style bar chart
 # for the 2020 wave.
 #
-# Input:  ./data/ZA8793_v1-0-0.dta  (ISSP Environment cumulation, Stata format)
+# Input:  ./data/issp/ZA8793_v1-0-0.dta  (ISSP Environment cumulation, Stata format)
 # Output: objects `issp` (tibble) and `likert_plot_2020` (ggplot) in the
 #         calling environment
 # ──────────────────────────────────────────────────────────────────────────────
@@ -20,7 +20,7 @@ library(tidyverse)   # dplyr, ggplot2, forcats, tidyr, …
 # --- Load and recode ISSP data ------------------------------------------------
 
 issp <-
-  haven::read_dta("./data/ZA8793_v1-0-0.dta") |>
+  haven::read_dta("./data/issp/ZA8793_v1-0-0.dta") |>
   sjlabelled::remove_all_labels() |>
   dplyr::select(
     year,

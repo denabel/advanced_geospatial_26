@@ -107,7 +107,7 @@ library(terra)
 age_avg <- terra::rast("./data/z22/age_avg.tif")
 
 # Load the federal states shapefile (contains state names in "GEN" column)
-states <- sf::st_read("./data/VG250_LAN.shp", quiet = TRUE) |> 
+states <- sf::st_read("./data/boundaries/VG250_LAN.shp", quiet = TRUE) |> 
   sf::st_transform(3035)
 
 # Subset the states into north and south
@@ -149,7 +149,7 @@ library(terra)
 
 age_avg <- terra::rast("../../data/z22/age_avg.tif")
 states <- 
-  sf::st_read("../../data/VG250_LAN.shp", quiet = TRUE) |> 
+  sf::st_read("../../data/boundaries/VG250_LAN.shp", quiet = TRUE) |> 
   sf::st_transform(3035)
 
 north_states <-
