@@ -26,7 +26,7 @@ issp <-
           "South Korea", "Latvia", "Lithuania", "Mexico", "Netherlands",
           "New Zealand", "Norway", "Philippines", "Portugal", "Russia", 
           "Slovakia", "Slovenia", "South Africa", "Spain", "Sweden", 
-          "Switzerland", "Great Britain", "USA", "Northern Ireland"
+          "Switzerland", "Great Britain", "United States", "Northern Ireland"
         )
       ),
     country = dplyr::case_when(
