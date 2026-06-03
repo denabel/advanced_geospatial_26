@@ -41,7 +41,7 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 
 - Administrative borders of Germany (Prefix *VG250_*) are provided by the German [Federal Agency for Cartography and Geodesy](http://www.bkg.bund.de) (2018). Check out their [Open Data Portal](https://gdz.bkg.bund.de/index.php/default/open-data.html).
 
-- German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We used our colleague [Jonas Lieth](https://www.gesis.org/institut/ueber-uns/mitarbeitendenverzeichnis/person/Jonas.Lieth)'s (experimental) `R` package [`z22`](https://github.com/JsLth/z22) to gather the data for you.
+- German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We used our colleague [Jonas Lieth](https://www.gesis.org/institut/ueber-uns/mitarbeitendenverzeichnis/person/Jonas.Lieth)'s `R` package [`z22`](https://github.com/JsLth/z22) to gather the data for you.
 
 - WorldPop population data are from [WorldPop](https://www.worldpop.org/), University of Southampton.
 
