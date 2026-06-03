@@ -8,7 +8,7 @@ execute:
 format:
   revealjs:
     embed-resources: true
-    theme: [simple, tweaks.css]
+    theme: [simple, tweaks.css, tweaks_code.css]
     smaller: true
     scrollable: true
     slide-number: "c/t"

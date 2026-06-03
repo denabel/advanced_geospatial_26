@@ -8,7 +8,7 @@ execute:
 format:
   revealjs:
     embed-resources: true
-    theme: [simple, tweaks.css]
+    theme: [simple, tweaks.css, tweaks_code.css]
     smaller: true
     scrollable: true
     slide-number: "c/t"
@@ -535,7 +535,7 @@ Instead, a *Programming Application Interface* (API) is often used.
 - [Copernicus Climate Data Store](https://cds.climate.copernicus.eu/)
 - ...
 - [Cologne's Open Data Portal](https://www.offenedaten-koeln.de/dataset/taxonomy/term/44/field_tags/Geo-44)
-- Specialized `R` packages, such as the [`wiesbaden` package](https://cran.r-project.org/web/packages/wiesbaden/index.html) or the [`tidycensus` package](https://cran.r-project.org/web/packages/tidycensus/index.html)
+- Specialized `R` packages, such as the [`wiesbaden` package](https://cran.r-project.org/web/packages/wiesbaden/index.html), the [`tidycensus` package](https://cran.r-project.org/web/packages/tidycensus/index.html), or the [`z22` package](https://cran.r-project.org/package=z22) for German Census 2022 grid data (which we used throughout this course!)
 
 
 ## R package `blackmarbler`

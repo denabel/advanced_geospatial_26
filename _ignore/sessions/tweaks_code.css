@@ -1,0 +1,20 @@
+/*-- scss:rules --*/
+/* R-Code im Chunk */
+.cell-code pre code {
+  font-size: 0.9em !important;
+}
+
+/* Generischer Output-Container */
+.cell-output {
+  font-size: 0.9em !important;
+}
+
+/* Tabellen (z. B. data.frame, tibble) */
+.cell-output table {
+  font-size: 0.9em !important;
+}
+
+/* Falls Pandoc/Quarto spezielle Klassen nutzt */
+.cell-output .table {
+  font-size: 0.9em !important;
+}

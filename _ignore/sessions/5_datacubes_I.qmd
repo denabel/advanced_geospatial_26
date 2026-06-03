@@ -8,7 +8,7 @@ execute:
 format:
   revealjs:
     embed-resources: true
-    theme: [simple, tweaks.css]
+    theme: [simple, tweaks.css, tweaks_code.css]
     smaller: true
     scrollable: true
     slide-number: "c/t"
@@ -58,7 +58,7 @@ Our goal for today is to:
 [Source](https://raw.githubusercontent.com/r-spatial/stars/master/images/cube2.png)
 
 
-## Most important EOD packages `r emo::ji("package")`
+## Most important EOD packages 📦
 
 If you want to do anything in `R`, you need to use functions, and functions are provided through packages.
 
@@ -76,7 +76,7 @@ The authors have produced a very extensive [tutorial](https://rspatial.org/) whi
 :::
 ::::
 
-## Most important EOD packages `r emo::ji("package")`
+## Most important EOD packages 📦
 
 If you want to do anything in `R`, you need to use functions, and functions are provided through packages.
 
