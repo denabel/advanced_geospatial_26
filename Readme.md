@@ -96,3 +96,5 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 [6_1 Map with Many Facets](https://denabel.github.io/advanced_geospatial_26/exercises/6_1_Map_with_many_facets.html)
 
 [6_2 Illuminate Your Region](https://denabel.github.io/advanced_geospatial_26/exercises/6_2_Illuminate_your_region.html)
+
+[7_1 Data Integration](https://denabel.github.io/advanced_geospatial_26/exercises/7_1_Data_Integration.html)
