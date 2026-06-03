@@ -1,8 +1,16 @@
-# Workshop "Advanced Geospatial Data Processing for Social Scientists" (April 28/29, 2025)
+# Workshop "Advanced Geospatial Data Processing for Social Scientists" (June 9/10, 2026)
+
+<p align=center>   
+<a href="https://github.com/denabel/advanced_geospatial_26/archive/refs/heads/main.zip"><b>CLICK HERE TO DOWNLOAD ALL COURSE MATERIALS</b></a> 
+</p>
+
+<p align=center>   
+<a href="https://denabel.github.io/advanced_geospatial_26/"><b>CLICK HERE FOR AN UNCLUTTERED VIEW</b></a> 
+</p>
 
 Materials for the GESIS workshop "Advanced Geospatial Data Processing for Social Scientists" 
 
-Dennis Abel (dennis.abel@gesis.org) & [Stefan Jünger](https://stefanjuenger.github.io) (stefan.juenger@gesis.org)
+Dennis Abel (dennis.abel@gesis.org) & Stefan Jünger (stefan.juenger@gesis.org)
 
 ## Workshop Description
 A growing interest in economics and the social sciences in Earth observation (EO) 
@@ -29,4 +37,62 @@ This page comprises the official workshop repository with the most recent change
 to our materials. You can find all the course data, slides, and exercises here. 
 The section below links the slides and exercises that will open them directly in 
 the browser as HTML files. They are also stored in the folders `./slides/` and 
-`./exercises`. You can also find all the data in the folder `./data`.
+`./exercises`. You can also find all the data in the folder `./data`. They comprise the following official (Open Data) sources:
+
+- Administrative borders of Germany (Prefix *VG250_*) are provided by the German [Federal Agency for Cartography and Geodesy](http://www.bkg.bund.de) (2018). Check out their [Open Data Portal](https://gdz.bkg.bund.de/index.php/default/open-data.html).
+
+- German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We used our colleague [Jonas Lieth](https://www.gesis.org/institut/ueber-uns/mitarbeitendenverzeichnis/person/Jonas.Lieth)'s (experimental) `R` package [`z22`](https://github.com/JsLth/z22) to gather the data for you.
+
+- WorldPop population data are from [WorldPop](https://www.worldpop.org/), University of Southampton.
+
+- Night light data (VNP46A4) are from [NASA's Black Marble](https://blackmarble.gsfc.nasa.gov/) product suite.
+
+- World country boundaries are from [Esri / ArcGIS Hub](https://hub.arcgis.com/datasets/esri::world-countries-generalized/).
+
+**Please make sure that if you reuse any of the provided data to cite the original data sources.**
+
+## Slides
+
+### Day 1
+
+[1 Introduction](https://denabel.github.io/advanced_geospatial_26/slides/1_Introduction.html)
+
+[2 (Vector and) Raster Data in R](https://denabel.github.io/advanced_geospatial_26/slides/2_Raster_Data_in_R.html)
+
+[3 Raster Data Processing](https://denabel.github.io/advanced_geospatial_26/slides/3_Raster_Data_Processing.html)
+
+[4 Graphical Display of Raster Data](https://denabel.github.io/advanced_geospatial_26/slides/4_Graphical_display.html)
+
+### Day 2
+
+[5 Datacube Processing I](https://denabel.github.io/advanced_geospatial_26/slides/5_datacubes_I.html)
+
+[6 Datacube Processing II](https://denabel.github.io/advanced_geospatial_26/slides/6_datacubes_II.html)
+
+[7 Data Integration and Linking](https://denabel.github.io/advanced_geospatial_26/slides/7_Data_Integration_Linking.html)
+
+[8 Outlook](https://denabel.github.io/advanced_geospatial_26/slides/8_Outlook.html)
+
+## Exercises
+
+[1_1 Package Installation](https://denabel.github.io/advanced_geospatial_26/exercises/1_1_Package_Installation.html)
+
+[2_1 Vector Data Refresher](https://denabel.github.io/advanced_geospatial_26/exercises/2_1_Vector_Data_Refresher.html)
+
+[2_2 Basic Raster Operations](https://denabel.github.io/advanced_geospatial_26/exercises/2_2_Basic_Raster_Operations.html)
+
+[3_1 Subsetting Raster Data](https://denabel.github.io/advanced_geospatial_26/exercises/3_1_Subsetting_Raster_Data.html)
+
+[3_2 Extracting and Analyzing Raster Information](https://denabel.github.io/advanced_geospatial_26/exercises/3_2_Extracting_Analyzing_Raster_Information.html)
+
+[4_1 Simple Map](https://denabel.github.io/advanced_geospatial_26/exercises/4_1_Simple_Map.html)
+
+[4_2 Fancy Map](https://denabel.github.io/advanced_geospatial_26/exercises/4_2_Fancy_Map.html)
+
+[5_1 Raster Stack (terra)](https://denabel.github.io/advanced_geospatial_26/exercises/5_1_Raster_stack_terra.html)
+
+[5_2 Raster Cube (stars)](https://denabel.github.io/advanced_geospatial_26/exercises/5_2_Raster_cube_stars.html)
+
+[6_1 Map with Many Facets](https://denabel.github.io/advanced_geospatial_26/exercises/6_1_Map_with_many_facets.html)
+
+[6_2 Illuminate Your Region](https://denabel.github.io/advanced_geospatial_26/exercises/6_2_Illuminate_your_region.html)
