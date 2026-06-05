@@ -8,6 +8,9 @@ format:
     code-copy: true
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 editor: visual
 callout-icon: false
 callout-appearance: minimal
@@ -85,7 +88,6 @@ In this exercise, you’ll explore how spatial resolution affects your results.
 ## ✅ Solution 1
 
 ```{r}
-#| eval: false
 library(terra)
 
 # Load the synthetic survey coordinates (an sf point dataset)
@@ -107,20 +109,6 @@ terra::crs(rent_avg, describe = TRUE)$code # CRS of the raster
 
 # They don't match! Before extracting raster values at point locations,
 # we'll need to reproject one to match the other using sf::st_transform().
-```
-
-```{r}
-#| echo: false
-library(terra)
-
-coordinates <- readRDS("../../data/survey/synthetic_survey_geocoordinates.rds")
-str(coordinates)
-
-rent_avg <- terra::rast("../../data/z22/rent_avg.tif")
-plot(rent_avg)
-
-sf::st_crs(coordinates)$epsg
-terra::crs(rent_avg, describe = TRUE)$code
 ```
 :::
 

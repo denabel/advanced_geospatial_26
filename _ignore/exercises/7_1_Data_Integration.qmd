@@ -8,6 +8,9 @@ format:
     code-copy: true
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 editor: visual
 callout-icon: false
 callout-appearance: minimal
@@ -120,7 +123,6 @@ The synthetic survey coordinates contain an attribute on citizenship status. Use
 ## ✅ Solution 1
 
 ```{r}
-#| eval: false
 library(terra)
 
 # Load the Census data cube
@@ -143,24 +145,12 @@ print(age_cube)
 # Plot all layers — each shows a different age group's share
 terra::plot(age_cube)
 ```
-
-```{r}
-#| echo: false
-library(terra)
-
-age_cube <- terra::rast("../../data/z22/age_short.nc")
-terra::nlyr(age_cube)
-names(age_cube)
-print(age_cube)
-terra::plot(age_cube)
-```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## ✅ Solution 2
 
 ```{r}
-#| eval: false
 library(sf)
 
 # Load survey coordinates
@@ -190,33 +180,12 @@ head(extracted_buffer)
 summary(extracted_point)
 summary(extracted_buffer)
 ```
-
-```{r}
-#| echo: false
-library(sf)
-
-points <- readRDS("../../data/survey/synthetic_survey_geocoordinates.rds")
-points <- sf::st_transform(points, terra::crs(age_cube))
-
-extracted_point <- terra::extract(age_cube, points, ID = FALSE)
-head(extracted_point)
-
-buffers <- sf::st_buffer(points, 5000)
-extracted_buffer <- terra::extract(
-  age_cube, buffers, fun = mean, na.rm = TRUE, ID = FALSE
-)
-head(extracted_buffer)
-
-summary(extracted_point)
-summary(extracted_buffer)
-```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## ✅ Solution 3
 
 ```{r}
-#| eval: false
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -237,37 +206,6 @@ group_profiles <- points_enriched |>
   dplyr::summarize(mean_share = mean(share, na.rm = TRUE), .groups = "drop")
 
 # Visualize
-ggplot(group_profiles, aes(x = age_group, y = mean_share, fill = factor(citizenship))) +
-  geom_col(position = "dodge") +
-  labs(
-    title = "Neighborhood age profiles by citizenship status",
-    x = "Age group (Census cube layer)",
-    y = "Mean share in 5 km buffer",
-    fill = "Citizenship\nstatus"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-#| echo: false
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-
-points_enriched <-
-  dplyr::tibble(citizenship = points$citizenship) |>
-  dplyr::bind_cols(extracted_buffer) |>
-  tidyr::pivot_longer(
-    cols = -citizenship,
-    names_to = "age_group",
-    values_to = "share"
-  )
-
-group_profiles <- points_enriched |>
-  dplyr::group_by(citizenship, age_group) |>
-  dplyr::summarize(mean_share = mean(share, na.rm = TRUE), .groups = "drop")
-
 ggplot(group_profiles, aes(x = age_group, y = mean_share, fill = factor(citizenship))) +
   geom_col(position = "dodge") +
   labs(

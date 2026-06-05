@@ -8,6 +8,9 @@ format:
     code-copy: true
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 editor: visual
 callout-icon: false
 callout-appearance: minimal
@@ -109,7 +112,6 @@ ggplot()+
 ## ✅ Solution 1
 
 ```{r}
-#| eval: false
 # load libraries
 library(dplyr)
 library(sf)
@@ -119,23 +121,6 @@ library(tidyterra)
 
 # Load the data
 USA_pop_2020 <- terra::rast("./data/worldpop/usa_ppp_2020_1km_Aggregated.tif")
-
-# Inspect it
-terra::plot(USA_pop_2020)
-
-```
-
-```{r}
-#| echo: false
-# load libraries
-library(dplyr)
-library(sf)
-library(ggplot2)
-library(terra)
-library(tidyterra)
-
-# Load the data
-USA_pop_2020 <- terra::rast("../../data/worldpop/usa_ppp_2020_1km_Aggregated.tif")
 
 # Inspect it
 terra::plot(USA_pop_2020)

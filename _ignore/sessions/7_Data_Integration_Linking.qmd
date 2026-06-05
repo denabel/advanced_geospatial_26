@@ -5,6 +5,9 @@ author: "Dennis Abel & Stefan Jünger"
 date: June 10, 2026
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 format:
   revealjs:
     embed-resources: true
@@ -30,7 +33,7 @@ library(tidyverse)
 
 ```{r}
 #| echo: false
-source("course_content.R") 
+source("_ignore/sessions/course_content.R") 
 
 course_content |> 
   kableExtra::row_spec(12, background = "yellow")
@@ -57,15 +60,7 @@ In this session, we put it all together in a **real research workflow**:
 After downloading the ISSP data file from the website, we placed it in our .`/data` folder. We have already prepared a script in the folder `./R` called `prep_issp.r` to prepare the data, which we call using `source()`. 
 
 ```{r}
-#| eval: false
 source("./R/prep_issp.R")
-
-head(issp, 10)
-```
-
-```{r}
-#| echo: false
-source("prep_issp.R")
 
 head(issp, 10)
 ```
@@ -249,19 +244,10 @@ for (yr in c("1993", "2000", "2010", "2020")) {
 Importing the data into `R` should feel natural to us right now. We simply use `terra::rast()` for this endevaour.
 
 ```{r}
-#| eval: false
 temp_1993 <- terra::rast("./data/era5/era5_temperature1993.grib")
 temp_2000 <- terra::rast("./data/era5/era5_temperature2000.grib")
 temp_2010 <- terra::rast("./data/era5/era5_temperature2010.grib")
 temp_2020 <- terra::rast("./data/era5/era5_temperature2020.grib")
-```
-
-```{r}
-#| echo: false
-temp_1993 <- terra::rast("../../data/era5/era5_temperature1993.grib")
-temp_2000 <- terra::rast("../../data/era5/era5_temperature2000.grib")
-temp_2010 <- terra::rast("../../data/era5/era5_temperature2010.grib")
-temp_2020 <- terra::rast("../../data/era5/era5_temperature2020.grib")
 ```
 
 ## Inspecting the data
@@ -382,15 +368,8 @@ file_path <-
 Again, we use `terra::rast()` to import the data.
 
 ```{r}
-#| eval: false
 temp_base <- 
   terra::rast("./data/era5/era5_temperature1961-1990.grib")
-```
-
-```{r}
-#| echo: false
-temp_base <- 
-  terra::rast("../../data/era5/era5_temperature1961-1990.grib")
 ```
 
 
@@ -434,7 +413,7 @@ if(!identical(terra::crs(world), terra::crs(temp_base))) {
 
 # Collapse all into one layer by averaging across months and years
 annual_values_base <- 
-  readRDS("../../data/era5/annual_values_base.rds")
+  readRDS("./data/era5/annual_values_base.rds")
 
 # Aggregate by country
 country_values <- 

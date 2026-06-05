@@ -8,6 +8,9 @@ format:
     code-copy: true
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 editor: visual
 callout-icon: false
 callout-appearance: minimal
@@ -53,29 +56,11 @@ Store your `stars` object as `.rds` file on disk (`saveRDS`).
 ## ✅ Solution 1
 
 ```{r}
-#| eval: false
 library(dplyr)
 library(stars)
 
 # Load the raster data
 files <- list.files("./data/worldpop", pattern = "US-TX_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
-
-# Vector of years
-dates <- 2017:2020
-
-# Read layers along time dimension
-TX_pop_cube <- read_stars(files, along = list(time = dates))
-
-print(TX_pop_cube)
-```
-
-```{r}
-#| echo: false
-library(dplyr)
-library(stars)
-
-# Load the raster data
-files <- list.files("../../data/worldpop", pattern = "US-TX_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
 
 # Vector of years
 dates <- 2017:2020
@@ -133,14 +118,7 @@ plot(TX_pop_cube[1,
 ## ✅ Solution 5
 
 ```{r}
-#| eval: false
 # Export
 saveRDS(TX_pop_cube, "./data/stacks/TX_pop_cube.rds")
-```
-
-```{r}
-#| echo: false
-# Export
-saveRDS(TX_pop_cube, "../../data/stacks/TX_pop_cube.rds")
 ```
 :::

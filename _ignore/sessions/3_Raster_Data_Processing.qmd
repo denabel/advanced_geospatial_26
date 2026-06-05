@@ -5,6 +5,9 @@ author: "Dennis Abel & Stefan Jünger"
 date: June 9, 2026
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 format:
   revealjs:
     embed-resources: true
@@ -27,7 +30,7 @@ library(tmap)
 
 ```{r}
 #| echo: false
-source("course_content.R") 
+source("_ignore/sessions/course_content.R") 
 
 course_content |> 
   kableExtra::row_spec(5, background = "yellow")
@@ -68,21 +71,8 @@ Cropping is a method of cutting out a specific 'slice' of a raster layer based o
 The easiest way (in my opinion) to create a bounding box in `R` is to use the `sf::st_bbox()` function, possibly based on another geospatial dataset.
 
 ```{r}
-#| eval: false
 bbox_east <-
   sf::st_read("./data/boundaries/VG250_LAN.shp") |>
-  dplyr::filter(SN_L %in% 11:16, GF == 4) |> # Eastern states
-  sf::st_transform(3035) |> # reproject
-  sf::st_bbox() |> # bounding box
-  sf::st_as_sfc(crs = 3035) # as geometry
-
-bbox_east
-```
-
-```{r}
-#| echo: false
-bbox_east <-
-  sf::st_read("../../data/boundaries/VG250_LAN.shp") |>
   dplyr::filter(SN_L %in% 11:16, GF == 4) |> # Eastern states
   sf::st_transform(3035) |> # reproject
   sf::st_bbox() |> # bounding box
@@ -96,18 +86,7 @@ bbox_east
 Now, cropping is easy using the `terra::crop()` function.
 
 ```{r}
-#| eval: false
 pop_grid_2022 <- terra::rast("./data/z22/population.tif")
-
-pop_grid_2022_crop <- terra::crop(pop_grid_2022, bbox_east) # crop to bbox
-
-terra::ext(pop_grid_2022) # full extent
-terra::ext(pop_grid_2022_crop) # cropped extent
-```
-
-```{r}
-#| echo: false
-pop_grid_2022 <- terra::rast("../../data/z22/population.tif")
 
 pop_grid_2022_crop <- terra::crop(pop_grid_2022, bbox_east) # crop to bbox
 
@@ -173,7 +152,7 @@ plot(
 #| fig-asp: .8
 east_german_states <-
   sf::st_read(
-    "../../data/boundaries/VG250_LAN.shp",
+    "./data/boundaries/VG250_LAN.shp",
     quiet = TRUE
   ) |>
   sf::st_transform(3035) |> 
@@ -302,7 +281,7 @@ points
 #| fig-asp: .7
 points <-
   readRDS(
-    "../../data/survey/synthetic_survey_geocoordinates.rds"
+    "./data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   dplyr::sample_n(size = 100) # random subset
 
@@ -513,13 +492,13 @@ plot(
 #| fig.asp: .8
 german_districts <-
   sf::st_read(
-    "../../data/boundaries/VG250_KRS.shp",
+    "./data/boundaries/VG250_KRS.shp",
     quiet = TRUE
   ) |>
   sf::st_transform(3035) # match raster CRS
 
 gender_ratios_2020 <-
-  terra::rast("../../data/worldpop/gender_ratio_2020.tif")
+  terra::rast("./data/worldpop/gender_ratio_2020.tif")
 
 plot(gender_ratios_2020) # raster base layer
 plot(
@@ -611,7 +590,7 @@ berlin <-
   dplyr::filter(AGS == "11000") # Berlin district
 
 rent_berlin <-
-  terra::rast("../../data/z22/rent_avg.tif") |>
+  terra::rast("./data/z22/rent_avg.tif") |>
   terra::project("EPSG:3035") |> # reproject
   terra::mask(terra::vect(berlin)) |> # clip to Berlin
   terra::crop(berlin) # trim extent
@@ -686,7 +665,7 @@ plot(sf::st_geometry(points_berlin)) # point locations
 #| fig.asp: .5
 points_berlin <-
   readRDS(
-    "../../data/survey/synthetic_survey_geocoordinates.rds"
+    "./data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   sf::st_crop(berlin) # subset to Berlin
 

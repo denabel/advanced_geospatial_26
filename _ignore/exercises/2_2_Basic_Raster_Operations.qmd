@@ -8,6 +8,9 @@ format:
     code-copy: true
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 editor: visual
 callout-icon: false
 callout-appearance: minimal
@@ -77,7 +80,6 @@ However, beware: Since the CRS of the two datasets might not match, you could en
 ## ✅ Solution 1
 
 ```{r}
-#| eval: false
 library(terra)
 
 # Load a raster — here: share of population aged 65+
@@ -94,27 +96,12 @@ terra::res(age_65_tif)[1] * terra::res(age_65_tif)[2] / 1e6 # in km²
 # Visualize
 plot(age_65_tif)
 ```
-
-```{r}
-#| echo: false
-library(terra)
-
-age_65_tif <- terra::rast("../../data/z22/age_from_65.tif")
-
-print(age_65_tif)
-dim(age_65_tif)
-terra::res(age_65_tif)
-terra::res(age_65_tif)[1] * terra::res(age_65_tif)[2] / 1e6
-
-plot(age_65_tif)
-```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## ✅ Solution 2
 
 ```{r}
-#| eval: false
 # Load a NetCDF — unlike .tif, these can hold multiple layers
 age_groups_nc <- terra::rast("./data/z22/age_short.nc")
 
@@ -131,27 +118,12 @@ names(age_groups_nc) # what age groups are inside?
 # Visualize the first layer
 plot(age_groups_nc[[1]])
 ```
-
-```{r}
-#| echo: false
-age_groups_nc <- terra::rast("../../data/z22/age_short.nc")
-
-print(age_groups_nc)
-dim(age_groups_nc)
-terra::nlyr(age_groups_nc)
-terra::res(age_groups_nc)
-terra::crs(age_groups_nc, describe = TRUE)$code
-names(age_groups_nc)
-
-plot(age_groups_nc[[1]])
-```
 :::
 
 ::: {.callout-tip collapse="true"}
 ## ✅ Solution 3
 
 ```{r}
-#| eval: false
 # Load a second .tif to combine with our age_65 layer
 population_tif <- terra::rast("./data/z22/population.tif") # absolute counts
 
@@ -170,18 +142,6 @@ if (terra::crs(age_65_tif) != terra::crs(population_tif)) {
 older_population <- population_tif * (age_65_tif / 100)
 
 # Visualize — where do most older people live?
-plot(older_population)
-```
-
-```{r}
-#| echo: false
-population_tif <- terra::rast("../../data/z22/population.tif")
-
-if (terra::crs(age_65_tif) != terra::crs(population_tif)) {
-  age_65_tif <- terra::project(age_65_tif, population_tif)
-}
-
-older_population <- population_tif * (age_65_tif / 100)
 plot(older_population)
 ```
 :::

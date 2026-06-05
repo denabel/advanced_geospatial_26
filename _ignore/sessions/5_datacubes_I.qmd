@@ -5,6 +5,9 @@ author: "Dennis Abel & Stefan Jünger"
 date: April 29, 2025
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 format:
   revealjs:
     embed-resources: true
@@ -32,7 +35,7 @@ library(emo)
 
 ```{r}
 #| echo: false
-source("course_content.R") 
+source("_ignore/sessions/course_content.R") 
 
 course_content |> 
   kableExtra::row_spec(8, background = "yellow")
@@ -127,23 +130,10 @@ The output will be a clean raster stack/cube for further processing/analysis.
 We load four layers of population data for California for the years 2017-2020.
 
 ```{r}
-#| eval: false
 CA_pop_2017 <- terra::rast("./data/worldpop/US-CA_ppp_2017_1km.tif")
 CA_pop_2018 <- terra::rast("./data/worldpop/US-CA_ppp_2018_1km.tif")
 CA_pop_2019 <- terra::rast("./data/worldpop/US-CA_ppp_2019_1km.tif")
 CA_pop_2020 <- terra::rast("./data/worldpop/US-CA_ppp_2020_1km.tif")
-
-class(CA_pop_2017)
-
-CA_pop_2017
-```
-
-```{r}
-#| echo: false
-CA_pop_2017 <- terra::rast("../../data/worldpop/US-CA_ppp_2017_1km.tif")
-CA_pop_2018 <- terra::rast("../../data/worldpop/US-CA_ppp_2018_1km.tif")
-CA_pop_2019 <- terra::rast("../../data/worldpop/US-CA_ppp_2019_1km.tif")
-CA_pop_2020 <- terra::rast("../../data/worldpop/US-CA_ppp_2020_1km.tif")
 
 class(CA_pop_2017)
 
@@ -169,18 +159,8 @@ CA_pop_stack
 We can integrate reading and stacking into one step by providing a list of raster layers to the `terra::rast()` command.
 
 ```{r}
-#| eval: false
 # Stacking more automated
 files <- list.files("./data/worldpop", pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
-CA_pop_stack <- terra::rast(files)
-
-CA_pop_stack
-```
-
-```{r}
-#| echo: false
-# Stacking more automated
-files <- list.files("../../data/worldpop", pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$", full.names = TRUE)
 CA_pop_stack <- terra::rast(files)
 
 CA_pop_stack
@@ -586,22 +566,10 @@ terra::plot(CA_pop_stack[0:500,
 Exporting your object is the same for raster stacks.
 
 ```{r}
-#| eval: false
 # Export
 writeRaster(
   CA_pop_stack,
   "./data/stacks/CA_pop_stack.tif",
-  overwrite=TRUE,
-  gdal=c("COMPRESS=LZW","BIGTIFF=YES")
-)
-```
-
-```{r}
-#| echo: false
-# Export
-writeRaster(
-  CA_pop_stack,
-  "../../data/stacks/CA_pop_stack.tif",
   overwrite=TRUE,
   gdal=c("COMPRESS=LZW","BIGTIFF=YES")
 )
@@ -618,23 +586,10 @@ writeRaster(
 We will now repeat this process with `stars`. We load four layers of population data for California for the years 2017-2020 with `read_stars`.
 
 ```{r}
-#| eval: false
 CA_pop_2017 <- read_stars("./data/worldpop/US-CA_ppp_2017_1km.tif")
 CA_pop_2018 <- read_stars("./data/worldpop/US-CA_ppp_2018_1km.tif")
 CA_pop_2019 <- read_stars("./data/worldpop/US-CA_ppp_2019_1km.tif")
 CA_pop_2020 <- read_stars("./data/worldpop/US-CA_ppp_2020_1km.tif")
-
-class(CA_pop_2017)
-
-print(CA_pop_2017)
-```
-
-```{r}
-#| echo: false
-CA_pop_2017 <- read_stars("../../data/worldpop/US-CA_ppp_2017_1km.tif")
-CA_pop_2018 <- read_stars("../../data/worldpop/US-CA_ppp_2018_1km.tif")
-CA_pop_2019 <- read_stars("../../data/worldpop/US-CA_ppp_2019_1km.tif")
-CA_pop_2020 <- read_stars("../../data/worldpop/US-CA_ppp_2020_1km.tif")
 
 class(CA_pop_2017)
 
@@ -662,18 +617,7 @@ Again, integrating these steps is more efficient.
 **BUT WAIT!** This generates four separate attributes. **This is not what we want!**
 
 ```{r}
-#| eval: false
 files <- list.files("./data/worldpop",
-                    pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
-                    full.names = TRUE)
-CA_pop_cube <- read_stars(files)
-
-print(CA_pop_cube)
-```
-
-```{r}
-#| echo: false
-files <- list.files("../../data/worldpop",
                     pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
                     full.names = TRUE)
 CA_pop_cube <- read_stars(files)
@@ -709,20 +653,7 @@ print(cube_merged)
 A more straightforward approach is to read the layers directly into one object based on the supplied date-variable:
 
 ```{r}
-#| eval: false
 files <- list.files("./data/worldpop",
-                    pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
-                    full.names = TRUE)
-
-# Read layers along time dimension
-CA_pop_cube <- read_stars(files, along = list(time = dates))
-
-print(CA_pop_cube)
-```
-
-```{r}
-#| echo: false
-files <- list.files("../../data/worldpop",
                     pattern = "US-CA_ppp_20(17|18|19|20)_1km\\.tif$",
                     full.names = TRUE)
 
@@ -868,18 +799,8 @@ CA_pop_cube[ ,1:100 ,1:100 , ]
 There is also a native export function for `stars` objects.
 
 ```{r}
-#| eval: false
 write_stars(CA_pop_cube,
             "./data/stacks/CA_pop_cube.tif",
-            driver = "GTiff",
-            options = c("COMPRESS=LZW", "BIGTIFF=YES")
-            )
-```
-
-```{r}
-#| echo: false
-write_stars(CA_pop_cube,
-            "../../data/stacks/CA_pop_cube.tif",
             driver = "GTiff",
             options = c("COMPRESS=LZW", "BIGTIFF=YES")
             )
@@ -891,20 +812,10 @@ write_stars(CA_pop_cube,
 The **GeoTIFF** format will store the most important data on cell values, x, y, and "bands" and the associated CRS. However, it will discard our coding of the time metadata. If we want to export the `stars` object for `R` usage only, we can simply store it as `.rds`-file to preserve the entire dataset. Exporting for external usage which preserves the extra dimensions can be done in **NetCDF** format.
 
 ```{r}
-#| eval: false
 saveRDS(CA_pop_cube, "./data/stacks/CA_pop_cube.rds")
 
 write_stars(CA_pop_cube, 
             "./data/stacks/CA_pop_cube.nc",
-            driver = "netCDF")
-```
-
-```{r}
-#| echo: false
-saveRDS(CA_pop_cube, "../../data/stacks/CA_pop_cube.rds")
-
-write_stars(CA_pop_cube, 
-            "../../data/stacks/CA_pop_cube.nc",
             driver = "netCDF")
 ```
 

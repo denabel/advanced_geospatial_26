@@ -8,6 +8,9 @@ format:
     code-copy: true
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 editor: visual
 callout-icon: false
 callout-appearance: minimal
@@ -99,7 +102,6 @@ Example palettes you might try:
 ## ✅ Solution 1
 
 ```{r}
-#| eval: false
 library(sf)
 library(terra)
 
@@ -137,44 +139,6 @@ south_states <-
 age_north <-
   terra::mask(age_avg, north_states) |>
   terra::crop(north_states)
-age_south <-
-  terra::mask(age_avg, south_states) |>
-  terra::crop(south_states)
-```
-
-```{r}
-#| echo: false
-library(sf)
-library(terra)
-
-age_avg <- terra::rast("../../data/z22/age_avg.tif")
-states <- 
-  sf::st_read("../../data/boundaries/VG250_LAN.shp", quiet = TRUE) |> 
-  sf::st_transform(3035)
-
-north_states <-
-  states |>
-  dplyr::filter(
-    GEN %in% c(
-      "Schleswig-Holstein", "Hamburg", "Bremen", "Niedersachsen",
-      "Mecklenburg-Vorpommern", "Brandenburg", "Berlin",
-      "Nordrhein-Westfalen", "Sachsen-Anhalt"
-    )
-  )
-
-south_states <-
-  states |>
-  dplyr::filter(
-    GEN %in% c(
-      "Bayern", "Baden-Württemberg", "Saarland",
-      "Rheinland-Pfalz", "Hessen", "Sachsen", "Thüringen"
-    )
-  )
-
-age_north <-
-  terra::mask(age_avg, north_states) |>
-  terra::crop(north_states)
-
 age_south <-
   terra::mask(age_avg, south_states) |>
   terra::crop(south_states)

@@ -5,6 +5,9 @@ author: "Dennis Abel & Stefan Jünger"
 date: June 9, 2026
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 format:
   revealjs:
     embed-resources: true
@@ -118,7 +121,7 @@ We will show the use of packages we exploit in practice
 
 ```{r}
 #| echo: false
-source("course_content.R")
+source("_ignore/sessions/course_content.R")
 course_content
 ```
 

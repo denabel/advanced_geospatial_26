@@ -8,6 +8,9 @@ format:
     code-copy: true
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 editor: visual
 callout-icon: false
 callout-appearance: minimal
@@ -78,7 +81,6 @@ You could also transform the polygons instead of the points — it depends on wh
 ## ✅ Solution 1
 
 ```{r}
-#| eval: false
 library(sf)
 
 # Load the German districts shapefile
@@ -94,21 +96,6 @@ sf::st_crs(polygon_data) # coordinate reference system
 table(polygon_data$GF) # how many of each type?
 
 # Visualize the geometry (without attributes)
-plot(sf::st_geometry(polygon_data))
-```
-
-```{r}
-#| echo: false
-library(sf)
-
-polygon_data <- sf::st_read("../../data/boundaries/VG250_KRS.shp", quiet = TRUE)
-
-print(polygon_data)
-nrow(polygon_data)
-sf::st_crs(polygon_data)
-
-table(polygon_data$GF)
-
 plot(sf::st_geometry(polygon_data))
 ```
 :::
@@ -143,7 +130,7 @@ plot(points_sf)
 library(sf)
 library(readr)
 
-coords_df <- readr::read_csv("../../data/survey/synthetic_geocoordinates.csv")
+coords_df <- readr::read_csv("./data/survey/synthetic_geocoordinates.csv")
 
 points_sf <-
   sf::st_as_sf(
