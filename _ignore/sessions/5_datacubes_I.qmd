@@ -28,7 +28,6 @@ library(terra)
 library(sf)
 library(ggplot2)
 library(units)
-library(emo)
 ```
 
 ## Now
