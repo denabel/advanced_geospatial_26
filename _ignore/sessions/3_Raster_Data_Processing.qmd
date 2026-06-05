@@ -49,7 +49,7 @@ In this session, you will learn
 - How to wrangle raster data even further
 - Linking to vector data
 - Manipulating the raster values
-- How to converse from one format into the other
+- How to convert from one format into the other
 
 ## Quick reminder: Census data documentation
 
@@ -172,7 +172,7 @@ plot(
 
 ## First solution: `terra::mask()`
 
-Masking is similar to cropping, yet values outside the extent are set to missing values (`NA`).
+Masking is similar to cropping, yet values outside the masking geometry (rather than outside the extent) are set to missing values (`NA`) — the raster extent itself stays unchanged.
 
 :::: columns
 ::: {.column width="50%"}
@@ -314,7 +314,7 @@ points$pop <- # add as new column
 points
 ```
 
-## More elaborated: spatial buffers
+## More elaborate: spatial buffers
 
 Sometimes, extracting information 1:1 is not enough.
 
@@ -460,7 +460,7 @@ terra::extract(
 
 ## Raster aggregation
 
-We can use the same procedure to aggregate a raster dataset into a vector polygon dataset. That's a widespread use case. Let's load our German districts vector dataset in `./data/`. This time, we will use WorldPop raster data on gender ratios from 2020.
+We can use the same procedure to aggregate a raster dataset into a vector polygon dataset. That's a widespread use case. Let's load our German districts vector dataset in `./data/boundaries/`. This time, we will use WorldPop raster data on gender ratios from 2020.
 
 :::: columns
 ::: {.column width="50%"}
@@ -642,7 +642,7 @@ plot(rent_berlin_smooth)
 
 So far, we used grid-cell-level Census data for our heat map. But what if we only have point observations, e.g., from a survey? We can create a similar density surface from scratch using `terra::rasterize()`. Let's demonstrate this with the synthetic survey coordinates.
 
-Usually, when we talk about heat maps, we mean analyzing point patterns and whether they spatially cluster. `terra` might not be your best choice regarding more elaborated techniques to estimate density kernels and distance base bandwidths between points to draw clusters. For this purpose, packages such as `spatstat` are better suited but require [learning about other data structures](https://r-spatial.org/book/11-PointPattern.html). That said, densities are more advanced ways of counting things in raster grid cells, and we can mimic this behavior also with `terra`. So, let's stick to this package and crop all of our points to the extent of Berlin.
+Usually, when we talk about heat maps, we mean analyzing point patterns and whether they spatially cluster. `terra` might not be your best choice regarding more elaborate techniques to estimate density kernels and distance-based bandwidths between points to draw clusters. For this purpose, packages such as `spatstat` are better suited but require [learning about other data structures](https://r-spatial.org/book/11-PointPattern.html). That said, densities are more advanced ways of counting things in raster grid cells, and we can mimic this behavior also with `terra`. So, let's stick to this package and crop all of our points to the extent of Berlin.
 
 :::: columns
 ::: {.column width="50%"}
@@ -676,7 +676,7 @@ plot(sf::st_geometry(points_berlin)) # point locations
 
 ## Creating a raster density template
 
-Next, we simply want to count survey respondent locations in raster grid cells for our density estimation. However, our points are sparse compared to our comprehensive raster dataset. We cannot initially rely on 1 km² grid cells as with the Census grid data. But 5 km² may be a good compromise. Let's do that!
+Next, we simply want to count survey respondent locations in raster grid cells for our density estimation. However, our points are sparse compared to our comprehensive raster dataset. We cannot initially rely on 1 km² grid cells as with the Census grid data. But a 5 km resolution may be a good compromise. Let's do that!
 
 ```{r}
 raster_template <-
@@ -728,7 +728,7 @@ plot(points_berlin_density)
 
 ## Reproject to a finer grid
 
-Now, this is not very pleasant. These data looks... not good. But fear not, working with raster data is powerful, as we now use a function you already know for projecting one CRS into another: `terra::project()`. This function can also be used to aggregate and disaggregate data based on the structure of another dataset. So, while we could not initially use 1 km² grid cells for our density 'estimation', we can reproject our 5 km² onto a 1 km² grid like our Census grid data. A bit of masking also helps get rid of cells that are not within the Berlin border.
+Now, this is not very pleasant. These data look... not good. But fear not, working with raster data is powerful, as we now use a function you already know for projecting one CRS into another: `terra::project()`. This function can also be used to aggregate and disaggregate data based on the structure of another dataset. So, while we could not initially use 1 km² grid cells for our density 'estimation', we can reproject our 5 km² onto a 1 km² grid like our Census grid data. A bit of masking also helps get rid of cells that are not within the Berlin border.
 
 :::: columns
 ::: {.column width="50%"}
@@ -865,7 +865,7 @@ It's magic. Just kidding, but it is indeed really powerful. It builds around the
 
 ## It's just a simple base `R` matrix
 
-When using this matrix as input and applying the statistic `fun = mean`, we change the value of the focal grid cell to the mean of the values of itself and the 8 surrounding grid cells. That's what we did before in one example.
+When using this matrix as input and applying the statistic `fun = mean`, we change the value of the focal grid cell to the mean of the values of itself and the 24 surrounding grid cells.
 
 ```{r}
 matrix(1, 5, 5)
@@ -945,7 +945,7 @@ $$r_x = \begin{bmatrix}1 & 0 & -1 \\2 & 0 & -2 \\1 & 0 & -1\end{bmatrix} \times 
 ```{r}
 sobel <- function(r) {
   fy <- matrix(c(1, 0, -1, 2, 0, -2, 1, 0, -1), nrow = 3) # vertical kernel
-  fx <- matrix(c(-1, -2, -1, 0, 0, 0, 1, 2, 1) , nrow = 3) # horizontal kernel
+  fx <- matrix(c(-1, -2, -1, 0, 0, 0, 1, 2, 1) , nrow = 3) # horizontal kernel (sign-flipped vs. formula — doesn't matter since we square it)
   rx <- terra::focal(r, fx) # horizontal gradient
   ry <- terra::focal(r, fy) # vertical gradient
   sqrt(rx^2 + ry^2) # gradient magnitude

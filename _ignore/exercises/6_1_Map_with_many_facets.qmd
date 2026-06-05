@@ -112,7 +112,7 @@ ggplot()+
   labs(
     title = "Population in Texas",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",
@@ -142,7 +142,7 @@ ggplot() +
   labs(
     title = "Population in Texas",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",
@@ -177,7 +177,7 @@ ggplot()+
   labs(
     title = "Population in Texas",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",
@@ -211,7 +211,7 @@ ggplot() +
   labs(
     title = "Population in Texas",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",

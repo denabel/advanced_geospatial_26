@@ -225,7 +225,7 @@ identified four major subject areas which have been addressed with EO data recen
 <ul style="font-size:.7em;">
 - Data integration of 1. harmonized **Eurobarometer** data, 2. EU parliamentary **electoral** data, and 3. **climatological** data
 - Aggregation on regional levels (**NUTS-2** and **NUTS-3**)
-- Climatological data from ERA5 reanalysis (CS3)
+- Climatological data from ERA5 reanalysis (C3S)
 - Calculations of temperature anomalies and extremes based on reference period (1971-2000) 
 - Findings suggest effect of temperature anomalies (heat, "dry spell") on environmental concern and vote intention
 </ul>
@@ -385,7 +385,7 @@ CRS is based on the:
 - GCS uses three-dimensional spherical surface to define locations based on **datum** and **latitude** and **longitude** lines
 - **Datum**: Mathematical model of the Earth that serves as reference point by defining size and shape of Earth
 - **Local datum**: Optimizes fit for particular location (like NAD83)
-- **Geocentric datum**: Optimizes fit for entire Earth (like Word Geodetic Survey 1984 - WGS84)
+- **Geocentric datum**: Optimizes fit for entire Earth (like World Geodetic System 1984 - WGS84)
 - **WGS84** is standard for GPS and many applications
 </ul>
 
@@ -405,7 +405,7 @@ CRS is based on the:
 
 ::::: columns
 ::: {.column width="50%"}
-- PCS represents Earth' surface on a **flat plane** by mathematical transformations (projections)
+- PCS represents Earth's surface on a **flat plane** by mathematical transformations (projections)
 - **Coordinate grid**: Here we talk about **x** and **y** coordinates (= easting and northing)
 - Conversion of degrees of latitude and longitude into measurable units (like meters)
 
@@ -571,25 +571,36 @@ But base `R` is limited when it comes to handling geospatial data
 
 We will use plenty of different packages during the course, but only a few are our main drivers (e.g., the `terra` package). Here's the list of packages you may need for the exercises:
 
+::: {.smaller-text}
+
 -   [`blackmarbler`](https://cloud.r-project.org/web/packages/blackmarbler/index.html)
 -   [`dplyr`](https://cran.r-project.org/web/packages/dplyr/index.html)
+-   [`ecmwfr`](https://cran.r-project.org/web/packages/ecmwfr/index.html)
 -   [`ggplot2`](https://cran.r-project.org/web/packages/ggplot2/index.html)
 -   [`ggrepel`](https://cran.r-project.org/web/packages/ggrepel/index.html)
 -   [`ggspatial`](https://cran.r-project.org/web/packages/ggspatial/index.html)
 -   [`haven`](https://cran.r-project.org/web/packages/haven/index.html)
+-   [`keyring`](https://cran.r-project.org/web/packages/keyring/index.html)
 -   [`randomForest`](https://cran.r-project.org/web/packages/randomForest/index.html)
 -   [`readr`](https://cran.r-project.org/web/packages/readr/index.html)
+:::
 
 ## Packages in this course II 📦
 
+::: {.smaller-text}
 
+-   [`rnaturalearth`](https://cran.r-project.org/web/packages/rnaturalearth/index.html)
 -   [`scales`](https://cran.r-project.org/web/packages/scales/index.html)
 -   [`sf`](https://cran.r-project.org/web/packages/sf/index.html)
+-   [`sjlabelled`](https://cran.r-project.org/web/packages/sjlabelled/index.html)
 -   [`stars`](https://cran.r-project.org/web/packages/stars/index.html)
 -   [`terra`](https://cran.r-project.org/web/packages/terra/index.html)
 -   [`tidyterra`](https://cran.r-project.org/web/packages/tidyterra/index.html)
+-   [`tidyverse`](https://cran.r-project.org/web/packages/tidyverse/index.html)
 -   [`tigris`](https://cran.r-project.org/web/packages/tigris/index.html)
 -   [`units`](https://cran.r-project.org/web/packages/units/index.html)
+-   [`z22`](https://cran.r-project.org/web/packages/z22/index.html)
+:::
 
 
 ------------------------------------------------------------------------
@@ -603,6 +614,8 @@ Illustration by [Allison Horst](https://github.com/allisonhorst/stats-illustrati
 
 In the folder called `./data`, you can find (most of) the data files prepared for all the exercises and slides. The following data are included:
 
+::: {.smaller-text}
+
 - Administrative borders of Germany (Prefix *VG250\_*) are provided by the German [Federal Agency for Cartography and Geodesy](http://www.bkg.bund.de) (2018). Check out their [Open Data Portal](https://gdz.bkg.bund.de/index.php/default/open-data.html).
 
 - German Census 2022 data are provided by the [Federal Statistical Office Germany, Wiesbaden 2024](https://www.zensus2022.de). We gathered the data using Jonas Lieth's [`z22` R package](https://cran.r-project.org/package=z22). The data live in `./data/z22/` in two formats:
@@ -610,22 +623,28 @@ In the folder called `./data`, you can find (most of) the data files prepared fo
   - **`.nc`** files: multi-layer rasters (categorical variables with multiple groups, e.g., `age_short.nc` contains age brackets)
 
   Layer names in `.nc` files can be cryptic — consult the [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes) for documentation, or use `z22::z22_categories()` if you have the package installed.
-
+:::
 
 ## Geospatial data in this course II
+
+::: {.smaller-text}
 
 - WorldPop data are provided by a [research group based at the University of Southampton](https://www.worldpop.org/), offering high-resolution, open-access data on population distribution and demographics. The datasets combine census information, satellite imagery, and statistical modeling to support research, policy-making, and humanitarian efforts worldwide.
 
 - Nighttime lights are derived from [NASA's Black Marble](https://blackmarble.gsfc.nasa.gov/) (Prefix *VNP46A4_*). The data has been accessed with Robert Marty's and Gabriel Stefanini Vicente's (2025) [blackmarbler](https://worldbank.github.io/blackmarbler/) package.
 
 - ERA5 is provided by the [Copernicus Climate Change Service](https://climate.copernicus.eu/) (C3S) and offers high-resolution, global reanalysis data on atmospheric, land, and oceanic variables. The datasets combine observations with models to produce consistent climate information used for research, forecasting, and environmental monitoring.
-
+:::
 
 ## Geospatial data in this course III
+
+::: {.smaller-text}
 
 - The International Social Survey Programme (ISSP) [available at GESIS](https://search.gesis.org/research_data/ZA7650) is provided by a cross-national collaboration of research organizations, delivering annual survey data on social attitudes and behaviors. The datasets cover a wide range of topics like work, family, environment, and social inequality, supporting comparative social science research worldwide.
 
 - The synthetic survey geocoordinates dataset is a simulated dataset comprising 2,000 spatial coordinates and one synthetic attribute related to migration status. It is designed for training and testing spatial analysis workflows without the constraints of real-world data privacy issues and was created using Stefan's experimental [`geosynth` `R` package](https://github.com/StefanJuenger/geosynth).
+
+:::
 
 **Please make sure that if you reuse any of the provided data to cite the original data sources.**
 

@@ -227,8 +227,8 @@ ggplot()+
   ) +
   labs(
     title = "Population change in Texas counties (2000–2020)",
-    subtitle = "In absolute numbers on 1x1km grid\nText labels identify top three districts",
-    caption = "Source: WorldPop (2018)"
+    subtitle = "In absolute numbers on 1x1km grid\nText labels identify top three counties",
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "br",

@@ -18,7 +18,7 @@ callout-appearance: minimal
 
 ### Exercises
 
-We are now focussing on creating a first map based on raster data in `ggplot`. We will work with population data in the US.
+We are now focusing on creating a first map based on raster data in `ggplot`. We will work with population data in the US.
 
 ::: callout-note
 ## 🏋️ Exercise 1
@@ -58,7 +58,7 @@ We now want to crop the raster-file on the basis of the US states bounding box:
 
 - Create a bounding box based on your shapefile,
 - Reproject this bbox to the CRS of the raster file, 
-- Then crop the raster file on based on the bbox.
+- Then crop the raster file based on the bbox.
 :::
 
 ::: {.callout-caution collapse="true"}

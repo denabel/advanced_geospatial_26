@@ -110,13 +110,13 @@ Geospatial data are interdisciplinary and the amount of available data feels unl
 - Lovelace, Nowosad & Muenchow: [Geocomputation with R](https://r.geocompx.org/) — the go-to for applied spatial analysis in `R`
 - Pebesma & Bivand: [Spatial Data Science](https://r-spatial.org/book/) — the definitive reference for `sf` and `stars`
 
-## EOD Spatial Linking Made Easy: `gxc`
+## EO Data Spatial Linking Made Easy: `gxc`
 
 :::: columns
 ::: {.column width="50%"}
 Our `R` package `gxc` aims to make the workflow you learned in this course more accessible:
 
-- Links time- and space-sensitive social science datasets with EOD
+- Links time- and space-sensitive social science datasets with EO data
 - Supports configurable spatial buffers, temporal windows, and aggregation functions
 - Covers applications in environmental social sciences, conflict research, political behavior, economic development, and public health
 :::

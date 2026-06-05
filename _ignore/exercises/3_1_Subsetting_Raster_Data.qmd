@@ -31,7 +31,7 @@ Choose a raster `.tif` layer from the `./data/z22/` folder. (Not sure what a fil
 
 Your task is to split the raster into two parts: one for the northern and one for the southern part of Germany!
 
-Use the shapefile `VG250_LAN.shp` (located in `./data/`) to help define the boundaries: This shapefile contains the outlines of Germany’s federal states (Bundesländer).
+Use the shapefile `VG250_LAN.shp` (located in `./data/boundaries/`) to help define the boundaries: This shapefile contains the outlines of Germany’s federal states (Bundesländer).
 :::
 
 ::: {.callout-caution collapse="true"}

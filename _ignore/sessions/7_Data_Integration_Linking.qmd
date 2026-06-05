@@ -57,7 +57,7 @@ In this session, we put it all together in a **real research workflow**:
 
 ## Survey data: ISSP Environment (1993-2020)
 
-After downloading the ISSP data file from the website, we placed it in our .`/data` folder. We have already prepared a script in the folder `./R` called `prep_issp.r` to prepare the data, which we call using `source()`. 
+After downloading the ISSP data file from the website, we placed it in our `./data` folder. We have already prepared a script in the folder `./R` called `prep_issp.R` to prepare the data, which we call using `source()`. 
 
 ```{r}
 source("./R/prep_issp.R")
@@ -201,7 +201,7 @@ The ERA5 files are pre-downloaded in `./data/era5/`. The following slides show h
 
 ## Downloading the data
 
-<smaller>
+::: {.smaller-text}
 ```{r}
 #| eval: false
 # API access looped over four years
@@ -237,11 +237,11 @@ for (yr in c("1993", "2000", "2010", "2020")) {
     )
 }
 ```
-</smaller>
+:::
 
 ## Importing the data
 
-Importing the data into `R` should feel natural to us right now. We simply use `terra::rast()` for this endevaour.
+Importing the data into `R` should feel natural to us right now. We simply use `terra::rast()` for this endeavour.
 
 ```{r}
 temp_1993 <- terra::rast("./data/era5/era5_temperature1993.grib")
@@ -273,7 +273,7 @@ plot(temp_2020[[1]])
 
 Now, we can aggregate the monthly values by year and country. If necessary, we will check that our country polygons and the raster files have the same CRS and align.
 
-<smaller>
+::: {.smaller-text}
 ```{r}
 #| message: false
 for (yr in c("1993", "2000", "2010", "2020")) {
@@ -302,7 +302,7 @@ for (yr in c("1993", "2000", "2010", "2020")) {
   world[paste0("temp_", yr)] <- country_values[, 2]
 }
 ```
-</smaller>
+:::
 
 ## The result
 
@@ -334,7 +334,7 @@ plot(world["temp_2020"])
 
 Now that we have the focal values for all four survey years, we redo the process for the baseline period (1961-1990). (Again, this data is already pre-downloaded — the code is shown for reference.)
 
-<smaller>
+::: {.smaller-text}
 ```{r}
 #| eval: false
 # Specify API request
@@ -344,7 +344,7 @@ request <-
     variable = "2m_temperature",
     product_type = "monthly_averaged_reanalysis",
     time = "00:00",
-    year = as.character(1961:1970),
+    year = as.character(1961:1990),
     month = 
       c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"),
     area = c(90, -180, -90, 180),
@@ -361,7 +361,7 @@ file_path <-
     verbose = FALSE
   )
 ```
-</smaller>
+:::
 
 ## Importing the data
 
@@ -460,7 +460,7 @@ ggplot(data = world) +
   theme_minimal() +
   labs(
     title = 
-      "Absolute deviation between 2020 and baseline temperature",
+      "Deviation of 2020 temperature from baseline",
     subtitle = "Averaged across countries",
     fill = "Temperature (K)"
   )
@@ -487,7 +487,7 @@ ggplot(data = world) +
   theme_minimal() +
   labs(
     title = 
-      "Absolute deviation between 2020 and baseline temperature",
+      "Deviation of 2020 temperature from baseline",
     subtitle = "Averaged across countries",
     fill = "Temperature (K)"
   )
@@ -739,7 +739,7 @@ ggplot(mapping = aes(x = temp_diff, y = concern)) +
 
 - Country-level means compress the enormous individual variation into a narrow band
 - The boxes barely differ across anomaly groups — the "signal" we might hope for is not there
-- This is the **ecological fallacy** made visible: even if there were a country-level pattern, it would not reflect individual-level reality
+- This makes the **aggregation problem** visible: country-level means compress enormous individual variation into a narrow band, and patterns at one level need not appear at the other — a reminder that cross-level inference (the "ecological fallacy") works in both directions
 
 ## What do we see? (2/2)
 

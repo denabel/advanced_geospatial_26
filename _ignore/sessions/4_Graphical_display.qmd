@@ -1090,8 +1090,8 @@ ggplot()+
   ) +
   labs(
     title = "Population change in NRW Districts (2000–2020)",
-    subtitle = "In absolute numbers on 100x100m grid\nText labels identify highest growth and decline districts",
-    caption = "Source: WorldPop (2018)"
+    subtitle = "In absolute numbers on approx. 1km grid\nText labels identify highest growth and decline districts",
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "br",
@@ -1143,8 +1143,8 @@ ggplot()+
   ) +
   labs(
     title = "Population change in NRW Districts (2000–2020)",
-    subtitle = "In absolute numbers on 100x100m grid\nText labels identify highest growth and decline districts",
-    caption = "Source: WorldPop (2018)"
+    subtitle = "In absolute numbers on approx. 1km grid\nText labels identify highest growth and decline districts",
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "br",

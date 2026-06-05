@@ -29,7 +29,7 @@ Let’s get started and have some fun with spatial data! 🌍✨
 ::: callout-note
 ## 🏋️ Exercise 1
 
-Import a polygon vector shapefile from the `./data` folder. After loading, explore it:
+Import a polygon vector shapefile from the `./data/boundaries` folder. After loading, explore it:
 
 - How many features are there? What attributes are included?
 - What is the coordinate reference system (CRS)?
@@ -48,7 +48,7 @@ The `GF` column encodes the geometry type (e.g., land vs. water boundaries). Try
 ::: callout-note
 ## 🏋️ Exercise 2
 
-Import the file `synthetic_coordinates.csv` from the `./data` folder. It contains point coordinates, but it’s not yet an `sf` object! After loading, convert it into a proper spatial object by assigning coordinates and a CRS. (Feel free to plot the points afterward if you like!)
+Import the file `synthetic_coordinates.csv` from the `./data/survey` folder. It contains point coordinates, but it’s not yet an `sf` object! After loading, convert it into a proper spatial object by assigning coordinates and a CRS. (Feel free to plot the points afterward if you like!)
 :::
 
 ::: {.callout-caution collapse="true"}

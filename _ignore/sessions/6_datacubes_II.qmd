@@ -2,7 +2,7 @@
 title: "Datacube processing II"
 subtitle: "Advanced Geospatial Data Processing for Social Scientists"
 author: "Dennis Abel & Stefan Jünger"
-date: April 29, 2025
+date: June 10, 2026
 execute:
   echo: true
 knitr:
@@ -283,7 +283,7 @@ ggplot()+
   labs(
     title = "Population in California",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",
@@ -325,7 +325,7 @@ ggplot()+
   labs(
     title = "Population in California",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",
@@ -439,7 +439,7 @@ ggplot() +
   labs(
     title = "Population in California",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",
@@ -471,7 +471,7 @@ ggplot() +
   labs(
     title = "Population in California",
     subtitle = "In absolute numbers on 1x1km grid",
-    caption = "Source: WorldPop (2018)"
+    caption = "Source: WorldPop (www.worldpop.org)"
   ) +
   annotation_scale(
     location = "bl",
@@ -511,7 +511,7 @@ Geospatial data tend to be quite big, and there's a pressure to distribute data 
 - Time's a factor
 - The data have a large geographic extent
 
-Instead, a *Programming Application Interface* (API) is often used.
+Instead, an *Application Programming Interface* (API) is often used.
 
 ## Data providers offering geospatial data APIs
 
@@ -528,7 +528,7 @@ Instead, a *Programming Application Interface* (API) is often used.
 
 :::: columns
 ::: {.column width="70%"}
-`blackmarbleR` by Robert Marty and Gabriel Stefanini Vicente (2025) supports easy access to NASA's Black Marble API. Let's check out their [vignette](https://worldbank.github.io/blackmarbler/) to set up an account and the data retrieval.
+`blackmarbler` by Robert Marty and Gabriel Stefanini Vicente (2025) supports easy access to NASA's Black Marble API. Let's check out their [vignette](https://worldbank.github.io/blackmarbler/) to set up an account and the data retrieval.
 
 ```{r}
 library(blackmarbler)
@@ -626,7 +626,7 @@ CA_nl_stack <- bm_raster(roi_sf = CA_sf,
 
 ## Data retrieval
 
-By default, the function writes the data to the `R` environment (`output_location_type = "memory"`). If you want to store it as single GeoTIFFs, specify `output_location_type = "file` and the file path with `file_dir=`. `file_return_null=` further specifies whether the data is additionally loaded to the `R` environment.
+By default, the function writes the data to the `R` environment (`output_location_type = "memory"`). If you want to store it as single GeoTIFFs, specify `output_location_type = "file"` and the file path with `file_dir=`. `file_return_null=` further specifies whether the data is additionally loaded to the `R` environment.
 
 In the previous step, we wrote the data to the disk. Let's load a single layer for 2020 to inspect the data a bit further.
 
