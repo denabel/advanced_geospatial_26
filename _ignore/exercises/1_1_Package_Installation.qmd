@@ -56,18 +56,25 @@ library(easypackages)
 easypackages::packages(
   "blackmarbler",
   "dplyr",
+  "ecmwfr",
   "ggplot2",
   "ggrepel",
   "ggspatial",
+  "haven",
+  "keyring",
   "randomForest",
   "readr",
+  "rnaturalearth",
   "scales",
   "sf",
+  "sjlabelled",
   "stars",
   "terra",
   "tidyterra",
+  "tidyverse",
   "tigris",
-  "units"
+  "units",
+  "z22"
 ) 
 ```
 :::

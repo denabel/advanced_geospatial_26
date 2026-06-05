@@ -12,14 +12,14 @@
 
 cran_packages <- c(
   "blackmarbler",   # NASA Black Marble nighttime lights      (Session 6)
+  "dplyr",          # Data wrangling                          (throughout)
   "easypackages",   # Bulk package installation helper        (Exercise 1_1)
-  "ecmwfr",         # Copernicus Climate Data Store API       (Session 7)
+  "ecmwfr",         # Copernicus Climate Data Store API       (Session 7, demo only)
   "ggplot2",        # Plotting                                (Sessions 4, 7; Exercises)
   "ggrepel",        # Non-overlapping text labels in ggplot2  (Session 4, Exercise 4_2)
   "ggspatial",      # Map annotations (scale bar, north arrow)(Sessions 4, 6; Exercises)
   "haven",          # Import SPSS/Stata files (ISSP data)     (Session 7, via prep_issp.R)
   "keyring",        # Secure API key storage                  (Session 7)
-  "patchwork",      # Compose multiple ggplots                (Session 7)
   "randomForest",   # Random forest models                    (Session 6)
   "readr",          # CSV import                              (Session 4, Exercise 2_1)
   "rnaturalearth",  # World country polygons                  (Session 7)
