@@ -6,3 +6,4 @@
 /data/issp/ZA*
 /data/EO_data
 /data/era5/*.grib
+_ignore/.render_hashes.json
