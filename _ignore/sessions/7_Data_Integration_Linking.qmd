@@ -60,6 +60,7 @@ In this session, we put it all together in a **real research workflow**:
 After downloading the ISSP data file from the website, we placed it in our `./data` folder. We have already prepared a script in the folder `./R` called `prep_issp.R` to prepare the data, which we call using `source()`. 
 
 ```{r}
+#| output-location: fragment
 source("./R/prep_issp.R")
 
 head(issp, 10)
@@ -138,45 +139,23 @@ lapply(required_packages, library, character.only = TRUE)
 
 We load the vector data containing country-level polygons and subset it to the most relevant variables.
 
-:::: columns
-::: {.column width="50%"}
 ```{r}
-#| eval: false
+#| echo: true
+#| output-location: column-fragment
 #| fig.asp: .8
-world <- 
+world <-
   rnaturalearth::ne_countries(
-    scale = "medium", 
+    scale = "medium",
     returnclass = "sf"
-  ) |> 
+  ) |>
   dplyr::select(
-    admin, 
-    iso_a3, 
+    admin,
+    iso_a3,
     geometry
   )
 
 plot(sf::st_geometry(world))
 ```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| fig.asp: .8
-world <- 
-  rnaturalearth::ne_countries(
-    scale = "medium", 
-    returnclass = "sf"
-  ) |> 
-  dplyr::select(
-    admin, 
-    iso_a3, 
-    geometry
-  )
-
-plot(sf::st_geometry(world))
-```
-:::
-::::
 
 ## Accessing the Copernicus API
 
@@ -309,6 +288,7 @@ for (yr in c("1993", "2000", "2010", "2020")) {
 We now have our country polygon vector file with yearly mean temperatures for each survey year.
 
 ```{r}
+#| output-location: fragment
 head(world, 2)
 ```
 
@@ -432,6 +412,7 @@ world$temp_base <- country_values[, 2]
 ## The result
 
 ```{r}
+#| output-location: fragment
 head(world)
 ```
 
@@ -439,12 +420,11 @@ head(world)
 
 Now that we have the focal and baseline values, we calculate single deviations.
 
-:::: columns
-::: {.column width="50%"}
 ```{r}
-#| eval: false
+#| echo: true
+#| output-location: column-fragment
 #| fig.asp: .8
-world <- 
+world <-
   world |>
   dplyr::mutate(
     diff_1993 = temp_1993 - temp_base,
@@ -459,50 +439,20 @@ ggplot(data = world) +
   scale_fill_viridis_c() +
   theme_minimal() +
   labs(
-    title = 
+    title =
       "Deviation of 2020 temperature from baseline",
     subtitle = "Averaged across countries",
     fill = "Temperature (K)"
   )
 ```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| fig.asp: .8
-world <- 
-  world |>
-  dplyr::mutate(
-    diff_1993 = temp_1993 - temp_base,
-    diff_2000 = temp_2000 - temp_base,
-    diff_2010 = temp_2010 - temp_base,
-    diff_2020 = temp_2020 - temp_base
-  )
-
-# Plot 2020 deviation from baseline
-ggplot(data = world) +
-  geom_sf(aes(fill = diff_2020)) +
-  scale_fill_viridis_c() +
-  theme_minimal() +
-  labs(
-    title = 
-      "Deviation of 2020 temperature from baseline",
-    subtitle = "Averaged across countries",
-    fill = "Temperature (K)"
-  )
-```
-:::
-::::
 
 ## Restructuring the temperature data
 
 First, we reshape the temperature anomalies into long format — one row per country and year, keeping the raw values in Kelvin. No standardization needed.
 
-:::: columns
-::: {.column width="50%"}
 ```{r}
-#| eval: false
+#| echo: true
+#| output-location: column-fragment
 world_restructured <-
   world |>
   sf::st_drop_geometry() |>
@@ -521,40 +471,14 @@ world_restructured <-
 
 world_restructured
 ```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-world_restructured <-
-  world |>
-  sf::st_drop_geometry() |>
-  dplyr::select(
-    country = admin,
-    dplyr::contains("diff_")
-  ) |>
-  tidyr::pivot_longer(
-    cols = dplyr::contains("diff_"),
-    values_to = "temp_diff",
-    names_to = "diff"
-  ) |>
-  dplyr::mutate(
-    year = as.numeric(stringr::str_extract(diff, "\\d{4}"))
-  )
-
-world_restructured
-```
-:::
-::::
 
 ## Linking at the individual level
 
 Remember `terra::extract()` from Session 3? We used it to link raster values to points and polygons. That's exactly what we did earlier — aggregating gridded temperatures to country polygons. Now we join the anomalies directly to **every individual respondent** via country name and year. This is the core pattern: **spatial aggregation** (raster → polygons) followed by a **tabular join** (via `dplyr::left_join()`).
 
-:::: columns
-::: {.column width="50%"}
 ```{r}
-#| eval: false
+#| echo: true
+#| output-location: column-fragment
 issp_linked <-
   issp |>
   dplyr::mutate(
@@ -571,29 +495,6 @@ issp_linked <-
 
 issp_linked
 ```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-issp_linked <-
-  issp |>
-  dplyr::mutate(
-    country = ifelse(
-      country == "USA",
-      "United States of America",
-      country
-    )
-  ) |>
-  dplyr::left_join(
-    world_restructured,
-    by = c("country", "year")
-  )
-
-issp_linked
-```
-:::
-::::
 
 ## Individual-level view: The full picture
 
