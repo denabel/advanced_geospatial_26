@@ -2,9 +2,12 @@
 title: "Outlook"
 subtitle: "Advanced Geospatial Data Processing for Social Scientists"
 author: "Dennis Abel & Stefan Jünger"
-date: April 29, 2025
+date: June 10, 2026
 execute:
   echo: true
+knitr:
+  opts_knit:
+    root.dir: ../../
 format:
   revealjs:
     embed-resources: true
@@ -12,11 +15,9 @@ format:
     smaller: true
     scrollable: true
     slide-number: "c/t"
-    navigation-mode: vertical
     logo: ../img/GESIS-Logo_2024.svg.png
-    # fig-dpi: 300
     fig-align: "center"
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -26,56 +27,98 @@ library(dplyr)
 library(ggplot2)
 library(sf)
 library(terra)
-library(tmap)
 ```
 
 ## What we have done
 
 ```{r}
 #| echo: false
-source("course_content.R") 
+source("_ignore/sessions/course_content.R")
 course_content
 ```
 
-## What's left
+## What you can do now
 
-- AI models for detecting objects on satellite images
-- More in-depth temporal linking techniques
-- ...
-- What do you think?
+After these two days, you should be able to:
 
-- **More data sources**
+- **Load, inspect, and wrangle** complex geospatial data in `R` (`sf`, `terra`, `stars`)
+- **Subset** raster data via cropping, masking, and extraction
+- **Build raster stacks and datacubes** with temporal dimensions
+- **Access remote sensing data** via APIs (NASA Black Marble, Copernicus ERA5)
+- **Create publication-ready maps** with `ggplot2`, `tidyterra`, and `ggspatial`
+- **Integrate EO data with social science datasets** — from spatial aggregation to individual-level linking
+
+These are transferable skills. The specific datasets change, but the workflow stays the same: *find data → access → wrangle → link → analyze → visualize*.
 
 
-## Data Sources
+## What we did NOT cover
 
-Some more information:
+There's much more in the geospatial `R` ecosystem. Here are some directions worth exploring on your own:
 
-- Geospatial data are interdisciplinary
-- Amount of data feels unlimited
-- Data providers and data portals are often specific in the area and/or the information they cover
+- **Spatial regression models** — spatial lag, spatial error, geographically weighted regression ([`spatialreg`](https://r-spatial.github.io/spatialreg/), [`spgwr`](https://cran.r-project.org/package=spgwr), [`spdep`](https://r-spatial.github.io/spdep/))
+- **Machine learning on satellite imagery** — image classification, object detection, land use mapping ([`sits`](https://e-sensing.github.io/sitsbook/), [`torch`](https://torch.mlverse.org/))
+- **Interactive maps** — web-based, zoomable maps for exploration and communication ([`leaflet`](https://rstudio.github.io/leaflet/), [`mapview`](https://r-spatial.github.io/mapview/), [`tmap`](https://r-tmap.github.io/tmap/) in view mode)
+- **Cloud-native formats** — accessing large EO archives without downloading entire files (Cloud-Optimized GeoTIFF, STAC catalogs, [`rstac`](https://brazil-data-cube.github.io/rstac/), [`gdalcubes`](https://gdalcubes.github.io/))
+- **Point pattern analysis** — kernel density estimation, spatial clustering ([`spatstat`](https://spatstat.org/))
 
-Some random examples: 
 
-- [Eurostat](https://ec.europa.eu/eurostat/web/gisco/geodata)
-- [European Spatial Data Infrastructure](https://inspire.ec.europa.eu/about-inspire/563)
-- [John Hopkins Corona Data Hub and Dashboard](https://coronavirus.jhu.edu/map.html)
-- [US Census Bureau](https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html)
+## Keep exploring: Data sources
 
-## EOD Spatial Linking Made Easy
+Geospatial data are interdisciplinary and the amount of available data feels unlimited. Here are some starting points, organized by theme:
+
+**Climate & Environment**
+
+- [Copernicus Climate Data Store](https://cds.climate.copernicus.eu/) — ERA5 reanalysis, seasonal forecasts, climate projections
+- [CHELSA](https://chelsa-climate.org/) — high-resolution climate data for land surfaces
+- [WorldClim](https://www.worldclim.org/) — global climate data for ecological modeling
+
+**Population & Demographics**
+
+- [WorldPop](https://www.worldpop.org/) — gridded population estimates (global)
+- [Global Human Settlement Layer (GHSL)](https://ghsl.jrc.ec.europa.eu/) — built-up areas, population grids (EU JRC)
+
+
+## Keep exploring: Data sources
+
+**Nighttime Lights & Economic Activity**
+
+- [NASA Black Marble](https://blackmarble.gsfc.nasa.gov/) — VIIRS nighttime lights (VNP46)
+- [DMSP Nighttime Lights](https://eogdata.mines.edu/products/dmsp/) — historical nighttime lights (1992–2013)
+
+**Land Use & Land Cover**
+
+- [ESA WorldCover](https://esa-worldcover.org/) — 10m global land cover
+- [Copernicus CORINE](https://land.copernicus.eu/en/products/corine-land-cover) — European land cover (1990–present)
+
+**Boundaries & Infrastructure**
+
+- [GADM](https://gadm.org/) — global administrative boundaries (all levels)
+- [Natural Earth](https://www.naturalearthdata.com/) — curated vector and raster map data
+- [Eurostat GISCO](https://ec.europa.eu/eurostat/web/gisco/geodata) — European boundaries (NUTS, LAU, countries)
+
+**Social Science Surveys**
+
+- [ISSP](https://issp.org/) — cross-national survey on social attitudes
+- [European Social Survey](https://www.europeansocialsurvey.org/) — biennial cross-national survey
+- [Eurobarometer](https://europa.eu/eurobarometer/) — EU public opinion surveys
+
+
+## Keep exploring: Books
+
+**Books** (both freely available online)
+
+- Lovelace, Nowosad & Muenchow: [Geocomputation with R](https://r.geocompx.org/) — the go-to for applied spatial analysis in `R`
+- Pebesma & Bivand: [Spatial Data Science](https://r-spatial.org/book/) — the definitive reference for `sf` and `stars`
+
+## EOD Spatial Linking Made Easy: `gxc`
 
 :::: columns
 ::: {.column width="50%"}
-Links time- and space-sensitive social science datasets with EOD
+Our `R` package `gxc` aims to make the workflow you learned in this course more accessible:
 
-Supports inter- and transdisciplinary research
-
-  - Environmental social sciences
-  - Conflict and peace research
-  - Political attitudes and behavior
-  - Policy studies
-  - Economic development and inequality
-  - Public health
+- Links time- and space-sensitive social science datasets with EOD
+- Supports configurable spatial buffers, temporal windows, and aggregation functions
+- Covers applications in environmental social sciences, conflict research, political behavior, economic development, and public health
 :::
 
 ::: {.column width="50%"}
@@ -83,42 +126,39 @@ Supports inter- and transdisciplinary research
 :::
 ::::
 
-## Installation
-
-The development version of the package is available on [GitHub](https://github.com/denabel/gxc). Please also refer to [our comprehensive online compendium](https://denabel.github.io/gxc_pages/).
+The development version is on [GitHub](https://github.com/denabel/gxc). See also [our online compendium](https://denabel.github.io/gxc_pages/).
 
 ```{r}
 #| eval: false
-if(!require(remotes)){install.packages("remotes")}
+if (!require(remotes)) { install.packages("remotes") }
 
 remotes::install_github("denabel/gxc")
 
 library(gxc)
 ```
 
-## Workflow
-
-![](../img/path_stock_pic.png){.r-stretch fig-align="center"}
-
-
-
 
 ## Upcoming Workshops / Events
 
-**Interactive Data Analysis with Shiny**
-
-- 03-04 July & 10-11 July 2025, Online; Lecturers: Jonas Lieth & Paul Bauer
-- [Register online](https://training.gesis.org/?site=pDetails&child=full&pID=0x30D69A7067E14C1190F57528682E1203)
-
 **Geodata and Spatial Regression Analysis**
 
-- 09-11 July 2025, GESIS Mannheim; Lecturer: Tobias Rüttenauer
-- [Register online](https://training.gesis.org/?site=pDetails&child=full&pID=0xC8DBE5AAA5FC4BE4ADDF1A90012B677E)
+- June 30 – July 2, 2026, GESIS Mannheim; Lecturer: Tobias Rüttenauer (University of Frankfurt)
+- [Register online](https://training.gesis.org/?site=pDetails&child=full&pID=0xB1DFA1C064924FF290362BB5D8D70177)
 
-**GESIS Workshop on Earth Observation Data in the Social Sciences**
+**Advanced Survey Design** (incl. data linking)
 
-- November or December 2025, GESIS Cologne; Hosts: Dennis Abel & Stefan Jünger
+- August 3–7, 2026, GESIS Cologne; Lecturers: Bella Struminskaya & Camilla Salvatore (Utrecht University)
+- [Register online](https://training.gesis.org/?site=pDetails&child=full&pID=0xE1EA4A565CDF45FF8E7F597B6C89B91D&subID=0x44EF7424DA7847E88BCCD1703C9E0A16)
 
-## The End {.center style="text-align: center;"}
+Check the [GESIS Training](https://training.gesis.org/) page for more upcoming workshops.
 
 
+## Thank you! {.center style="text-align: center;"}
+
+Dennis Abel — dennis.abel@gesis.org
+
+Stefan Jünger — stefan.juenger@gesis.org
+
+<br>
+
+All course materials: [github.com/denabel/advanced_geospatial_26](https://github.com/denabel/advanced_geospatial_26)
