@@ -28,6 +28,7 @@ library(terra)
 library(tmap)
 ```
 
+## Now
 
 ```{r}
 #| echo: false
@@ -53,7 +54,7 @@ So, always know what kind of data you are dealing with!
 
 ![](../img/fig_geometries.png){.r-stretch fig-align="center"}
 
-<small>Sources: OpenStreetMap / GEOFABRIK (2018), City of Cologne (2014), and the Statistical Offices of the Federation and the Länder (2016) / Jünger, 2019</small>
+<small>Source: OpenStreetMap / GEOFABRIK (2018), City of Cologne (2014), Statistical Offices of the Federation and the Länder (2016) / Jünger, 2019</small>
 
 ## Vector data {.center style="text-align: center;"}
 
@@ -96,7 +97,7 @@ Every real-world feature is one of three types of geometry:
 
 ::: {.column width="50%"}
 ![](../img/vector_geometries.png){fig-align="center" width="75%"}
-<small>National Ecological Observatory Network (NEON), cited by [Datacarpentry](https://datacarpentry.org/organization-geospatial/instructor/02-intro-vector-data.html)</small>
+<small>Source: National Ecological Observatory Network (NEON), cited by [Datacarpentry](https://datacarpentry.org/organization-geospatial/instructor/02-intro-vector-data.html)</small>
 
 :::
 ::::
@@ -129,7 +130,7 @@ We must assign attributes to each geometry to hold additional information $\righ
 Several packages are out there to wrangle and visualize spatial and, especially, vector data within `R`. We often use the `sf` package ("simple features"). But there is also an implementation in the `terra` package we use for our raster data.
 
 <br>
-Why? 
+But why stick to `sf`? 
 
 `simple features` refers to a formal standard representing spatial geometries and supports interfaces to other programming languages and GIS systems (ISO 19125-1).
 :::
@@ -138,7 +139,7 @@ Why?
 
 ![](../img/sf.jpg){fig-align="center"}
 
-<p style="text-align: right;"><small>Illustration by [Allison Horst](https://allisonhorst.com/r-packages-functions)</small></p>
+<small>Source: Illustration by [Allison Horst](https://allisonhorst.com/r-packages-functions)</small>
 :::
 ::::
 
@@ -169,6 +170,8 @@ hello_world <- sf::read_sf("./data/boundaries/World_Countries.geojson")
 ## We can already plot it
 
 ```{r}
+#| output-location: fragment
+#| out-width: "90%"
 plot(sf::st_geometry(hello_world)) # geometry only, no attributes
 ```
 
@@ -189,6 +192,7 @@ sf::st_bbox(hello_world) |>
 There are no huge differences between the file we just imported and a regular data table.
 
 ```{r}
+#| output-location: fragment
 # head of data table
 head(hello_world, 2)
 ```
@@ -198,8 +202,9 @@ head(hello_world, 2)
 Besides our general data inspection, we may also want to check the spatial features of our import. This check includes the geometric type (points? lines? polygons?) and the coordinate reference system.
 
 ```{r}
+#| output-location: fragment
 # type of geometry
-sf::st_geometry(hello_world) 
+sf::st_geometry(hello_world)
 ```
 
 ## Inspect your data: multipolygons
@@ -207,6 +212,7 @@ sf::st_geometry(hello_world)
 Each polygon is defined by several connected points forming an enclosed area. A `MULTIPOLYGON` in `sf` means that a **single feature** (= one row) can consist of multiple separate polygons — for example, a country like Indonesia is one feature but made up of thousands of island polygons.
 
 ```{r}
+#| output-location: fragment
 attr(hello_world, "sf_column") |> # get geometry column name
   dplyr::pull(hello_world, var = _) |> # extract it
   dplyr::glimpse() # compact overview
@@ -217,57 +223,37 @@ attr(hello_world, "sf_column") |> # get geometry column name
 Remember: The Coordinate Reference System is critical. A crucial step is to check the CRS of your geospatial data.
 
 ```{r}
+#| output-location: fragment
 # coordinate reference system
-sf::st_crs(hello_world) 
+sf::st_crs(hello_world)
 ```
 
 ## Spatial joins
 
 Often, we want to combine geospatial datasets from different sources. The choice of an appropriate method depends, once again, on the data format. In the world of vector data, we usually speak of "spatial joins" when linking two vector datasets. Let's pull in more spatially narrowed data.
 
-:::: columns
-::: {.column width="50%"}
 ```{r}
+#| echo: true
+#| output-location: column-fragment
+#| fig-asp: .7
 german_districts <-
   sf::st_read(
     "./data/boundaries/VG250_KRS.shp",
-    as_tibble = TRUE # returns tibble, not plain df
+    as_tibble = TRUE, # returns tibble, not plain df,
+    quiet = TRUE
   )
 
 plot(german_districts["AGS"]) # plot by district code
 ```
-:::
 
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| fig-asp: .7
-plot(german_districts["AGS"])
-```
-:::
-::::
 
 ## Spatial joins
 
 Using the synthetic survey geocoordinates, we can craft a toy example to demonstrate spatial joins. This is how they look.
 
-:::: columns
-::: {.column width="50%"}
 ```{r}
-#| eval: false
-points <-
-  readRDS(
-    "./data/survey/synthetic_survey_geocoordinates.rds"
-  ) |>
-  sf::st_transform(sf::st_crs(german_districts)) # match CRS
-
-plot(sf::st_geometry(points)) # point locations
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
+#| echo: true
+#| output-location: column-fragment
 #| fig-asp: .9
 points <-
   readRDS(
@@ -277,8 +263,6 @@ points <-
 
 plot(sf::st_geometry(points)) # point locations
 ```
-:::
-::::
 
 
 ## Spatial joins
@@ -286,6 +270,7 @@ plot(sf::st_geometry(points)) # point locations
 It would be nice if we had regional identifiers in our points data, but there aren't any. This issue shows where spatial joins come in handy. We can use `sf::st_join()` to extract this information.
 
 ```{r}
+#| output-location: fragment
 points_ags <- sf::st_join(points, german_districts["AGS"]) # join by location
 
 points_ags
@@ -302,16 +287,20 @@ In this course, we only use a subset of the options for spatial joins in `sf`. P
 We have to change our CRS fairly often depending on our data sources. That's easily doable in `sf` using the `sf::st_transform()`. Here's a closer look.
 
 ```{r}
+#| output-location: fragment
 sf::st_crs(german_districts)$epsg # current CRS
 ```
 
+::: {.fragment}
 Let's pretend we want to use the EPSG code `4326` — no problem!
 
 ```{r}
+#| output-location: fragment
 german_districts_4326 <- sf::st_transform(german_districts, 4326) # reproject
 
 sf::st_crs(german_districts_4326)$epsg # verify new CRS
 ```
+:::
 
 ## Exercise 2_1: Vector Data Refresher
 
@@ -334,10 +323,7 @@ Now that we've refreshed vector data, let's look at the other major spatial data
 
 ::: {.column width="50%"}
 ![](../img/Bitmap_VS_SVG.svg.png)
-<p style="text-align: right;">
-
-<small>Von Yug, modifications by Cfaerber et al. - Eigenes Werk, CC BY-SA 2.5, https://commons.wikimedia.org/w/index.php?curid=1183592</small>
-</p>
+<small>Source: [Von Yug, modifications by Cfaerber et al., CC BY-SA 2.5](https://commons.wikimedia.org/w/index.php?curid=1183592)</small>
 :::
 :::::
 
@@ -368,9 +354,7 @@ Remember this figure from earlier? Now let's focus on the right side — the ras
 
 ::: {.column width="50%"}
 ![](../img/same_picture.jpg){fig-align="right" width="75%"}
-<p style="text-align: center;">
-<small>https://knowyourmeme.com/memes/theyre-the-same-picture</small>
-</p>
+<small>Source: [Know Your Meme](https://knowyourmeme.com/memes/theyre-the-same-picture)</small>
 :::
 :::::
 
@@ -390,6 +374,7 @@ Remember this figure from earlier? Now let's focus on the right side — the ras
 ## Setting up a raster dataset is easy
 
 ```{r}
+#| output-location: fragment
 input_data <- matrix(sample(1:100, 16), nrow = 4) # 4x4 random values
 
 raster_layer <- terra::rast(input_data) # matrix → raster
@@ -402,6 +387,8 @@ raster_layer
 This toy example shows: a raster is just a matrix with spatial metadata. The real power comes when we load actual geodata.
 
 ```{r}
+#| output-location: fragment
+#| out-width: "80%"
 terra::plot(raster_layer)
 ```
 
@@ -440,6 +427,7 @@ File names correspond to Census features (e.g., `population.tif`, `rent_avg.tif`
 Loading raster data in `terra` is straightforward. For this purpose, we use the function `terra::rast()`.
 
 ```{r}
+#| output-location: fragment
 pop_grid_ger_2022 <- terra::rast("./data/z22/population.tif") # load raster
 
 pop_grid_ger_2022 # inspect metadata
@@ -450,6 +438,7 @@ pop_grid_ger_2022 # inspect metadata
 Let's load another dataset to compare structures because that's really easy in `terra`.
 
 ```{r}
+#| output-location: fragment
 age_under_18_grid_2022 <- terra::rast("./data/z22/age_under_18.tif") # % under 18
 
 age_under_18_grid_2022 # compare metadata with population
@@ -461,6 +450,7 @@ age_under_18_grid_2022 # compare metadata with population
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
+#| #| output-location: fragment
 terra::plot(
   pop_grid_ger_2022
 )
@@ -470,6 +460,7 @@ terra::plot(
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
+#| #| output-location: fragment
 terra::plot(
   age_under_18_grid_2022
 )
@@ -484,17 +475,23 @@ Working with raster data is straightforward — quite speedy, yet not as comfort
 `terra::global()` computes summary statistics efficiently (without loading all values into memory):
 
 ```{r}
+#| output-location: fragment
 terra::global(pop_grid_ger_2022, fun = "mean", na.rm = TRUE) # efficient summary
 ```
 
+::: {.fragment}
 For custom statistics, extract the raw values as a vector with `terra::values()`:
 
 ```{r}
+#| output-location: fragment
 all_raster_values <- terra::values(pop_grid_ger_2022) # all cells as vector
 mean(all_raster_values, na.rm = TRUE) # same result, more flexible
 ```
+:::
 
+::: {.fragment}
 For large rasters, prefer `terra::global()` — it's faster and memory-friendly.
+:::
 
 ## Combining raster layers to calculate new values
 
@@ -503,6 +500,7 @@ Although raster data are simple data tables, working with them is a bit differen
 :::: columns
 ::: {.column width="50%"}
 ```{r}
+#| output-location: fragment
 young_people <-
   pop_grid_ger_2022 * # population count
   (age_under_18_grid_2022 / 100) # × share under 18
@@ -512,11 +510,13 @@ young_people
 :::
 
 ::: {.column width="50%"}
+::: {.fragment}
 ```{r}
 #| echo: false
 #| fig.asp: .6
 terra::plot(young_people)
 ```
+::: 
 :::
 ::::
 
@@ -525,6 +525,7 @@ terra::plot(young_people)
 Later, we will work with multidimensional raster data cubes. While it is possible to work with them in `terra`, `stars` is way more elaborate (we'll discuss it tomorrow in more detail). So, here is an example of how to load raster data into `stars`.
 
 ```{r}
+#| output-location: fragment
 pop_grid_ger_2022_stars <-
   stars::read_stars("./data/z22/population.tif") # same data, different package
 
@@ -533,39 +534,32 @@ pop_grid_ger_2022_stars # note the different output format
 
 ## `stars` objects can also be plotted
 
-:::: columns
-::: {.column width="50%"}
 ```{r}
-#| eval: false
+#| echo: true
+#| output-location: column-fragment
 #| fig.asp: 1
 plot(pop_grid_ger_2022_stars)
 ```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| fig.asp: 1
-plot(pop_grid_ger_2022_stars)
-```
-:::
-::::
 
 ## Finally: Transforming the CRS
 
 As mentioned before, we may also have to change the CRS of our raster data. Returning to `terra`, this is not called 'transforming' but 'projecting' (which makes sense, right?).
 
 ```{r}
+#| output-location: fragment
 terra::crs(pop_grid_ger_2022, describe = TRUE)$code # current CRS
 ```
 
-Let's pretend we want to use the EPSG code `3035` — no problem!
+::: {.fragment}
+Let's pretend we want to use the EPSG code `4236` — no problem!
 
 ```{r}
-pop_grid_ger_2022_3035 <- terra::project(pop_grid_ger_2022, "EPSG:3035") # reproject
+#| output-location: fragment
+pop_grid_ger_2022_3035 <- terra::project(pop_grid_ger_2022, "EPSG:4236") # reproject
 
 terra::crs(pop_grid_ger_2022_3035, describe = TRUE)$code # verify new CRS
 ```
+:::
 
 ## Exercise 2_2: Basic Raster Operations
 
