@@ -1,11 +1,16 @@
-# Workshop "Advanced Geospatial Data Processing for Social Scientists" (June 9/10, 2026)
+# Advanced Geospatial Data Processing for Social Scientists
+
+![GESIS Workshop](https://img.shields.io/badge/GESIS-Workshop-orange)
+![Language: R](https://img.shields.io/badge/Language-R_≥_4.3-276DC3?logo=r)
+![Slides: Quarto Revealjs](https://img.shields.io/badge/Slides-Quarto_Revealjs-4B8BBE)
+![Date: June 2026](https://img.shields.io/badge/Date-June_9--10,_2026-green)
 
 <p align=center>   
-<a href="https://github.com/denabel/advanced_geospatial_26/archive/refs/heads/main.zip"><b>CLICK HERE TO DOWNLOAD ALL COURSE MATERIALS</b></a> 
+<a href="https://github.com/denabel/advanced_geospatial_26/archive/refs/heads/main.zip"><b>📥 CLICK HERE TO DOWNLOAD ALL COURSE MATERIALS</b></a> 
 </p>
 
 <p align=center>   
-<a href="https://denabel.github.io/advanced_geospatial_26/"><b>CLICK HERE FOR AN UNCLUTTERED VIEW</b></a> 
+<a href="https://denabel.github.io/advanced_geospatial_26/"><b>🌐 CLICK HERE FOR AN UNCLUTTERED VIEW</b></a> 
 </p>
 
 Materials for the GESIS workshop "Advanced Geospatial Data Processing for Social Scientists" 
@@ -59,16 +64,19 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 
 **Please make sure that if you reuse any of the provided data to cite the original data sources.**
 
-## ⚡ Getting started
+## 🚀 Getting started
 
-1. **Download** the course materials using the link at the top of this page and **unzip** the folder.
-2. **Open `advanced_geospatial_26.Rproj`** in RStudio (double-click the file). This sets your working directory correctly so that all data paths in the exercises work out of the box.
-3. **Install packages** by running:
-    ```r
-    source("R/install_packages.R")
-    ```
-    The script only installs packages that are not yet on your system.
-4. **Write your scripts** in the `scripts/` folder — see [`scripts/START_HERE.md`](scripts/START_HERE.md) for details.
+📥 **Download** the course materials using the link at the top of this page and **unzip** the folder.
+
+📂 **Open `advanced_geospatial_26.Rproj`** in RStudio (double-click the file). This sets your working directory correctly so that all data paths in the exercises work out of the box.
+
+📦 **Install packages** by running:
+```r
+source("R/install_packages.R")
+```
+The script only installs packages that are not yet on your system.
+
+✍️ **Write your scripts** in the `scripts/` folder — see [`scripts/START_HERE.md`](scripts/START_HERE.md) for details.
 
 ## 🗓️ Course schedule
 
@@ -76,16 +84,16 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 
 | # | Time | Session | Slides | Exercises |
 |:-:|---|---|---|---|
-| 1 | 10:00–11:15 | Introduction | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/1_Introduction.html) | [1_1 Package Installation](https://denabel.github.io/advanced_geospatial_26/exercises/1_1_Package_Installation.html) |
-| 2 | 11:30–13:00 | Raster Data in R | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/2_Raster_Data_in_R.html) | [2_1 Vector Refresher](https://denabel.github.io/advanced_geospatial_26/exercises/2_1_Vector_Data_Refresher.html) · [2_2 Basic Raster Operations](https://denabel.github.io/advanced_geospatial_26/exercises/2_2_Basic_Raster_Operations.html) |
-| 3 | 14:00–15:15 | Raster Data Processing | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/3_Raster_Data_Processing.html) | [3_1 Subsetting](https://denabel.github.io/advanced_geospatial_26/exercises/3_1_Subsetting_Raster_Data.html) · [3_2 Extracting & Analyzing](https://denabel.github.io/advanced_geospatial_26/exercises/3_2_Extracting_Analyzing_Raster_Information.html) |
-| 4 | 15:30–17:00 | Graphical Display | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/4_Graphical_display.html) | [4_1 Simple Map](https://denabel.github.io/advanced_geospatial_26/exercises/4_1_Simple_Map.html) · [4_2 Fancy Map](https://denabel.github.io/advanced_geospatial_26/exercises/4_2_Fancy_Map.html) |
+| 1 | 10:00–11:15 | 👋 Introduction | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/1_Introduction.html) | [1_1 Package Installation](https://denabel.github.io/advanced_geospatial_26/exercises/1_1_Package_Installation.html) |
+| 2 | 11:30–13:00 | 🗺️ Raster Data in R | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/2_Raster_Data_in_R.html) | [2_1 Vector Refresher](https://denabel.github.io/advanced_geospatial_26/exercises/2_1_Vector_Data_Refresher.html) · [2_2 Basic Raster Operations](https://denabel.github.io/advanced_geospatial_26/exercises/2_2_Basic_Raster_Operations.html) |
+| 3 | 14:00–15:15 | ⚙️ Raster Data Processing | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/3_Raster_Data_Processing.html) | [3_1 Subsetting](https://denabel.github.io/advanced_geospatial_26/exercises/3_1_Subsetting_Raster_Data.html) · [3_2 Extracting & Analyzing](https://denabel.github.io/advanced_geospatial_26/exercises/3_2_Extracting_Analyzing_Raster_Information.html) |
+| 4 | 15:30–17:00 | 🎨 Graphical Display | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/4_Graphical_display.html) | [4_1 Simple Map](https://denabel.github.io/advanced_geospatial_26/exercises/4_1_Simple_Map.html) · [4_2 Fancy Map](https://denabel.github.io/advanced_geospatial_26/exercises/4_2_Fancy_Map.html) |
 
 ### Day 2 — June 10
 
 | # | Time | Session | Slides | Exercises |
 |:-:|---|---|---|---|
-| 5 | 10:00–11:15 | Datacube Processing I | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/5_datacubes_I.html) | [5_1 Raster Stack (terra)](https://denabel.github.io/advanced_geospatial_26/exercises/5_1_Raster_stack_terra.html) · [5_2 Raster Cube (stars)](https://denabel.github.io/advanced_geospatial_26/exercises/5_2_Raster_cube_stars.html) |
-| 6 | 11:30–13:00 | Datacube Processing II | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/6_datacubes_II.html) | [6_1 Map with Many Facets](https://denabel.github.io/advanced_geospatial_26/exercises/6_1_Map_with_many_facets.html) · [6_2 Illuminate Your Region](https://denabel.github.io/advanced_geospatial_26/exercises/6_2_Illuminate_your_region.html) |
-| 7 | 14:00–15:15 | Data Integration & Linking | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/7_Data_Integration_Linking.html) | [7_1 Data Integration](https://denabel.github.io/advanced_geospatial_26/exercises/7_1_Data_Integration.html) |
-| 8 | 15:30–17:00 | Outlook | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/8_Outlook.html) | — |
+| 5 | 10:00–11:15 | 🧊 Datacube Processing I | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/5_datacubes_I.html) | [5_1 Raster Stack (terra)](https://denabel.github.io/advanced_geospatial_26/exercises/5_1_Raster_stack_terra.html) · [5_2 Raster Cube (stars)](https://denabel.github.io/advanced_geospatial_26/exercises/5_2_Raster_cube_stars.html) |
+| 6 | 11:30–13:00 | 🧊 Datacube Processing II | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/6_datacubes_II.html) | [6_1 Map with Many Facets](https://denabel.github.io/advanced_geospatial_26/exercises/6_1_Map_with_many_facets.html) · [6_2 Illuminate Your Region](https://denabel.github.io/advanced_geospatial_26/exercises/6_2_Illuminate_your_region.html) |
+| 7 | 14:00–15:15 | 🔗 Data Integration & Linking | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/7_Data_Integration_Linking.html) | [7_1 Data Integration](https://denabel.github.io/advanced_geospatial_26/exercises/7_1_Data_Integration.html) |
+| 8 | 15:30–17:00 | 🔭 Outlook | [Slides](https://denabel.github.io/advanced_geospatial_26/slides/8_Outlook.html) | — |
