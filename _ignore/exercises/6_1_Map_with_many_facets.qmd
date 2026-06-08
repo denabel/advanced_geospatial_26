@@ -23,7 +23,7 @@ Now that we know how to map several layers simultaneously with `ggplot()`, we wa
 ::: callout-note
 ## 🏋️ Exercise 1
 
-In the previous session, we have created a raster stack and a raster cube for the four years in Texas. If these are not in your environment anymore, please load both (`./data/stacks/TX_pop_stack.tif` and `./data/stacks/TX_pop_cube.rds`). 
+In the previous session, we have created a raster stack and a raster cube for the four years in Texas. If these are not in your environment anymore, please load both (`./data/stacks/TX_pop_stack.tif` and `./data/stacks/TX_pop_cube.rds`).
 
 In addition, load the county shapefiles for Texas with the `tigris` package. Reproject it to the CRS of your raster files.
 :::
@@ -39,7 +39,7 @@ Polish it as much as you like (NAs transparent, theme, titles, and North arrow a
 ::: callout-note
 ## 🏋️ Exercise 3
 
-Add your Texas counties shapefile to the plots with `geom_sf()`. 
+Add your Texas counties shapefile to the plots with `geom_sf()`.
 :::
 
 ::: callout-note
@@ -59,10 +59,10 @@ We want to point out counties which experience high population growth. Please at
 
 What else could enhance your map? Polish it for publication, for example, by:
 
--   Turn NAs transparent,
--   Add titles,
--   Adjust the overall theme of the plot,
--   Add a North arrow and scale bar.
+- Turn NAs transparent,
+- Add titles,
+- Adjust the overall theme of the plot,
+- Add a North arrow and scale bar.
 :::
 
 ### Solutions
@@ -166,8 +166,7 @@ ggplot()+
   geom_spatraster(data = TX_pop_stack)+
   geom_sf(data = TX_counties,
           fill = "transparent",
-          color = "white",
-          size = 3)+
+          color = "white")+
   scale_fill_viridis_c(na.value = "transparent",
                        name = "Pop count",
                        limits = c(0, 2000),
@@ -199,8 +198,7 @@ ggplot() +
              ) +
   geom_sf(data = TX_counties,
           fill = "transparent",
-          color = "white",
-          size = 3)+
+          color = "white")+
   scale_fill_viridis_c(na.value = "transparent",
                        name = "Pop count",
                        limits = c(0, 2000),
@@ -224,5 +222,3 @@ ggplot() +
   )
 ```
 :::
-
-
