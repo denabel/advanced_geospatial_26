@@ -66,7 +66,15 @@ The data were downloaded with the [`z22` package](https://cran.r-project.org/pac
 
 ## Cropping raster data
 
-Cropping is a method of cutting out a specific 'slice' of a raster layer based on an input dataset or geospatial extent, such as a bounding box. We often do this to 'zoom' in on a dataset or to make our computations more efficient. Let's pretend we are mainly interested in the small-scale population size of Eastern Germany. For this purpose, we can use the bounding box of Eastern Germany.
+Cropping is a method of cutting out a specific 'slice' of a raster layer based on an input dataset or geospatial extent, such as a bounding box. We often do this to 'zoom' in on a dataset or to make our computations more efficient. 
+
+::: {.fragment}
+![](../img/fig_cropping.svg){width="60%" fig-align="center"}
+:::
+
+::: {.fragment}
+Let's pretend we are mainly interested in the small-scale population size of Eastern Germany. For this purpose, we can use the bounding box of Eastern Germany.
+:::
 
 ## Bounding box in `R`
 
@@ -75,7 +83,7 @@ The easiest way (in my opinion) to create a bounding box in `R` is to use the `s
 ```{r}
 #| output-location: fragment
 bbox_east <-
-  sf::st_read("./data/boundaries/VG250_LAN.shp") |>
+  sf::st_read("./data/boundaries/VG250_LAN.shp", quiet = TRUE) |>
   dplyr::filter(SN_L %in% 11:16, GF == 4) |> # Eastern states
   sf::st_transform(3035) |> # reproject
   sf::st_bbox() |> # bounding box
@@ -95,10 +103,18 @@ pop_grid_2022 <- terra::rast("./data/z22/population.tif")
 pop_grid_2022_crop <- terra::crop(pop_grid_2022, bbox_east) # crop to bbox
 
 terra::ext(pop_grid_2022) # full extent
-terra::ext(pop_grid_2022_crop) # cropped extent
 ```
 
+::: {.fragment}
+```{r}
+#| output-location: fragment
+terra::ext(pop_grid_2022_crop) # cropped extent
+```
+:::
+
+::: {.fragment}
 Note the different spatial extents.
+:::
 
 ## Plotting the different extents
 
@@ -106,6 +122,7 @@ Note the different spatial extents.
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .8
+#| output-location: fragment
 terra::plot(pop_grid_2022)
 ```
 :::
@@ -113,6 +130,7 @@ terra::plot(pop_grid_2022)
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .8
+#| output-location: fragment
 terra::plot(pop_grid_2022_crop)
 ```
 :::
@@ -122,37 +140,11 @@ terra::plot(pop_grid_2022_crop)
 
 ...do these data only include Eastern German states? Let's have a look at their shapes.
 
-:::: columns
-::: {.column width="50%"}
-```{r}
-#| eval: false
-#| message: false
-#| warning: false
-#| fig-asp: .8
-east_german_states <-
-  sf::st_read(
-    "./data/boundaries/VG250_LAN.shp",
-    quiet = TRUE
-  ) |>
-  sf::st_transform(3035) |> 
-  dplyr::filter(SN_L %in% 11:16, GF == 4) # subset
-
-plot(pop_grid_2022_crop) # raster base layer
-plot(
-  sf::st_geometry(east_german_states),
-  border = "white",
-  col = scales::alpha("white", .2),
-  lwd = 4,
-  add = TRUE # overlay borders
-)
-```
-:::
-
-::: {.column width="50%"}
 ```{r}
 #| echo: false
 #| message: false
 #| warning: false
+#| output-location: column-fragment
 #| fig-asp: .8
 east_german_states <-
   sf::st_read(
@@ -171,12 +163,22 @@ plot(
   add = TRUE # overlay borders
 )
 ```
-:::
-::::
 
 ## First solution: `terra::mask()`
 
 Masking is similar to cropping, yet values outside the masking geometry (rather than outside the extent) are set to missing values (`NA`) — the raster extent itself stays unchanged.
+
+::: {.fragment}
+![](../img/fig_masking.svg){width="60%" fig-align="center"}
+:::
+
+::: {.fragment}
+::: {.callout-note}
+Raster data often contain `NA` cells (e.g., water bodies, areas outside borders). Most functions require `na.rm = TRUE` to handle them — you'll see this argument throughout this session. Keep it in mind whenever you work with raster data!
+:::
+:::
+
+## First solution: `terra::mask()`
 
 ```{r}
 #| echo: true
@@ -191,9 +193,6 @@ pop_grid_2022_mask <-
 plot(pop_grid_2022_mask)
 ```
 
-::: {.callout-note}
-Raster data often contain `NA` cells (e.g., water bodies, areas outside borders). Most functions require `na.rm = TRUE` to handle them — you'll see this argument throughout this session. Keep it in mind whenever you work with raster data!
-:::
 
 ## Second and best solution: combining masking and cropping
 
@@ -223,12 +222,14 @@ plot(pop_grid_2022_crop)
 
 ## Changes in terminology
 
-If we only want to add one attribute from a vector dataset `Y` to another vector dataset `X`, we can conduct a spatial join using `sf::st_join()` as shown earlier. In the raster data world, these operations are called raster extractions.
-
-Raster data are helpful when we aim to
+If we only want to add one attribute from a vector dataset `Y` to another vector dataset `X`, we can conduct a spatial join using `sf::st_join()` as shown earlier. In the raster data world, these operations are called **raster extractions**:
 
 - Apply calculations that are the same for all geometries in the dataset
 - **Extract information from the raster fast and efficiently**
+
+::: {.fragment}
+![](../img/fig_extraction.svg){width="70%" fig-align="center"}
+:::
 
 ## Pulling in some data
 
@@ -256,8 +257,10 @@ terra::extract(pop_grid_2022, points, ID = FALSE) |> # extract at point location
   head(10)
 ```
 
+::: {.fragment}
 ::: {.callout-warning}
 Make sure your raster and vector data share the same CRS before extracting — `terra::extract()` will not always warn you if they don't, and results may be silently wrong!
+:::
 :::
 
 ## Add results to existing dataset
@@ -279,7 +282,9 @@ Sometimes, extracting information 1:1 is not enough.
 - It's too narrow
 - There is missing information about the surroundings of a point
 
-![](../img/fig_linking_buffer_sealing.png){.r-stretch fig-align="center"}
+::: {.fragment}
+![](../img/fig_extraction_buffer.svg){width="80%" fig-align="center"}
+:::
 
 ## Buffer extraction
 
@@ -289,6 +294,7 @@ We can use spatial buffers of different sizes to extract information about our s
 ::: {.column width="50%"}
 ```{r}
 #| code-line-numbers: "3"
+#| output-location: fragment
 terra::extract(
   pop_grid_2022,
   sf::st_buffer(points, 2500), # 2.5km buffer
@@ -304,6 +310,7 @@ terra::extract(
 ::: {.column width="50%"}
 ```{r}
 #| code-line-numbers: "3"
+#| output-location: fragment
 terra::extract(
   pop_grid_2022,
   sf::st_buffer(points, 5000), # 5km buffer
@@ -321,7 +328,9 @@ terra::extract(
 
 There's a multitude of arguments that we can adjust to conduct the extraction. An important option is from which raster cells we want our extraction done. Here's an example of how the argument `terra::extract(..., touches = FALSE/TRUE)` works.
 
-![](../img/extract_touches.png){.r-stretch fig-align="center"}
+::: {.frame}
+![](../img/fig_extract_touches.svg){width="80%" fig-align="center"}
+:::
 
 ## `touches = FALSE` vs. `touches = TRUE`
 
@@ -331,6 +340,7 @@ Let's see how the values differ when we apply the option or not.
 ::: {.column width="50%"}
 ```{r}
 #| code-line-numbers: "6"
+#| output-location: fragment
 terra::extract(
   pop_grid_2022,
   sf::st_buffer(points, 2500),
@@ -347,6 +357,7 @@ terra::extract(
 ::: {.column width="50%"}
 ```{r}
 #| code-line-numbers: "6"
+#| output-location: fragment
 terra::extract(
   pop_grid_2022,
   sf::st_buffer(points, 2500),
@@ -369,6 +380,7 @@ Often, we default to the mean of raster cell values to be extracted. In our exam
 ::: {.column width="50%"}
 ```{r}
 #| code-line-numbers: "4"
+#| output-location: fragment
 terra::extract(
   pop_grid_2022,
   sf::st_buffer(points, 2500),
@@ -385,6 +397,7 @@ terra::extract(
 ::: {.column width="50%"}
 ```{r}
 #| code-line-numbers: "4"
+#| output-location: fragment
 terra::extract(
   pop_grid_2022,
   sf::st_buffer(points, 2500),
@@ -424,7 +437,7 @@ We can use the same procedure to aggregate a raster dataset into a vector polygo
 ```{r}
 #| echo: true
 #| output-location: column-fragment
-#| fig.asp: .8
+#| fig.asp: .7
 german_districts <-
   sf::st_read(
     "./data/boundaries/VG250_KRS.shp",
@@ -470,6 +483,8 @@ plot(german_districts["gender_ratios_2020"])
 
 The previous steps are efforts that work on the raw raster cell values data. However, there are occasions where we might want to work on the raster data themselves or pre-process them to add them to another dataset (e.g., a vector file). Some of these procedures are for visualization, such as heat maps, and others are necessary for our later analyses. We will show a few in the following.
 
+![](../img/fig_raster_processing.svg){width="85%" fig-align="center"}
+
 ## Creating a quick 'heat map'
 
 Population counts for the whole of Germany help us to identify urban and rural clusters. But there may be applications where we need to zoom in on a specific city to identify within-city variations regarding specific attributes like average rent levels. Let's do that for the German capital Berlin. For this purpose, we subset the district data and mask and crop data on average rent prices from the German census.
@@ -485,7 +500,7 @@ berlin <-
 rent_berlin <-
   terra::rast("./data/z22/rent_avg.tif") |>
   terra::project("EPSG:3035") |> # reproject
-  terra::mask(terra::vect(berlin)) |> # clip to Berlin
+  terra::mask(berlin) |> # clip to Berlin
   terra::crop(berlin) # trim extent
 
 plot(rent_berlin)
@@ -514,12 +529,24 @@ plot(rent_berlin_smooth)
 
 So far, we used grid-cell-level Census data for our heat map. But what if we only have point observations, e.g., from a survey? We can create a similar density surface from scratch using `terra::rasterize()`. Let's demonstrate this with the synthetic survey coordinates.
 
+::: {.fragment}
+::: {.callout-note}
 Usually, when we talk about heat maps, we mean analyzing point patterns and whether they spatially cluster. `terra` might not be your best choice regarding more elaborate techniques to estimate density kernels and distance-based bandwidths between points to draw clusters. For this purpose, packages such as `spatstat` are better suited but require [learning about other data structures](https://r-spatial.org/book/11-PointPattern.html). That said, densities are more advanced ways of counting things in raster grid cells, and we can mimic this behavior also with `terra`. So, let's stick to this package and crop all of our points to the extent of Berlin.
+:::
+:::
+
+## From survey points to a smooth density surface
+
+The next slides will walk through a five-step pipeline: crop points → count on a coarse grid → reproject to a finer grid → mask to the study area → smooth with `focal()`.
+
+![](../img/fig_point_to_raster_pipeline.svg){width="95%" fig-align="center"}
+
+## 'Real' point pattern analysis
 
 ```{r}
 #| echo: true
 #| output-location: column-fragment
-#| fig.asp: .5
+#| fig.asp: .8
 points_berlin <-
   readRDS(
     "./data/survey/synthetic_survey_geocoordinates.rds"
@@ -579,14 +606,19 @@ points_berlin_density <-
 plot(points_berlin_density)
 ```
 
+## Steps so far for our 'real' point pattern analysis
+
+![](../img/fig_point_to_raster_pipeline.svg){width="95%" fig-align="center"}
+
 ## Smoothing: 5×5 window
 
-We can also apply smoothing as with the population grid data.
+We can now also apply smoothing as with the population grid data.
 
 :::: columns
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .6
+#| output-location: fragment
 terra::focal(
   rent_berlin,
   w = matrix(1, 5, 5),
@@ -600,6 +632,7 @@ terra::focal(
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .6
+#| output-location: fragment
 focal(
   points_berlin_density, 
   w = matrix(1, 5, 5), 
@@ -620,6 +653,7 @@ We can adjust the smoothing to a smaller degree.
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
+#| output-location: fragment
 terra::focal(
   rent_berlin,
   w = matrix(1, 3, 3),
@@ -633,6 +667,7 @@ terra::focal(
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7 
+#| output-location: fragment
 focal(
   points_berlin_density, 
   w = matrix(1, 3, 3), 
@@ -652,6 +687,7 @@ We can also adjust the smoothing to a higher degree.
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
+#| output-location: fragment
 terra::focal(
   rent_berlin,
   w = matrix(1, 9, 9),
@@ -665,6 +701,7 @@ terra::focal(
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7 
+#| output-location: fragment
 focal(
   points_berlin_density, 
   w = matrix(1, 9, 9), 
@@ -678,11 +715,31 @@ focal(
 
 Larger windows produce smoother surfaces but lose local detail — choose based on your research question.
 
+## Taking a step back
+
+Comparing the two columns, the difference is striking: the Census grid (left) captures fine-grained spatial variation because it covers the **entire population**, whereas our survey-based density (right) is driven by a sparse **sample** of point locations.
+
+::: {.smaller-text}
+::: {.fragment}
+**What does this mean in practice?**
+
+- Point-based density surfaces are useful for **exploratory visualization** and for detecting broad spatial clusters in your own data
+- They are **not a substitute** for high-resolution administrative data (Census, register data) when precise local estimates matter
+- The smoothing window size becomes a critical choice: too small → noisy artifacts from sparse data; too large → you blur away the very patterns you want to detect
+:::
+
+::: {.fragment}
+::: {.callout-tip}
+Always consider your **data source and sample size** before interpreting smoothed surfaces. A beautiful heat map can be misleading if the underlying point density is too low for the chosen resolution.
+:::
+:::
+:::
+
 ## What is this argument `w`?
 
 It's magic. Just kidding, but it is indeed really powerful. It builds around the idea of connecting the value of a focal grid cell to the values of surrounding grid cells, as in the figure below. Hence, the name of the function `terra::focal()` where the argument is used.
 
-![](../img/fig_linking_focal_immigrants.png){.r-stretch fig-align="center"}
+![](../img/fig_focal_window.svg){.r-stretch fig-align="center"}
 
 ## It's just a simple base `R` matrix
 
@@ -710,6 +767,7 @@ weighted_w
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
+#| output-location: fragment
 terra::focal(
   rent_berlin,
   w = matrix(1, 5, 5),
@@ -723,6 +781,7 @@ terra::focal(
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
+#| output-location: fragment
 focal(
   rent_berlin,
   w = weighted_w,
@@ -783,13 +842,23 @@ rent_berlin_edges <- sobel(rent_berlin_smooth) # apply to smoothed rents
 
 We can now clearly display the edges of sudden changes in rent levels within Berlin.
 
+:::: columns
+::: {.column width="50%"}
 ```{r}
-#| output-location: fragment
-#| layout-ncol: 2
 #| fig.asp: .6
+#| output-location: fragment
 plot(rent_berlin_smooth)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig.asp: .6
+#| output-location: fragment
 plot(rent_berlin_edges)
 ```
+:::
+::::
 
 ## Exercise 3_2: Extracting and Analyzing Raster Information {.center style="text-align: center;"}
 
