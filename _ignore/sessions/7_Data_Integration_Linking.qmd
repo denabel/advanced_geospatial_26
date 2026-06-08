@@ -5,6 +5,7 @@ author: "Dennis Abel & Stefan Jünger"
 date: June 10, 2026
 execute:
   echo: true
+  cache: true
 knitr:
   opts_knit:
     root.dir: ../../
@@ -31,6 +32,8 @@ library(rnaturalearth)
 library(tidyverse)
 ```
 
+## Now
+
 ```{r}
 #| echo: false
 source("_ignore/sessions/course_content.R") 
@@ -47,13 +50,15 @@ So far, we have learned how to
 - Extract and aggregate raster values to points and polygons
 - Work with raster stacks and data cubes
 
+
+::: {.fragment}
 In this session, we put it all together in a **real research workflow**:
 
 - Introduce a social science survey dataset (ISSP)
 - Access Earth observation data via an API (Copernicus ERA5)
 - Aggregate gridded climate data to the country level
 - Link survey and EO data to investigate: **Do temperature anomalies relate to climate concern?**
-
+:::
 
 ## Survey data: ISSP Environment (1993-2020)
 
@@ -91,6 +96,7 @@ Our question: **Are people in countries that experienced unusual warming more co
 
 Why *anomalies* instead of absolute temperatures? A hot country isn't automatically more concerned — but a country that is *unusually* hot compared to its own history might be. The anomaly captures the deviation from "normal".
 
+::: {.fragment}
 Here's the workflow we'll follow:
 
 1. **Survey data** (ISSP) → climate concern per country & year
@@ -98,7 +104,7 @@ Here's the workflow we'll follow:
 3. **Baseline** (1961–1990) → long-term "normal" temperature per country
 4. **Anomaly** = focal year temperature − baseline
 5. **Join & compare** — do anomalies track with concern?
-
+:::
 
 ## EO indicators
 
@@ -173,9 +179,11 @@ keyring::key_set_with_value(service = "wf_api_key", password = api_key)
 
 Now we can access the data. We loop the download over the four years of the survey program (1993, 2000, 2010, 2020) to create four separate files.
 
+::: {.fragment}
 ::: {.callout-note}
 ## 📦 Data already included
 The ERA5 files are pre-downloaded in `./data/era5/`. The following slides show how we obtained them so you understand the workflow — **you don't need to run this code yourself**.
+:::
 :::
 
 ## Downloading the data
@@ -236,12 +244,14 @@ Let's inspect the datacube for 2020 and plot the first layer of the 2020 datacub
 :::: columns
 ::: {.column width="50%"}
 ```{r}
+#| output-location: fragment
 temp_2020
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r}
+#| output-location: fragment
 #| fig.asp: .7
 plot(temp_2020[[1]])
 ```
@@ -255,6 +265,7 @@ Now, we can aggregate the monthly values by year and country. If necessary, we w
 ::: {.smaller-text}
 ```{r}
 #| message: false
+#| warning: false
 for (yr in c("1993", "2000", "2010", "2020")) {
   temp_data <- get(paste0("temp_", yr))
   
@@ -292,23 +303,13 @@ We now have our country polygon vector file with yearly mean temperatures for ea
 head(world, 2)
 ```
 
-:::: columns
-::: {.column width="50%"}
+::: {.fragment}
 ```{r}
-#| eval: false
 #| fig.asp: .3
+#| output-location: column-fragment
 plot(world["temp_2020"])
 ```
 :::
-
-::: {.column width="50%"}
-```{r}
-#| echo: false
-#| fig.asp: .3
-plot(world["temp_2020"])
-```
-:::
-::::
 
 ## Gathering the baseline data
 
@@ -348,8 +349,10 @@ file_path <-
 Again, we use `terra::rast()` to import the data.
 
 ```{r}
-temp_base <- 
-  terra::rast("./data/era5/era5_temperature1961-1990.grib")
+#| output-location: fragment
+temp_base <- terra::rast("./data/era5/era5_temperature1961-1990.grib")
+
+temp_base
 ```
 
 
@@ -448,7 +451,7 @@ ggplot(data = world) +
 
 ## Restructuring the temperature data
 
-First, we reshape the temperature anomalies into long format — one row per country and year, keeping the raw values in Kelvin. No standardization needed.
+First, we reshape the temperature anomalies into long format — one row per country and year, keeping the raw values in Kelvin.
 
 ```{r}
 #| echo: true
@@ -536,7 +539,7 @@ issp_linked |>
 
 ## Now let's aggregate — what changes?
 
-We deliberately move from individuals to country means — using the **same anomaly groups** as above. Compare the full concern distributions in the heatmap with these boxplots: the enormous individual variation collapses into a narrow band of country means.
+We deliberately move from individuals to country means — using the **same anomaly groups** as above. Compare the full concern distributions in the heatmap with these boxplots: the individual variation collapses into a narrow band of country means.
 
 ```{r}
 #| echo: false
@@ -630,33 +633,41 @@ ggplot(mapping = aes(x = temp_diff, y = concern)) +
 
 ## What do we see? (1/2)
 
+::: {.smaller-text}
 **Individual-level heatmap**
 
 - The concern distribution looks remarkably similar across all three anomaly groups — people in "clearly warmer" countries are not systematically more concerned
 - Over time, the "> 1 K" group grows (more countries experience large anomalies), but the concern distribution within each group stays fairly stable
 - This is the full individual variation — something we lose entirely when we aggregate
 
+::: {.fragment}
 **Aggregated boxplot**
 
-- Country-level means compress the enormous individual variation into a narrow band
-- The boxes barely differ across anomaly groups — the "signal" we might hope for is not there
-- This makes the **aggregation problem** visible: country-level means compress enormous individual variation into a narrow band, and patterns at one level need not appear at the other — a reminder that cross-level inference (the "ecological fallacy") works in both directions
+- Country-level means compress the individual variation into a narrow band
+- The boxes differ, but not necessarily as expected — the "signal" we might hope for is not there
+- This finding may also make the **aggregation problem** visible: country-level means compress individual variation into a narrow band, and patterns at one level need not appear at the other — a reminder that cross-level inference (the "ecological fallacy") works in both directions
+:::
+:::
 
 ## What do we see? (2/2)
 
+::: {.smaller-text}
 **Country trajectories**
 
 - Almost all countries move rightward: anomalies grow from 1993 to 2020
 - But concern trajectories are idiosyncratic — some countries grow more concerned, others less
-- This suggests that country-specific factors (media, politics, economic context) matter more than temperature alone
+- This result may suggest that country-specific factors (media, politics, economic context) matter more than temperature alone
 
+::: {.fragment}
 **Limitations**
 
 - Only 4 time points — too few for robust trend analysis
 - No causal claim possible: many confounding factors
-- Finer spatial resolution (e.g., NUTS-2 regions) would strengthen the analysis
+- Finer spatial resolution (e.g., NUTS-3 regions) would strengthen the analysis
 
 $\rightarrow$ But as a **workflow demonstration**, this shows how survey and EO data can be integrated end-to-end using the tools we've learned in this course.
+:::
+:::
 
 ## Exercise 7_1: Data Integration {.center style="text-align: center;"}
 
