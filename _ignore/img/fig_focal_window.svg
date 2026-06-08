@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 380" font-family="sans-serif">
+
+  <rect width="700" height="380" fill="white"/>
+
+  <!-- Title -->
+  <text x="350" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">How terra::focal() works</text>
+
+  <!-- ============================================================ -->
+  <!-- Left panel: 7×7 grid with focal cell + 5×5 window           -->
+  <!-- ============================================================ -->
+
+  <!-- Cell size = 40px, grid starts at (30, 50) -->
+  <!-- Values represent generic raster data (e.g. rent, population) -->
+
+  <!-- Row 0 (y=50) — faded (outside window) -->
+  <rect x="30"  y="50" width="40" height="40" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="70"  y="50" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="110" y="50" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="150" y="50" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="190" y="50" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="230" y="50" width="40" height="40" fill="#2171b5" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="270" y="50" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <!-- numbers -->
+  <text x="50"  y="75" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">12</text>
+  <text x="90"  y="75" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">15</text>
+  <text x="130" y="75" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">14</text>
+  <text x="170" y="75" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">18</text>
+  <text x="210" y="75" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">22</text>
+  <text x="250" y="75" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">28</text>
+  <text x="290" y="75" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">24</text>
+
+  <!-- Row 1 (y=90) — left+right faded, center 5 in window -->
+  <rect x="30"  y="90" width="40" height="40" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="70"  y="90" width="40" height="40" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+  <rect x="110" y="90" width="40" height="40" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+  <rect x="150" y="90" width="40" height="40" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+  <rect x="190" y="90" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+  <rect x="230" y="90" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+  <rect x="270" y="90" width="40" height="40" fill="#2171b5" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <text x="50"  y="115" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">8</text>
+  <text x="90"  y="115" text-anchor="middle" font-size="11" fill="#333">10</text>
+  <text x="130" y="115" text-anchor="middle" font-size="11" fill="#333">7</text>
+  <text x="170" y="115" text-anchor="middle" font-size="11" fill="#333">11</text>
+  <text x="210" y="115" text-anchor="middle" font-size="11" fill="#333">16</text>
+  <text x="250" y="115" text-anchor="middle" font-size="11" fill="#333">20</text>
+  <text x="290" y="115" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">26</text>
+
+  <!-- Row 2 (y=130) -->
+  <rect x="30"  y="130" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="70"  y="130" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+  <rect x="110" y="130" width="40" height="40" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+  <rect x="150" y="130" width="40" height="40" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+  <rect x="190" y="130" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+  <rect x="230" y="130" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+  <rect x="270" y="130" width="40" height="40" fill="#08519c" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <text x="50"  y="155" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">16</text>
+  <text x="90"  y="155" text-anchor="middle" font-size="11" fill="#333">19</text>
+  <text x="130" y="155" text-anchor="middle" font-size="11" fill="#333">12</text>
+  <text x="170" y="155" text-anchor="middle" font-size="11" fill="#333">9</text>
+  <text x="210" y="155" text-anchor="middle" font-size="11" fill="#333">18</text>
+  <text x="250" y="155" text-anchor="middle" font-size="11" fill="#333">23</text>
+  <text x="290" y="155" text-anchor="middle" font-size="11" fill="white" opacity="0.5">31</text>
+
+  <!-- Row 3 (y=170) — center row with FOCAL CELL -->
+  <rect x="30"  y="170" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="70"  y="170" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+  <rect x="110" y="170" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+  <!-- FOCAL CELL — highlighted with thick red border -->
+  <rect x="150" y="170" width="40" height="40" fill="#c6dbef" stroke="#e41a1c" stroke-width="3"/>
+  <rect x="190" y="170" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+  <rect x="230" y="170" width="40" height="40" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+  <rect x="270" y="170" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <text x="50"  y="195" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">20</text>
+  <text x="90"  y="195" text-anchor="middle" font-size="11" fill="#333">22</text>
+  <text x="130" y="195" text-anchor="middle" font-size="11" fill="#333">15</text>
+  <text x="170" y="195" text-anchor="middle" font-size="13" font-weight="bold" fill="#e41a1c">11</text>
+  <text x="210" y="195" text-anchor="middle" font-size="11" fill="#333">24</text>
+  <text x="250" y="195" text-anchor="middle" font-size="11" fill="white">27</text>
+  <text x="290" y="195" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">19</text>
+
+  <!-- Row 4 (y=210) -->
+  <rect x="30"  y="210" width="40" height="40" fill="#2171b5" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="70"  y="210" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+  <rect x="110" y="210" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+  <rect x="150" y="210" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+  <rect x="190" y="210" width="40" height="40" fill="#08519c" stroke="#999" stroke-width="0.5"/>
+  <rect x="230" y="210" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+  <rect x="270" y="210" width="40" height="40" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <text x="50"  y="235" text-anchor="middle" font-size="11" fill="white" opacity="0.5">25</text>
+  <text x="90"  y="235" text-anchor="middle" font-size="11" fill="#333">14</text>
+  <text x="130" y="235" text-anchor="middle" font-size="11" fill="#333">21</text>
+  <text x="170" y="235" text-anchor="middle" font-size="11" fill="#333">23</text>
+  <text x="210" y="235" text-anchor="middle" font-size="11" fill="white">30</text>
+  <text x="250" y="235" text-anchor="middle" font-size="11" fill="#333">24</text>
+  <text x="290" y="235" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">13</text>
+
+  <!-- Row 5 (y=250) -->
+  <rect x="30"  y="250" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="70"  y="250" width="40" height="40" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+  <rect x="110" y="250" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+  <rect x="150" y="250" width="40" height="40" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+  <rect x="190" y="250" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+  <rect x="230" y="250" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+  <rect x="270" y="250" width="40" height="40" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <text x="50"  y="275" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">23</text>
+  <text x="90"  y="275" text-anchor="middle" font-size="11" fill="#333">8</text>
+  <text x="130" y="275" text-anchor="middle" font-size="11" fill="#333">17</text>
+  <text x="170" y="275" text-anchor="middle" font-size="11" fill="white">26</text>
+  <text x="210" y="275" text-anchor="middle" font-size="11" fill="#333">20</text>
+  <text x="250" y="275" text-anchor="middle" font-size="11" fill="#333">16</text>
+  <text x="290" y="275" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">9</text>
+
+  <!-- Row 6 (y=290) — fully faded -->
+  <rect x="30"  y="290" width="40" height="40" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="70"  y="290" width="40" height="40" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="110" y="290" width="40" height="40" fill="#4292c6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="150" y="290" width="40" height="40" fill="#6baed6" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="190" y="290" width="40" height="40" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="230" y="290" width="40" height="40" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <rect x="270" y="290" width="40" height="40" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.35"/>
+  <text x="50"  y="315" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">7</text>
+  <text x="90"  y="315" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">13</text>
+  <text x="130" y="315" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">22</text>
+  <text x="170" y="315" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">19</text>
+  <text x="210" y="315" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">15</text>
+  <text x="250" y="315" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">9</text>
+  <text x="290" y="315" text-anchor="middle" font-size="11" fill="#666" opacity="0.5">11</text>
+
+
+  <!-- 5×5 window — dashed rectangle -->
+  <rect x="70" y="90" width="200" height="200" fill="none"
+        stroke="#333" stroke-width="2.5" stroke-dasharray="8,4" rx="2"/>
+
+  <!-- Label: 5×5 window -->
+  <text x="170" y="85" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">5 × 5 window</text>
+
+  <!-- Focal cell pointer -->
+  <line x1="192" y1="190" x2="218" y2="190" stroke="#e41a1c" stroke-width="1.5"/>
+  <circle cx="170" cy="190" r="14" fill="none" stroke="#e41a1c" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+
+  <!-- ============================================================ -->
+  <!-- Right panel: Explanation / computation                       -->
+  <!-- ============================================================ -->
+
+  <g transform="translate(360, 60)">
+
+    <!-- Arrow from grid to explanation -->
+    <line x1="-30" y1="130" x2="0" y2="130" stroke="#555" stroke-width="1.8" marker-end="url(#arr)"/>
+
+    <!-- Explanation box -->
+    <rect x="10" y="30" width="310" height="250" fill="#f5f8fc" stroke="#bbb" stroke-width="1" rx="8"/>
+
+    <!-- Focal cell label -->
+    <rect x="25" y="45" width="16" height="16" fill="#c6dbef" stroke="#e41a1c" stroke-width="2" rx="2"/>
+    <text x="50" y="57" font-size="12" font-weight="bold" fill="#e41a1c">= focal cell (value: 11)</text>
+
+    <!-- Step 1: collect -->
+    <text x="25" y="85" font-size="13" font-weight="bold" fill="#2171b5">① Collect neighbors</text>
+    <text x="25" y="102" font-size="11" fill="#555">All 25 cells inside the 5×5 window:</text>
+
+    <!-- Mini value grid (simplified, monospace columns) -->
+    <text x="25" y="120" font-size="10" fill="#333" font-family="monospace">10   7  11  16  20</text>
+    <text x="25" y="133" font-size="10" fill="#333" font-family="monospace">19  12   9  18  23</text>
+    <text x="25" y="146" font-size="10" font-family="monospace">
+      <tspan fill="#333">22  15  </tspan><tspan fill="#e41a1c" font-weight="bold">11</tspan><tspan fill="#333">  24  27</tspan>
+    </text>
+    <text x="25" y="159" font-size="10" fill="#333" font-family="monospace">14  21  23  30  24</text>
+    <text x="25" y="172" font-size="10" fill="#333" font-family="monospace"> 8  17  26  20  16</text>
+
+    <!-- Step 2: apply function -->
+    <text x="25" y="198" font-size="13" font-weight="bold" fill="#2171b5">② Apply function</text>
+    <text x="25" y="216" font-size="11" fill="#555">fun = mean  →  (10 + 7 + 11 + … + 16) / 25</text>
+
+    <!-- Step 3: result -->
+    <text x="25" y="244" font-size="13" font-weight="bold" fill="#2171b5">③ Replace focal cell</text>
+    <text x="25" y="247" font-size="1" fill="none">.</text>
+    <text x="30" y="262" font-size="11" fill="#555">new value =</text>
+    <rect x="118" y="249" width="55" height="22" fill="#2171b5" rx="4"/>
+    <text x="145" y="265" text-anchor="middle" font-size="13" font-weight="bold" fill="white">17.5</text>
+  </g>
+
+  <!-- Bottom note -->
+  <text x="350" y="370" text-anchor="middle" font-size="11" fill="#888">This process repeats for every cell in the raster — each becomes the focal cell in turn.</text>
+
+  <!-- Arrowhead -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+
+</svg>

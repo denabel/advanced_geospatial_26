@@ -1,0 +1,244 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 280" font-family="sans-serif">
+
+  <!-- Background -->
+  <rect width="780" height="280" fill="white"/>
+
+  <!-- === Panel 1: Full raster === -->
+  <!-- Title -->
+  <text x="120" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Full raster</text>
+
+  <!-- 8x8 grid with colored cells -->
+  <g transform="translate(20, 45)">
+    <!-- Row 0 -->
+    <rect x="0"   y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="0"   width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="0"   width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="0"   width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 1 -->
+    <rect x="0"   y="25"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="25"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="25"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="25"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="25"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="25"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="25"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="25"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 2 -->
+    <rect x="0"   y="50"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="50"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="50"  width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="50"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="50"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="50"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="50"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="50"  width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 3 -->
+    <rect x="0"   y="75"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="75"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="75"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="75"  width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="75"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="75"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="75"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="75"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 4 -->
+    <rect x="0"   y="100" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="100" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="100" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="100" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="100" width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="100" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="100" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="100" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 5 -->
+    <rect x="0"   y="125" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="125" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="125" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="125" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="125" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="125" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="125" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="125" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 6 -->
+    <rect x="0"   y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="150" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="150" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="150" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="150" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 7 -->
+    <rect x="0"   y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="175" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="175" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="175" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="175" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+    <rect x="175" y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5"/>
+  </g>
+
+  <!-- Extent label -->
+  <text x="120" y="265" text-anchor="middle" font-size="12" fill="#666">Full extent</text>
+
+
+  <!-- === Arrow 1 === -->
+  <g transform="translate(240, 145)">
+    <line x1="0" y1="0" x2="40" y2="0" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="20" y="-10" text-anchor="middle" font-size="11" fill="#333">crop()</text>
+  </g>
+
+
+  <!-- === Panel 2: Raster + bounding box === -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">+ Bounding box</text>
+
+  <!-- Same 8x8 grid, slightly faded outside bbox -->
+  <g transform="translate(300, 45)">
+    <!-- Row 0 (faded) -->
+    <rect x="0"   y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="50"  y="0"   width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="75"  y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="100" y="0"   width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="125" y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="150" y="0"   width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="0"   width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <!-- Row 1 (left faded, middle bright, right faded) -->
+    <rect x="0"   y="25"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="25"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="25"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="25"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="25"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="25"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="25"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="25"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <!-- Row 2 -->
+    <rect x="0"   y="50"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="50"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="50"  width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="50"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="50"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="50"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="50"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="50"  width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <!-- Row 3 -->
+    <rect x="0"   y="75"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="75"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="75"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="75"  width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="75"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="75"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="75"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="75"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <!-- Row 4 -->
+    <rect x="0"   y="100" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="100" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="100" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="100" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="100" width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="100" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="100" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="100" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <!-- Row 5 -->
+    <rect x="0"   y="125" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="125" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="125" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="125" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="125" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="125" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="150" y="125" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="125" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <!-- Row 6 (faded) -->
+    <rect x="0"   y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="50"  y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="75"  y="150" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="100" y="150" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="125" y="150" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="150" y="150" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="150" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <!-- Row 7 (faded) -->
+    <rect x="0"   y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="25"  y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="50"  y="175" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="75"  y="175" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="100" y="175" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="125" y="175" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="150" y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+    <rect x="175" y="175" width="25" height="25" fill="#deebf7" stroke="#999" stroke-width="0.5" opacity="0.3"/>
+
+    <!-- Bounding box overlay (red dashed) -->
+    <rect x="25" y="25" width="150" height="125" fill="none" stroke="#e41a1c" stroke-width="2.5" stroke-dasharray="6,4" rx="2"/>
+  </g>
+
+  <text x="400" y="265" text-anchor="middle" font-size="12" fill="#666">Bounding box selects region</text>
+
+
+  <!-- === Arrow 2 === -->
+  <g transform="translate(520, 145)">
+    <line x1="0" y1="0" x2="40" y2="0" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="20" y="-10" text-anchor="middle" font-size="11" fill="#333">result</text>
+  </g>
+
+
+  <!-- === Panel 3: Cropped result === -->
+  <text x="660" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Cropped raster</text>
+
+  <!-- 6x5 grid (the inside of the bbox) -->
+  <g transform="translate(585, 58)">
+    <!-- Row 0 -->
+    <rect x="0"   y="0"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="0"  width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="0"  width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="0"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="0"  width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="0"  width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 1 -->
+    <rect x="0"   y="25" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="25" width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="25" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="25" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="25" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="25" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 2 -->
+    <rect x="0"   y="50" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="50" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="50" width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="50" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="50" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="50" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 3 -->
+    <rect x="0"   y="75" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="75" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="75" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="75" width="25" height="25" fill="#2171b5" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="75" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="75" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <!-- Row 4 -->
+    <rect x="0"   y="100" width="25" height="25" fill="#c6dbef" stroke="#999" stroke-width="0.5"/>
+    <rect x="25"  y="100" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+    <rect x="50"  y="100" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="75"  y="100" width="25" height="25" fill="#4292c6" stroke="#999" stroke-width="0.5"/>
+    <rect x="100" y="100" width="25" height="25" fill="#6baed6" stroke="#999" stroke-width="0.5"/>
+    <rect x="125" y="100" width="25" height="25" fill="#9ecae1" stroke="#999" stroke-width="0.5"/>
+
+    <!-- Border around cropped result -->
+    <rect x="0" y="0" width="150" height="125" fill="none" stroke="#333" stroke-width="1.5" rx="1"/>
+  </g>
+
+  <text x="660" y="265" text-anchor="middle" font-size="12" fill="#666">Trimmed extent</text>
+
+
+  <!-- === Arrow marker definition === -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+
+</svg>
