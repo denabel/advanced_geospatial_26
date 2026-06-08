@@ -118,6 +118,47 @@ render <- function(file = NULL, what = NULL, force = FALSE) {
 }
 
 
+#' Render the currently open .qmd file in RStudio
+#'
+#' Detects the active editor tab, renders it, and copies the HTML to the
+#' appropriate output folder. Only works in RStudio with a workshop .qmd open.
+#'
+#' @param force Logical; if TRUE, render even if unchanged since last render.
+#'
+#' @examples
+#' # Just call it while editing a session or exercise .qmd:
+#' render_current()
+render_current <- function(force = TRUE) {
+  if (!requireNamespace("rstudioapi", quietly = TRUE) || !rstudioapi::isAvailable()) {
+    stop("render_current() requires RStudio.")
+  }
+
+  ctx <- tryCatch(rstudioapi::getSourceEditorContext(), error = function(e) NULL)
+
+  if (is.null(ctx) || is.null(ctx$path) || ctx$path == "") {
+    stop("No file open in the editor.")
+  }
+
+  file <- ctx$path
+
+  if (!grepl("\\.qmd$", file)) {
+    stop("Current file is not a .qmd: ", basename(file))
+  }
+
+  if (!grepl("(sessions|exercises)", file)) {
+    stop("Current file is not in sessions/ or exercises/: ", basename(file))
+  }
+
+  targets <- list(
+    sessions  = list(src = "./_ignore/sessions/",  dest = "./slides/"),
+    exercises = list(src = "./_ignore/exercises/", dest = "./exercises/")
+  )
+
+  message("Rendering: ", basename(file))
+  render_and_copy(file, targets, force = force)
+}
+
+
 # --- Hash store: tracks which .qmd content was last rendered ---
 
 hash_file <- "./_ignore/.render_hashes.json"
