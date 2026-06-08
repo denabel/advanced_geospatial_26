@@ -12,7 +12,7 @@ Materials for the GESIS workshop "Advanced Geospatial Data Processing for Social
 
 Dennis Abel (dennis.abel@gesis.org) & Stefan Jünger (stefan.juenger@gesis.org)
 
-## Workshop Description
+## 📖 Workshop Description
 A growing interest in economics and the social sciences in Earth observation (EO) 
 data has led to a broad thematic spectrum of publications in recent years. 
 They range from studying environmental attitudes and behavior, 
@@ -32,7 +32,7 @@ of workflow for data integration with users' datasets, such as survey data. This
 course is advanced and suitable for students and scientists who feel familiar 
 with R and have some basic knowledge of working with geodata. 
 
-## What do you find here?
+## 📦 What do you find here?
 This page comprises the official workshop repository with the most recent changes 
 to our materials. You can find all the course data, slides, and exercises here. 
 The section below links the slides and exercises that will open them directly in 
@@ -59,7 +59,7 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
 
 **Please make sure that if you reuse any of the provided data to cite the original data sources.**
 
-## Getting started
+## ⚡ Getting started
 
 1. **Download** the course materials using the link at the top of this page and **unzip** the folder.
 2. **Open `advanced_geospatial_26.Rproj`** in RStudio (double-click the file). This sets your working directory correctly so that all data paths in the exercises work out of the box.
@@ -70,7 +70,7 @@ the browser as HTML files. They are also stored in the folders `./slides/` and
     The script only installs packages that are not yet on your system.
 4. **Write your scripts** in the `scripts/` folder — see [`scripts/START_HERE.md`](scripts/START_HERE.md) for details.
 
-## Course schedule
+## 🗓️ Course schedule
 
 ### Day 1 — June 9
 
