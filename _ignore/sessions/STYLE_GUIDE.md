@@ -1,21 +1,39 @@
-# Style Guide: Quarto Revealjs Slides
+# Style Guide: Workshop Slides
 
-Quick reference for the `.qmd` files in `_ignore/sessions/`.
+Quick reference for the `.qmd` session files in `_ignore/sessions/`.
 
 ---
 
 ## 1. YAML Header (every session)
 
 ```yaml
+title: "Session Title"
+subtitle: "Advanced Geospatial Data Processing for Social Scientists"
+author: "Dennis Abel & Stefan Jünger"
+date: June 9, 2026
+execute:
+  echo: true                # show code by default
+knitr:
+  opts_knit:
+    root.dir: ../../        # working directory = repo root (two levels up from _ignore/sessions/)
 format:
   revealjs:
-    embed-resources: true
+    embed-resources: true   # self-contained HTML (no external deps)
     theme: [simple, tweaks.css, tweaks_code.css]
-    smaller: true          # smaller base font size globally
-    scrollable: true       # slides scroll if content overflows
-    slide-number: "c/t"    # current / total
+    smaller: true           # smaller base font size globally
+    scrollable: true        # slides scroll if content overflows
+    slide-number: "c/t"     # current / total
     logo: ../img/GESIS-Logo_2024.svg.png
+editor_options:
+  chunk_output_type: console  # RStudio: output in console, not inline
 ```
+
+Key points:
+
+- **`root.dir: ../../`** — All file paths in R chunks (e.g. `"./data/z22/population.tif"`) are relative to the **repo root**, not to the `.qmd` file location. This is set via `knitr: opts_knit:` because the `.qmd` files live two levels deep (`_ignore/sessions/`).
+- **`execute: echo: true`** — Code is shown by default; override per chunk with `#| echo: false`.
+- **`embed-resources: true`** — The rendered HTML is fully self-contained (images, CSS, JS all embedded). This makes the file large but portable — no broken links when sharing.
+- **`editor_options: chunk_output_type: console`** — When editing in RStudio, chunk output goes to the console instead of appearing inline below the chunk.
 
 Two custom CSS files extend the theme:
 
