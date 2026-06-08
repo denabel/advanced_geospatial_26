@@ -13,3 +13,18 @@
 .reveal .smaller-text {
   font-size: 0.8em;
 }
+
+/* smaller output: target the pre for font-size */
+.reveal pre.smaller-output {
+  font-size: 40%;
+}
+
+/* remove border/background from ALL ancestor containers */
+.reveal .cell-output:has(pre.smaller-output),
+.reveal .cell-output:has(pre.smaller-output) .sourceCode,
+.reveal .cell-output:has(pre.smaller-output) .code-copy-outer-scaffold,
+.reveal pre.smaller-output {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
