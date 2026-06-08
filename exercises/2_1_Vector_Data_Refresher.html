@@ -2361,7 +2361,7 @@ vertical-align: -.125em;
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>polygon_data <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">&quot;./data/boundaries/VG250_KRS.shp&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic inspection — how big is the dataset?</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(polygon_data) <span class="co"># overview: columns, geometry type, CRS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>polygon_data <span class="co"># overview: columns, geometry type, CRS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 431 features and 23 fields
 Geometry type: MULTIPOLYGON
@@ -2507,7 +2507,7 @@ PROJCRS[&quot;ETRS89 / UTM zone 32N&quot;,
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load as plain data frame — no geometry yet!</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>coords_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;./data/survey/synthetic_geocoordinates.csv&quot;</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(coords_df) <span class="co"># inspect: which columns hold coordinates?</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>coords_df <span class="co"># inspect: which columns hold coordinates?</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to sf: specify coordinate columns and CRS</span></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># The x/y columns are in EPSG:3035 (ETRS89-LAEA, meters)</span></span>
@@ -2575,22 +2575,27 @@ dbl (6): age, female, citizenship, rent_avg, x, y
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>points_with_AGS <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_join</span>(points_transformed, polygon_data[, <span class="st">&quot;AGS&quot;</span>])</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check: each point should now have an AGS value</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(points_with_AGS)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>points_with_AGS</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 6 features and 6 fields
+<pre><code>Simple feature collection with 500 features and 6 fields
 Geometry type: POINT
 Dimension:     XY
-Bounding box:  xmin: 367922.1 ymin: 5708271 xmax: 829425.9 ymax: 5948916
+Bounding box:  xmin: 294988.7 ymin: 5267839 xmax: 890892.3 ymax: 6080921
 Projected CRS: ETRS89 / UTM zone 32N
-# A tibble: 6 × 7
-    age female citizenship income      rent_avg           geometry AGS  
-  &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;        &lt;POINT [m]&gt; &lt;chr&gt;
-1    51      1           0 2500-3000 €     6.21 (540828.5 5857602) 03358
-2    36      0           1 1000-1500 €     5.44 (367922.1 5708271) 05513
-3    47      1           1 1500-2000 €     5.35 (380782.8 5718445) 05562
-4    51      0           0 2000-2500 €     9.46 (564543.3 5948916) 01060
-5    46      0           1 &gt; 5000 €        6.81 (829425.9 5819662) 12067
-6    45      1           1 4000-4500 €     5.70 (472899.1 5781689) 05758</code></pre>
+# A tibble: 500 × 7
+     age female citizenship income      rent_avg           geometry AGS  
+ * &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;        &lt;POINT [m]&gt; &lt;chr&gt;
+ 1    51      1           0 2500-3000 €     6.21 (540828.5 5857602) 03358
+ 2    36      0           1 1000-1500 €     5.44 (367922.1 5708271) 05513
+ 3    47      1           1 1500-2000 €     5.35 (380782.8 5718445) 05562
+ 4    51      0           0 2000-2500 €     9.46 (564543.3 5948916) 01060
+ 5    46      0           1 &gt; 5000 €        6.81 (829425.9 5819662) 12067
+ 6    45      1           1 4000-4500 €     5.70 (472899.1 5781689) 05758
+ 7    53      1           1 2500-3000 €     6.36 (377382.8 5601424) 07131
+ 8    38      0           1 3500-4000 €     4.22   (451344 5822381) 03460
+ 9    33      1           1 &lt;NA&gt;            4.87 (868183.5 5696081) 14625
+10    43      1           1 3500-4000 €     7.39 (555127.2 5391885) 08117
+# ℹ 490 more rows</code></pre>
 </div>
 </div>
 </div>

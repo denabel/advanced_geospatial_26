@@ -139,6 +139,7 @@ south_states <-
 age_north <-
   terra::mask(age_avg, north_states) |>
   terra::crop(north_states)
+
 age_south <-
   terra::mask(age_avg, south_states) |>
   terra::crop(south_states)

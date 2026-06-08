@@ -2357,7 +2357,7 @@ vertical-align: -.125em;
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>age_65_tif <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">&quot;./data/z22/age_from_65.tif&quot;</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect metadata</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(age_65_tif) <span class="co"># dimensions, resolution, CRS, value range</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>age_65_tif <span class="co"># dimensions, resolution, CRS, value range</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>class       : SpatRaster 
 size        : 859, 641, 1  (nrow, ncol, nlyr)
@@ -2378,7 +2378,7 @@ max value   : 100.00 </code></pre>
 <pre><code>[1] 1000 1000</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cell area: resolution is 1000 × 1000 m = 1 km² per cell</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">res</span>(age_65_tif)[<span class="dv">1</span>] <span class="sc">*</span> terra<span class="sc">::</span><span class="fu">res</span>(age_65_tif)[<span class="dv">2</span>] <span class="sc">/</span> <span class="fl">1e6</span> <span class="co"># in km²</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">res</span>(age_65_tif)[<span class="dv">1</span>] <span class="sc">*</span> terra<span class="sc">::</span><span class="fu">res</span>(age_65_tif)[<span class="dv">2</span>] <span class="sc">/</span> <span class="dv">1000000</span> <span class="co"># in km²</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1</code></pre>
 </div>
@@ -2412,7 +2412,7 @@ max value   : 100.00 </code></pre>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>age_groups_nc <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">&quot;./data/z22/age_short.nc&quot;</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare with the .tif from Exercise 1</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(age_groups_nc) <span class="co"># notice: multiple layers!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>age_groups_nc <span class="co"># notice: multiple layers!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>class       : SpatRaster 
 size        : 859, 641, 5  (nrow, ncol, nlyr)

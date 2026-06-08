@@ -33,7 +33,7 @@ You'll work with Census 2022 rasters from `./data/z22/`. Not sure what a file co
 
 Your first task is to import a dataset of synthetic geographic coordinates (`synthetic_survey_geocoordinates.rds` in `./data/survey/`) and a raster `.tif` dataset from the `./data/z22/` folder.
 
-After loading both, compare their coordinate reference systems. Do they match? What would you need to do before extracting raster values at the point locations?
+After loading both, compare their coordinate reference systems. Do they match? This is a crucial check you should **always** perform before extracting raster values at point locations.
 :::
 
 ::: {.callout-caution collapse="true"}
@@ -51,7 +51,7 @@ In this exercise, you’ll extract raster values at the locations of the synthet
 
 Use buffers or a spatial filter (like `terra::focal()`) to capture information around each point, not just at the point itself. This will help you get a broader view of the raster values in the neighborhood of your coordinates.
 
-Important: You may notice that the CRS of the points and the CRS of the raster don’t align. You will need to adjust the CRS of your points to match the raster's CRS to correctly extract values.
+Important: Always verify that the CRS of your points and raster match before extracting. If they don’t, you’ll need to reproject one to match the other using `sf::st_transform()` or `terra::project()`.
 :::
 
 ::: {.callout-caution collapse="true"}
@@ -103,12 +103,13 @@ rent_avg <- terra::rast("./data/z22/rent_avg.tif")
 plot(rent_avg)
 
 # Key step: compare the CRS of both datasets
-# Points use EPSG from the survey, raster uses the Census grid CRS
+# Always do this before spatial operations — mismatched CRS = wrong results!
 sf::st_crs(coordinates)$epsg # CRS of the point data
 terra::crs(rent_avg, describe = TRUE)$code # CRS of the raster
 
-# They don't match! Before extracting raster values at point locations,
-# we'll need to reproject one to match the other using sf::st_transform().
+# They match (both EPSG:3035)! We can proceed directly with extraction.
+# If they didn't, we'd need to reproject one to match the other
+# using sf::st_transform() or terra::project().
 ```
 :::
 
@@ -118,14 +119,10 @@ terra::crs(rent_avg, describe = TRUE)$code # CRS of the raster
 ```{r}
 library(terra)
 
-# Step 1: Fix the CRS mismatch we found in Exercise 1
-# We reproject the points to match the raster's CRS
-crs_points <- sf::st_crs(coordinates)$epsg
-crs_raster <- terra::crs(rent_avg, describe = TRUE)$code
-
-if (crs_points != crs_raster) {
-  coordinates <- sf::st_transform(coordinates, crs = as.numeric(crs_raster))
-}
+# Step 1: Confirm the CRS match (always check!)
+sf::st_crs(coordinates)$epsg
+terra::crs(rent_avg, describe = TRUE)$code
+# Both EPSG:3035 — good to go.
 
 # Step 2: Create buffers around each point
 # 5000 = 5 km in projected CRS (units are meters)

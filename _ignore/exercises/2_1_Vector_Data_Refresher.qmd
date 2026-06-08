@@ -87,7 +87,7 @@ library(sf)
 polygon_data <- sf::st_read("./data/boundaries/VG250_KRS.shp", quiet = TRUE)
 
 # Basic inspection — how big is the dataset?
-print(polygon_data) # overview: columns, geometry type, CRS
+polygon_data # overview: columns, geometry type, CRS
 nrow(polygon_data) # number of features (rows)
 sf::st_crs(polygon_data) # coordinate reference system
 
@@ -110,7 +110,7 @@ library(readr)
 
 # Load as plain data frame — no geometry yet!
 coords_df <- read_csv("./data/survey/synthetic_geocoordinates.csv")
-head(coords_df) # inspect: which columns hold coordinates?
+coords_df # inspect: which columns hold coordinates?
 
 # Convert to sf: specify coordinate columns and CRS
 # The x/y columns are in EPSG:3035 (ETRS89-LAEA, meters)
@@ -161,6 +161,6 @@ points_transformed <-
 points_with_AGS <- sf::st_join(points_transformed, polygon_data[, "AGS"])
 
 # Check: each point should now have an AGS value
-head(points_with_AGS)
+points_with_AGS
 ```
 :::

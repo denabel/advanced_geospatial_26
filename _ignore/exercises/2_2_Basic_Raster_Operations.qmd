@@ -86,12 +86,12 @@ library(terra)
 age_65_tif <- terra::rast("./data/z22/age_from_65.tif")
 
 # Inspect metadata
-print(age_65_tif) # dimensions, resolution, CRS, value range
+age_65_tif # dimensions, resolution, CRS, value range
 dim(age_65_tif) # rows, columns, layers
 terra::res(age_65_tif) # cell size (in CRS units)
 
 # Cell area: resolution is 1000 × 1000 m = 1 km² per cell
-terra::res(age_65_tif)[1] * terra::res(age_65_tif)[2] / 1e6 # in km²
+terra::res(age_65_tif)[1] * terra::res(age_65_tif)[2] / 1000000 # in km²
 
 # Visualize
 plot(age_65_tif)
@@ -106,7 +106,7 @@ plot(age_65_tif)
 age_groups_nc <- terra::rast("./data/z22/age_short.nc")
 
 # Compare with the .tif from Exercise 1
-print(age_groups_nc) # notice: multiple layers!
+age_groups_nc # notice: multiple layers!
 dim(age_groups_nc) # rows, cols, layers — more layers than the .tif
 terra::nlyr(age_groups_nc) # how many layers (= age groups)?
 terra::res(age_groups_nc) # resolution — same as the .tif?
