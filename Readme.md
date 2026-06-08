@@ -1,10 +1,10 @@
 # Advanced Geospatial Data Processing for Social Scientists
 
-![GESIS Workshop](https://img.shields.io/badge/GESIS-Workshop-orange)
-![Language: R](https://img.shields.io/badge/Language-R_≥_4.3-276DC3?logo=r)
-![Slides: Quarto Revealjs](https://img.shields.io/badge/Slides-Quarto_Revealjs-4B8BBE)
-![Date: June 2026](https://img.shields.io/badge/Date-June_9--10,_2026-green)
-![Last updated](https://img.shields.io/github/last-commit/denabel/advanced_geospatial_26?label=Last%20updated&color=blue)
+![GESIS Workshop](https://img.shields.io/badge/GESIS-Workshop-e74c3c)
+![Language: R](https://img.shields.io/badge/Language-R_≥_4.3-e67e22?logo=r)
+![Slides: Quarto Revealjs](https://img.shields.io/badge/Slides-Quarto_Revealjs-f1c40f)
+![Date: June 2026](https://img.shields.io/badge/Date-June_9--10,_2026-2ecc71)
+![Last updated](https://img.shields.io/github/last-commit/denabel/advanced_geospatial_26?label=Last%20updated&color=3498db)
 
 <p align=center>   
 <a href="https://github.com/denabel/advanced_geospatial_26/archive/refs/heads/main.zip"><b>📥 CLICK HERE TO DOWNLOAD ALL COURSE MATERIALS</b></a> 
