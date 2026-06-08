@@ -211,9 +211,13 @@ pop_grid_2022_crop <-
 plot(pop_grid_2022_crop)
 ```
 
-## Exercise 3_1: Subsetting Raster Data
+## Exercise 3_1: Subsetting Raster Data {.center style="text-align: center;"}
 
-![](../img/cat_quality.webp){width="45%" fig-align="center"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/3_1_Subsetting_Raster_Data.html)
+
+![](../img/cat_quality.webp){width="15%" fig-align="center"}
+
+*AI-assisted picture*
 
 ## Extraction & Aggregation {.center style="text-align: center;"}
 
@@ -787,9 +791,13 @@ plot(rent_berlin_smooth)
 plot(rent_berlin_edges)
 ```
 
-## Exercise 3_2: Extracting and Analyzing Raster Information
+## Exercise 3_2: Extracting and Analyzing Raster Information {.center style="text-align: center;"}
 
-![](../img/cat_quality.webp){width="45%" fig-align="center"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/3_2_Extracting_Analyzing_Raster_Information.html)
+
+![](../img/cat_quality.webp){width="15%" fig-align="center"}
+
+*AI-assisted picture*
 
 ## Conversion {.center style="text-align: center;"}
 

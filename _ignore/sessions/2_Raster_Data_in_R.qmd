@@ -322,6 +322,8 @@ sf::st_crs(german_districts_4326)$epsg # verify new CRS
 
 ![](../img/cat_quality.webp){width="15%" fig-align="center"}
 
+*AI-assisted picture*
+
 ## Raster data {.center style="text-align: center;"}
 
 Now that we've refreshed vector data, let's look at the other major spatial data format. While vector data represent discrete features (points, lines, polygons), raster data represent continuous surfaces as a grid of cells.
@@ -582,3 +584,5 @@ terra::crs(pop_grid_ger_2022_3035, describe = TRUE)$code # verify new CRS
 [🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/2_2_Basic_Raster_Operations.html)
 
 ![](../img/cat_quality.webp){width="15%" fig-align="center"}
+
+*AI-assisted picture*

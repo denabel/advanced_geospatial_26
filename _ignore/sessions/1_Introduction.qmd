@@ -650,8 +650,10 @@ In the folder called `./data`, you can find (most of) the data files prepared fo
 
 
 
-## Exercise 1_1: Package Installation
+## Exercise 1_1: Package Installation {.center style="text-align: center;"}
 
-![](../img/cat_scientist.png){fig-align="center" width="40%"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/1_1_Package_Installation.html)
+
+![](../img/cat_scientist.png){width="15%" fig-align="center"}
 
 *AI-assisted picture*

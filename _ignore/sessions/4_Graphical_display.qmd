@@ -648,10 +648,13 @@ ggplot()+
 ::::
 
 
-## Exercise 4_1: A simple map
+## Exercise 4_1: A simple map {.center style="text-align: center;"}
 
-![](../img/cat_measure.png){fig-align="center" width="50%"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/4_1_Simple_Map.html)
 
+![](../img/cat_measure.png){width="15%" fig-align="center"}
+
+*AI-assisted picture*
 
 ## Case study: Population dynamics
 
@@ -1306,6 +1309,10 @@ ggplot()+
 :::
 ::::
 
-## Exercise 4_2: A fancy map
+## Exercise 4_2: A fancy map {.center style="text-align: center;"}
 
-![](../img/cat_quality.png){fig-align="center" width="50%"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/4_2_Fancy_Map.html)
+
+![](../img/cat_quality.png){width="15%" fig-align="center"}
+
+*AI-assisted picture*

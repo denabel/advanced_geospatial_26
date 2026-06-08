@@ -486,9 +486,11 @@ ggplot() +
 :::
 ::::
 
-## Exercise 6_1: A map with many facets
+## Exercise 6_1: A map with many facets {.center style="text-align: center;"}
 
-![](../img/cat_quality.png){fig-align="center" width="50%"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/6_1_Map_with_many_facets.html)
+
+![](../img/cat_quality.png){width="15%" fig-align="center"}
 
 *AI-assisted picture*
 
@@ -996,8 +998,10 @@ global(LA_stack, fun = mean, na.rm=TRUE)
 layerCor(LA_stack, fun = "cor", use = "complete.obs")
 ```
 
-## Exercise 6_2: Illuminate your region
+## Exercise 6_2: Illuminate your region {.center style="text-align: center;"}
 
-![](../img/cat_scientist.png){fig-align="center" width="50%"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/6_2_Illuminate_your_region.html)
+
+![](../img/cat_scientist.png){width="15%" fig-align="center"}
 
 *AI-assisted picture*

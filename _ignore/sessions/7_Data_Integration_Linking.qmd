@@ -658,9 +658,13 @@ ggplot(mapping = aes(x = temp_diff, y = concern)) +
 
 $\rightarrow$ But as a **workflow demonstration**, this shows how survey and EO data can be integrated end-to-end using the tools we've learned in this course.
 
-## Exercise 7_1: Data Integration
+## Exercise 7_1: Data Integration {.center style="text-align: center;"}
 
-![](../img/cat_quality.webp){width="45%" fig-align="center"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/7_1_Data_Integration.html)
+
+![](../img/cat_quality.webp){width="15%" fig-align="center"}
+
+*AI-assisted picture*
 
 ## Appendix: Plot code {.appendix .smaller}
 

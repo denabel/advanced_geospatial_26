@@ -575,10 +575,13 @@ writeRaster(
 ```
 
 
-## Exercise 5_1: A raster stack with `terra`
+## Exercise 5_1: A raster stack with `terra` {.center style="text-align: center;"}
 
-![](../img/cat_scientist.png){fig-align="center" width="40%"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/5_1_Raster_stack_terra.html)
 
+![](../img/cat_scientist.png){width="15%" fig-align="center"}
+
+*AI-assisted picture*
 
 ## `stars` approach: stacking raster layers
 
@@ -849,6 +852,10 @@ print(CA_pop_cube_terra)
 ```
 
 
-## Exercise 5_2: A raster cube with `stars`
+## Exercise 5_2: A raster cube with `stars` {.center style="text-align: center;"}
 
-![](../img/cat_measure.png){fig-align="center" width="40%"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/5_2_Raster_cube_stars.html)
+
+![](../img/cat_measure.png){width="15%" fig-align="center"}
+
+*AI-assisted picture*
