@@ -42,19 +42,21 @@ course_content |>
 
 ## Why care about data types and formats?
 
+:::: columns
+::: {.column width="50%"}
 There are differences in how spatial information is stored, processed, and visually represented.
 
 - Different commands for data import and manipulation
 - Spatial linking techniques and analyses partly determined by data format
 - Visualization of data can vary
+:::
 
-So, always know what kind of data you are dealing with!
-
-## Vector and raster data
-
-![](../img/fig_geometries.png){.r-stretch fig-align="center"}
+::: {.column width="50%"}
+![](../img/fig_geometries.png){fig-align="center" width="50%"}
 
 <small>Source: OpenStreetMap / GEOFABRIK (2018), City of Cologne (2014), Statistical Offices of the Federation and the Länder (2016) / Jünger, 2019</small>
+:::
+::::
 
 ## Vector data {.center style="text-align: center;"}
 
@@ -193,8 +195,7 @@ There are no huge differences between the file we just imported and a regular da
 
 ```{r}
 #| output-location: fragment
-# head of data table
-head(hello_world, 2)
+hello_world
 ```
 
 ## Inspect your data: geometry type
@@ -251,19 +252,32 @@ plot(german_districts["AGS"]) # plot by district code
 
 Using the synthetic survey geocoordinates, we can craft a toy example to demonstrate spatial joins. This is how they look.
 
+:::: columns
+::: {.column width="50%"}
 ```{r}
-#| echo: true
-#| output-location: column-fragment
-#| fig-asp: .9
+#| output-location: fragment
+#| class-output: smaller-output
 points <-
   readRDS(
     "./data/survey/synthetic_survey_geocoordinates.rds"
   ) |>
   sf::st_transform(sf::st_crs(german_districts)) # match CRS
 
+points
+```
+:::
+
+::: {.column width="50%"}
+::: {.fragment}
+```{r}
+#| fig.asp: .8
+#| output-location: fragment
+#| class-output: smaller-output
 plot(sf::st_geometry(points)) # point locations
 ```
-
+::: 
+:::
+::::
 
 ## Spatial joins
 
@@ -302,9 +316,11 @@ sf::st_crs(german_districts_4326)$epsg # verify new CRS
 ```
 :::
 
-## Exercise 2_1: Vector Data Refresher
+## Exercise 2_1: Vector Data Refresher {.center style="text-align: center;"}
 
-![](../img/cat_quality.webp){width="45%" fig-align="center"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/2_1_Vector_Data_Refresher.html)
+
+![](../img/cat_quality.webp){width="15%" fig-align="center"}
 
 ## Raster data {.center style="text-align: center;"}
 
@@ -388,7 +404,7 @@ This toy example shows: a raster is just a matrix with spatial metadata. The rea
 
 ```{r}
 #| output-location: fragment
-#| out-width: "80%"
+#| out-width: "70%"
 terra::plot(raster_layer)
 ```
 
@@ -450,7 +466,7 @@ age_under_18_grid_2022 # compare metadata with population
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
-#| #| output-location: fragment
+#| output-location: fragment
 terra::plot(
   pop_grid_ger_2022
 )
@@ -460,7 +476,7 @@ terra::plot(
 ::: {.column width="50%"}
 ```{r}
 #| fig.asp: .7
-#| #| output-location: fragment
+#| output-location: fragment
 terra::plot(
   age_under_18_grid_2022
 )
@@ -561,6 +577,8 @@ terra::crs(pop_grid_ger_2022_3035, describe = TRUE)$code # verify new CRS
 ```
 :::
 
-## Exercise 2_2: Basic Raster Operations
+## Exercise 2_2: Basic Raster Operations {.center style="text-align: center;"}
 
-![](../img/cat_quality.webp){width="45%" fig-align="center"}
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/2_2_Basic_Raster_Operations.html)
+
+![](../img/cat_quality.webp){width="15%" fig-align="center"}
