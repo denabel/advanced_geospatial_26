@@ -18,15 +18,19 @@ source("R/install_packages.R")
 
 **`render.R`**
 Render Quarto (`.qmd`) slides and exercises to HTML and copy them
-into `./slides/` and `./exercises/`. Offers an interactive menu or
-can be called directly with a file path or batch keyword.
+into `./slides/` and `./exercises/`. Provides three entry points:
 
 ```r
 source("R/render.R")
 render()                              # interactive menu
 render(what = "sessions")             # all slides
 render("_ignore/sessions/3_Raster_Data_Processing.qmd")  # single file
+render_current()                      # render the file open in RStudio
 ```
+
+`render()` uses hash-based incremental rendering — unchanged files are
+skipped unless `force = TRUE`. `render_current()` detects the active
+editor tab in RStudio and renders + copies it.
 
 **`prep_issp.R`**
 Prepare the ISSP Environment module data for Session 7. Loads the
@@ -57,3 +61,12 @@ source("R/download_worldpop.R")
 download_worldpop(year = 2020, country = "KEN",
                   indicator = "all", cellsize = 10000)
 ```
+
+**`synthetic_data.R`**
+Generate the synthetic survey dataset with spatially correlated
+attributes. Loads pre-generated point locations (EPSG:3035), extracts
+Census raster values at each location, adds individual-level noise,
+and saves the result.
+
+- Requires: `z22`, `terra`, `sf`, `dplyr`, `readr`, internet access
+- Output: `./data/survey/synthetic_survey_geocoordinates.rds`

@@ -11,7 +11,7 @@ library(readr)
 
 # --- Load base coordinates ---
 # These are pre-generated point locations across Germany (EPSG:3035)
-synthetic_coordinates <- readRDS("./data/synthetic_survey_geocoordinates.rds")
+synthetic_coordinates <- readRDS("./data/survey/synthetic_survey_geocoordinates.rds")
 
 
 # =============================================================================
@@ -157,7 +157,7 @@ synthetic_coordinates$income <- ordered(
 # Select and order columns
 # =============================================================================
 synthetic_coordinates <- synthetic_coordinates |>
-  dplyr::select(age, female, citizenship, income, rent_avg)
+  dplyr::select(age, female, citizenship, income, rent_avg) 
 
 
 # =============================================================================
@@ -169,10 +169,11 @@ synthetic_coordinates_csv <-
     x = sf::st_coordinates(synthetic_coordinates)[, 1],
     y = sf::st_coordinates(synthetic_coordinates)[, 2]
   ) |>
-  sf::st_drop_geometry()
+  sf::st_drop_geometry() |> 
+  dplyr::mutate(crs = 3035)
 
-readr::write_csv(synthetic_coordinates_csv, "./data/synthetic_geocoordinates.csv")
-saveRDS(synthetic_coordinates, "./data/synthetic_survey_geocoordinates.rds")
+readr::write_csv(synthetic_coordinates_csv, "./data/survey/synthetic_geocoordinates.csv")
+saveRDS(synthetic_coordinates, "./data/survey/synthetic_survey_geocoordinates.rds")
 
 message("Done! Synthetic data saved with columns: ",
         paste(names(synthetic_coordinates), collapse = ", "))
