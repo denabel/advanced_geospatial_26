@@ -18,6 +18,8 @@ format:
     logo: ../img/GESIS-Logo_2024.svg.png
 editor_options: 
   chunk_output_type: console
+resources:
+  - ../img/terra-project.html
 ---
 
 ```{r}
@@ -398,6 +400,30 @@ Reprojecting raster data is fundamentally different from reprojecting vector dat
 - **Practical advice**: When aligning raster and vector data, **it is usually better to reproject the vector data** onto the raster’s coordinate system — to avoid unnecessary loss or distortion in the raster values.
 
 
+## `terra::project()` documentation
+
+<iframe
+  src="../img/terra-project.html"
+  width="100%"
+  height="620"
+  style="border: 1px solid #ddd; background: white;">
+</iframe>
+
+
+## Note on reprojecting raster data
+
+| Method | Best for |
+|---|---|
+| `near` | categorical, IDs |
+| `mode` | categorical |
+| `bilinear` | continuous |
+| `mean` | continuous, densities, proportions |
+| `sum` | counts, totals |
+| `median`, `q1`, `q3` | robust summaries |
+| `min`, `max` | extremes |
+| `cubic`, `cubicspline`, `lanczos` | smooth image-like continuous |
+
+
 ## `terra` approach: stacking raster layers
 
 Now that we have properly prepared variable names and times, we have several options to access single layers or specific cell values.
@@ -490,6 +516,8 @@ Now that we have properly prepared variable names and times, we have several opt
 
 Alternatively, you can use **array slicing syntax** on `SpatRaster` objects:
 
+:::: columns
+::: {.column width="50%"}
 ```{r}
 #| eval: false
 your_raster[i, # rows
@@ -498,7 +526,13 @@ your_raster[i, # rows
             drop = FALSE/TRUE # whether to keep `SpatRaster`geometry
             ]
 ```
+:::
 
+::: {.column width="50%"}
+![](../img/cake_slice.gif){fig-align="center" width="50%"}
+
+:::
+::::
 
 ## `terra` approach: stacking raster layers
 
@@ -738,7 +772,7 @@ st_crs(CA_pop_cube)
 
 ## `stars` approach: stacking raster layers
 
-We can reproject the data with `st_transform()`. This will create a curvilinear grid cell with the advantage that no information is lost - cell values remain identical. This is the case because `st_transform()` reprojects without resampling. 
+In stars, `st_transform()` changes the CRS of the raster geometry without resampling the cell values. For regular gridded rasters, this produces a curvilinear grid in the target CRS. The cell values remain unchanged, so the operation is lossless with respect to the raster values. 
 
 ```{r}
 CA_pop_cube_curv <- sf::st_transform(CA_pop_cube, 
@@ -751,7 +785,7 @@ print(CA_pop_cube_curv)
 
 ## `stars` approach: stacking raster layers
 
-Alternative to obtain a regular grid is to create a workaround with  `st_warp()`. We first specify the target grid with same number of rows and columns and "warp" into that grid.
+To obtain a regular grid is to create a workaround with  `st_warp()`. We first specify the target grid with same number of rows and columns and "warp" into that grid.
 
 ```{r}
 grid <- st_bbox(CA_pop_cube) |>
