@@ -2,7 +2,7 @@
 title: "Exercise 3_2: Extracting and Analyzing Raster Information"
 subtitle: 'Advanced Geospatial Data Processing for Social Scientists'
 author: Dennis Abel & Stefan Jünger
-format: 
+format:
   html:
     embed-resources: true
     code-copy: true
@@ -14,72 +14,60 @@ knitr:
 editor: visual
 callout-icon: false
 callout-appearance: minimal
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
-In this set of exercises, you'll focus on linking raster data, aggregating them to a coarser resolution, creating heatmaps using spatial smoothing, and linking processed raster data with your synthetic geocoordinates. You will:
+In this set of exercises, you'll practice two core raster workflows:
 
-- Aggregate raster data to a larger grid (e.g., 5 km resolution).
-- Use a focal operation to create a heatmap and visualize spatial patterns.
-- Link the aggregated raster back to your geocoordinates for further analysis.
+1. **Extracting** raster values at point locations — both directly and using spatial buffers.
+2. **Smoothing** raster data with `terra::focal()` and comparing the effect of different window sizes.
 
 You'll work with Census 2022 rasters from `./data/z22/`. Not sure what a file contains? File names match Census variable names — check the [Census 2022 database](https://ergebnisse.zensus2022.de/datenbank/online/themes) for documentation, or use `z22::z22_features()` if you have the [`z22` package](https://cran.r-project.org/package=z22) installed.
 
 ### Exercises
 
 ::: callout-note
-## 🏋️ Exercise 1
+## 🏋️ Exercise 1: Extraction — points and buffers
 
-Your first task is to import a dataset of synthetic geographic coordinates (`synthetic_survey_geocoordinates.rds` in `./data/survey/`) and a raster `.tif` dataset from the `./data/z22/` folder.
+Load the synthetic survey coordinates (`synthetic_survey_geocoordinates.rds` in `./data/survey/`) and a raster `.tif` of your choice from `./data/z22/`. Before extracting, confirm that their CRS match.
 
-After loading both, compare their coordinate reference systems. Do they match? This is a crucial check you should **always** perform before extracting raster values at point locations.
+Then:
+
+1. **Extract** raster values directly at the point locations.
+2. **Create 5 km buffers** around each point and extract the **mean** raster value within each buffer.
+3. **Compare** the two results: How much do the point values and the buffer means differ? Why might they differ?
 :::
 
 ::: {.callout-caution collapse="true"}
 ## 💡 Tip
 
-- Use `readRDS()` to load the `.rds` file and `terra::rast()` for the raster.
-- Check the CRS of the points with `sf::st_crs()` and of the raster with `terra::crs(..., describe = TRUE)`.
-- After loading, inspect the structure with `str()` and visualize with `plot()`.
+- Use `readRDS()` for the points, `terra::rast()` for the raster.
+- Check the CRS with `sf::st_crs()` and `terra::crs(..., describe = TRUE)`.
+- `terra::extract(raster, points, ID = FALSE)` gives you 1:1 values.
+- `sf::st_buffer(points, 5000)` creates 5 km buffers (units are meters in EPSG:3035).
+- `terra::extract(raster, buffers, fun = mean, na.rm = TRUE)` summarizes within each buffer.
 :::
 
 ::: callout-note
-## 🏋️ Exercise 2
+## 🏋️ Exercise 2: Smoothing and heatmaps
 
-In this exercise, you’ll extract raster values at the locations of the synthetic coordinates you loaded previously. But here’s the twist: Think about the surrounding area!
+Choose a raster from `./data/z22/` and crop it to a region of interest (e.g., Berlin or any state — use the boundaries in `./data/boundaries/`).
 
-Use buffers or a spatial filter (like `terra::focal()`) to capture information around each point, not just at the point itself. This will help you get a broader view of the raster values in the neighborhood of your coordinates.
+Then:
 
-Important: Always verify that the CRS of your points and raster match before extracting. If they don’t, you’ll need to reproject one to match the other using `sf::st_transform()` or `terra::project()`.
+1. **Smooth** the cropped raster with `terra::focal()` using two different window sizes (e.g., 3×3 and 9×9).
+2. **Plot** the raw raster and both smoothed versions side by side. What spatial patterns become visible? At what point do you lose too much detail?
+3. **Bonus:** Extract values at the survey coordinates from both the raw and the smoothed raster. How much do they differ?
 :::
 
 ::: {.callout-caution collapse="true"}
 ## 💡 Tip
 
-- You can use `terra::extract()` to pull raster values at specific coordinates.
-- To consider the surrounding area, use `terra::focal()` to apply a spatial filter or create buffers with `sf::st_buffer()` around your points.
-- Be creative: What size buffer makes sense for your data? Should you use a large or small neighborhood around the points? How do the values change within this window?
-:::
-
-::: callout-note
-## 🏋️ Exercise 3
-
-In this exercise, you’ll explore how spatial resolution affects your results.
-
-- Aggregate the raster to **two different resolutions** (e.g., a 5 km and a 10 km grid).
-- Apply a focal smoothing operation to both aggregated rasters to create heatmaps.
-- Extract values at your synthetic coordinates from both versions.
-- Compare the extracted values: How much do they differ? Plot both heatmaps side by side. At which resolution do you start losing important spatial patterns?
-:::
-
-::: {.callout-caution collapse="true"}
-## 💡 Tip
-
-- To aggregate raster data, use `terra::aggregate()` with different `fact` values (e.g., `fact = 5` for 5 km, `fact = 10` for 10 km).
-- Use `terra::focal()` to apply a moving window average for the heatmap effect.
-- Use `par(mfrow = c(1, 2))` to plot both heatmaps side by side.
-- After aggregation and smoothing, link both rasters back to your coordinates using `terra::extract()` and compare.
+- Subset a district with `dplyr::filter()`, then `terra::mask()` and `terra::crop()`.
+- `terra::focal(raster, w = matrix(1, 3, 3), fun = mean, na.rm = TRUE)` applies a 3×3 moving average.
+- Use `par(mfrow = c(1, 3))` to plot three maps side by side.
+- For the bonus: extract from both the raw and smoothed raster and compare with `head()` or `summary()`.
 :::
 
 ### Solutions
@@ -90,26 +78,35 @@ In this exercise, you’ll explore how spatial resolution affects your results.
 ```{r}
 library(terra)
 
-# Load the synthetic survey coordinates (an sf point dataset)
+# Load data
 coordinates <- readRDS("./data/survey/synthetic_survey_geocoordinates.rds")
-
-# Inspect: how many points? which columns? which geometry type?
-str(coordinates)
-
-# Load a raster dataset — pick any .tif from ./data/z22/
 rent_avg <- terra::rast("./data/z22/rent_avg.tif")
 
-# Visualize the raster to get a first impression
-plot(rent_avg)
+# Always check: do the CRS match?
+sf::st_crs(coordinates)$epsg
+terra::crs(rent_avg, describe = TRUE)$code
+# Both EPSG:3035 — good to go.
 
-# Key step: compare the CRS of both datasets
-# Always do this before spatial operations — mismatched CRS = wrong results!
-sf::st_crs(coordinates)$epsg # CRS of the point data
-terra::crs(rent_avg, describe = TRUE)$code # CRS of the raster
+# --- Point extraction (1:1) ---
+rent_at_points <- terra::extract(rent_avg, coordinates, ID = FALSE)
+head(rent_at_points)
 
-# They match (both EPSG:3035)! We can proceed directly with extraction.
-# If they didn't, we'd need to reproject one to match the other
-# using sf::st_transform() or terra::project().
+# --- Buffer extraction (5 km neighborhood mean) ---
+buffers <- sf::st_buffer(coordinates, 5000) # 5 km radius
+rent_in_buffers <- terra::extract(rent_avg, buffers, fun = mean, na.rm = TRUE)
+head(rent_in_buffers)
+
+# --- Compare ---
+# Point values are single-cell readings; buffer values are local averages.
+# Buffer values should be less extreme (smoothed towards the neighborhood).
+comparison <- data.frame(
+  point  = rent_at_points[[1]],
+  buffer = rent_in_buffers[[2]]
+)
+comparison$diff <- comparison$point - comparison$buffer
+
+summary(comparison$diff)
+# Positive diff = point is above its neighborhood; negative = below.
 ```
 :::
 
@@ -119,70 +116,39 @@ terra::crs(rent_avg, describe = TRUE)$code # CRS of the raster
 ```{r}
 library(terra)
 
-# Step 1: Confirm the CRS match (always check!)
-sf::st_crs(coordinates)$epsg
-terra::crs(rent_avg, describe = TRUE)$code
-# Both EPSG:3035 — good to go.
+# --- Subset to Berlin ---
+german_districts <-
+  sf::st_read("./data/boundaries/VG250_KRS.shp", quiet = TRUE) |>
+  sf::st_transform(3035)
 
-# Step 2: Create buffers around each point
-# 5000 = 5 km in projected CRS (units are meters)
-buffer <- sf::st_buffer(coordinates, 5000)
+berlin <- german_districts |> dplyr::filter(AGS == "11000")
 
-# Quick check: do buffers look reasonable?
-plot(sf::st_geometry(buffer))
-plot(rent_avg)
+rent_berlin <-
+  terra::rast("./data/z22/rent_avg.tif") |>
+  terra::project("EPSG:3035") |>
+  terra::mask(berlin) |>
+  terra::crop(berlin)
 
-# Step 3a: Extract raster values directly at point locations (1:1)
-rent_buffer_values <- terra::extract(rent_avg, coordinates)
+# --- Smooth with two window sizes ---
+rent_3x3 <- terra::focal(rent_berlin, w = matrix(1, 3, 3), fun = mean, na.rm = TRUE)
+rent_9x9 <- terra::focal(rent_berlin, w = matrix(1, 9, 9), fun = mean, na.rm = TRUE)
 
-# Step 3b: Alternative — smooth the raster first with a focal window,
-# then extract. This captures the neighborhood context.
-rent_focal <-
-  terra::focal(rent_avg, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
-
-rent_focal_values <-
-  terra::extract(rent_focal, coordinates)
-
-# Compare: point extraction vs. focal-smoothed extraction
-# The focal values should be less extreme (smoothed towards neighbors)
-head(rent_buffer_values)
-head(rent_focal_values)
-```
-:::
-
-::: {.callout-tip collapse="true"}
-## ✅ Solution 3
-
-```{r}
-# Step 1: Aggregate the original raster to two resolutions
-# fact = 5 combines 5x5 cells → ~5 km; fact = 10 → ~10 km
-rent_5km <- terra::aggregate(rent_avg, fact = 5, na.rm = TRUE)
-rent_10km <- terra::aggregate(rent_avg, fact = 10, na.rm = TRUE)
-
-# Step 2: Smooth both with a focal window to create heatmaps
-# Same window size (5x5), but applied to different base resolutions
-rent_heatmap_5km <-
-  terra::focal(rent_5km, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
-rent_heatmap_10km <-
-  terra::focal(rent_10km, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
-
-# Step 3: Visual comparison — plot side by side
-# Notice how the 10 km version loses local patterns (e.g., city centers)
-par(mfrow = c(1, 2))
-plot(rent_heatmap_5km, main = "Heatmap (5 km)")
-plot(rent_heatmap_10km, main = "Heatmap (10 km)")
+# --- Side-by-side comparison ---
+par(mfrow = c(1, 3))
+plot(rent_berlin, main = "Raw")
+plot(rent_3x3, main = "Smoothed 3×3")
+plot(rent_9x9, main = "Smoothed 9×9")
 par(mfrow = c(1, 1))
+# The 3×3 reveals clusters while keeping local variation.
+# The 9×9 is much smoother — good for broad trends, but fine detail is lost.
 
-# Step 4: Extract values at our survey coordinates from both
-values_5km <- terra::extract(rent_heatmap_5km, coordinates)
-values_10km <- terra::extract(rent_heatmap_10km, coordinates)
+# --- Bonus: compare extracted values ---
+coords_berlin <- sf::st_crop(coordinates, berlin)
 
-# Inspect: the 10 km values should be more uniform (less variation)
-head(values_5km)
-head(values_10km)
+raw_vals <- terra::extract(rent_berlin, coords_berlin, ID = FALSE)[[1]]
+smooth_vals <- terra::extract(rent_9x9, coords_berlin, ID = FALSE)[[1]]
 
-# Quantify the difference: mean absolute difference per point
-# Higher values = more information lost at coarser resolution
-mean(abs(values_5km[[2]] - values_10km[[2]]), na.rm = TRUE)
+summary(raw_vals - smooth_vals)
+# Differences show how much local noise is removed by smoothing.
 ```
 :::

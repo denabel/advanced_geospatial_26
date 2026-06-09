@@ -579,6 +579,41 @@ terra::crs(pop_grid_ger_2022_3035, describe = TRUE)$code # verify new CRS
 ```
 :::
 
+## New functions at a glance 🧰 (1/3)
+
+**Vector data (`sf`)**
+
+| Function | What it does |
+|---|---|
+| `sf::read_sf()` / `sf::st_read()` | Load vector data (GeoJSON, Shapefile, …) |
+| `sf::st_geometry()` | Extract geometry column (for plotting) |
+| `sf::st_bbox()` | Get bounding box of a dataset |
+| `sf::st_crs()` | Inspect coordinate reference system |
+| `sf::st_transform(x, crs)` | Reproject to a different CRS |
+| `sf::st_join(x, y)` | Spatial join — transfer attributes by location |
+
+## New functions at a glance 🧰 (2/3)
+
+**Raster data (`terra`)**
+
+| Function | What it does |
+|---|---|
+| `terra::rast(file)` | Load a raster (`.tif`, `.nc`, …) or create from matrix |
+| `terra::plot(raster)` | Quick visualization of raster layers |
+| `terra::crs(raster, describe = TRUE)` | Inspect CRS of a raster |
+| `terra::project(raster, crs)` | Reproject raster to a different CRS |
+| `terra::global(raster, fun)` | Memory-efficient summary stats (mean, sum, …) |
+| `terra::values(raster)` | Extract all cell values as a vector |
+
+## New functions at a glance  🧰 (3/3)
+
+**Raster data (`stars`)**
+
+| Function | What it does |
+|---|---|
+| `stars::read_stars(file)` | Load raster as a `stars` object |
+| `plot(stars_obj)` | Plot a `stars` raster layer |
+
 ## Exercise 2_2: Basic Raster Operations {.center style="text-align: center;"}
 
 [🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/2_2_Basic_Raster_Operations.html)

@@ -477,17 +477,29 @@ german_districts$gender_ratios_2020 <-
 plot(german_districts["gender_ratios_2020"])
 ```
 
-## Manipulating the raster data {.center style="text-align: center;"}
+## Spatial smoothing {.center style="text-align: center;"}
 
-## Digging deeper
+## Why smooth raster data?
 
-The previous steps are efforts that work on the raw raster cell values data. However, there are occasions where we might want to work on the raster data themselves or pre-process them to add them to another dataset (e.g., a vector file). Some of these procedures are for visualization, such as heat maps, and others are necessary for our later analyses. We will show a few in the following.
+Raw raster values can be noisy — individual cells may fluctuate due to small sample sizes, measurement error, or natural variability. This makes it hard to see **spatial patterns**.
 
-![](../img/fig_raster_processing.svg){width="85%" fig-align="center"}
+::: {.fragment}
+::: {.smaller-text}
+Smoothing helps us to:
 
-## Creating a quick 'heat map'
+- **Reveal hidden spatial structure** in noisy data (e.g., rent clusters, population hotspots)
+- **Create heat maps** for visualization and exploratory analysis
+- **Pre-process data** before linking them to other datasets (e.g., survey points)
+:::
+:::
 
-Population counts for the whole of Germany help us to identify urban and rural clusters. But there may be applications where we need to zoom in on a specific city to identify within-city variations regarding specific attributes like average rent levels. Let's do that for the German capital Berlin. For this purpose, we subset the district data and mask and crop data on average rent prices from the German census.
+::: {.fragment}
+![](../img/fig_raster_processing.svg){width="60%" fig-align="center"}
+:::
+
+## The problem: raw data are noisy
+
+Let's zoom into Berlin and look at average rent prices from the Census. We subset, mask, and crop — techniques we already know.
 
 ```{r}
 #| echo: true
@@ -499,251 +511,25 @@ berlin <-
 
 rent_berlin <-
   terra::rast("./data/z22/rent_avg.tif") |>
-  terra::project("EPSG:3035") |> # reproject
   terra::mask(berlin) |> # clip to Berlin
   terra::crop(berlin) # trim extent
 
 plot(rent_berlin)
 ```
 
-## It's easy
-
-Although we can identify some clusters using the raw data, some smoothing may be helpful. We can use the `terra::focal()` function to do that. It applies a moving window filter on all raster cells of a grid. We'll have a more detailed look at this function in a minute.
-
-```{r}
-#| echo: true
-#| output-location: column-fragment
-#| fig.asp: .7
-rent_berlin_smooth <-
-  terra::focal(
-    rent_berlin,
-    w = matrix(1, 5, 5), # 5x5 moving window
-    fun = mean,
-    na.rm = TRUE
-  )
-
-plot(rent_berlin_smooth)
-```
-
-## 'Real' point pattern analysis
-
-So far, we used grid-cell-level Census data for our heat map. But what if we only have point observations, e.g., from a survey? We can create a similar density surface from scratch using `terra::rasterize()`. Let's demonstrate this with the synthetic survey coordinates.
-
 ::: {.fragment}
-::: {.callout-note}
-Usually, when we talk about heat maps, we mean analyzing point patterns and whether they spatially cluster. `terra` might not be your best choice regarding more elaborate techniques to estimate density kernels and distance-based bandwidths between points to draw clusters. For this purpose, packages such as `spatstat` are better suited but require [learning about other data structures](https://r-spatial.org/book/11-PointPattern.html). That said, densities are more advanced ways of counting things in raster grid cells, and we can mimic this behavior also with `terra`. So, let's stick to this package and crop all of our points to the extent of Berlin.
-:::
+Can you see spatial clusters? It's possible, but the cell-to-cell variation makes it hard to tell. **This is where smoothing comes in.**
 :::
 
-## From survey points to a smooth density surface
+## How `terra::focal()` works
 
-The next slides will walk through a five-step pipeline: crop points → count on a coarse grid → reproject to a finer grid → mask to the study area → smooth with `focal()`.
-
-![](../img/fig_point_to_raster_pipeline.svg){width="95%" fig-align="center"}
-
-## 'Real' point pattern analysis
-
-```{r}
-#| echo: true
-#| output-location: column-fragment
-#| fig.asp: .8
-points_berlin <-
-  readRDS(
-    "./data/survey/synthetic_survey_geocoordinates.rds"
-  ) |>
-  sf::st_crop(berlin) # subset to Berlin
-
-plot(sf::st_geometry(points_berlin)) # point locations
-```
-
-## Creating a raster density template
-
-Next, we simply want to count survey respondent locations in raster grid cells for our density estimation. However, our points are sparse compared to our comprehensive raster dataset. We cannot initially rely on 1 km² grid cells as with the Census grid data. But a 5 km resolution may be a good compromise. Let's do that!
-
-```{r}
-#| output-location: fragment
-raster_template <-
-  points_berlin |>
-  sf::st_bbox() |> # extent of points
-  terra::ext() |> # as terra extent
-  terra::rast(resolution = 5000, crs = "EPSG:3035") # 5km grid
-
-raster_template
-```
-
-## Rasterize: counting points in grid cells
-
-You may wonder why we are doing that. The answer is simple: We want to count the number of points in each grid cell. We use the function `terra::rasterize()` as a simple technique.
-
-```{r}
-#| echo: true
-#| output-location: column-fragment
-#| fig.asp: .8
-points_berlin_density <-
-  terra::rasterize(
-    points_berlin,
-    raster_template, # target grid
-    fun = "sum", # count per cell
-    background = 0 # empty cells = 0
-  )
-
-plot(points_berlin_density)
-```
-
-## Reproject to a finer grid
-
-Now, this is not very pleasant. These data look... not good. But fear not, working with raster data is powerful, as we now use a function you already know for projecting one CRS into another: `terra::project()`. This function can also be used to aggregate and disaggregate data based on the structure of another dataset. So, while we could not initially use 1 km² grid cells for our density 'estimation', we can reproject our 5 km² onto a 1 km² grid like our Census grid data. A bit of masking also helps get rid of cells that are not within the Berlin border.
-
-```{r}
-#| echo: true
-#| output-location: column-fragment
-#| fig.asp: .55
-points_berlin_density <-
-  points_berlin_density |>
-  terra::project(rent_berlin) |> # match 1km grid
-  terra::mask(rent_berlin) # clip to Berlin
-
-plot(points_berlin_density)
-```
-
-## Steps so far for our 'real' point pattern analysis
-
-![](../img/fig_point_to_raster_pipeline.svg){width="95%" fig-align="center"}
-
-## Smoothing: 5×5 window
-
-We can now also apply smoothing as with the population grid data.
-
-:::: columns
-::: {.column width="50%"}
-```{r}
-#| fig.asp: .6
-#| output-location: fragment
-terra::focal(
-  rent_berlin,
-  w = matrix(1, 5, 5),
-  fun = mean,
-  na.rm = TRUE
-) |>
-  plot()
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| fig.asp: .6
-#| output-location: fragment
-focal(
-  points_berlin_density, 
-  w = matrix(1, 5, 5), 
-  fun = mean,
-  na.rm = TRUE
-) |> 
-  plot()
-```
-:::
-::::
-
-
-## Smoothing: 3×3 window
-
-We can adjust the smoothing to a smaller degree.
-
-:::: columns
-::: {.column width="50%"}
-```{r}
-#| fig.asp: .7
-#| output-location: fragment
-terra::focal(
-  rent_berlin,
-  w = matrix(1, 3, 3),
-  fun = mean,
-  na.rm = TRUE
-) |>
-  plot()
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| fig.asp: .7 
-#| output-location: fragment
-focal(
-  points_berlin_density, 
-  w = matrix(1, 3, 3), 
-  fun = mean,
-  na.rm = TRUE
-) |> 
-  plot()
-```
-:::
-::::
-
-## Smoothing: 9×9 window
-
-We can also adjust the smoothing to a higher degree.
-
-:::: columns
-::: {.column width="50%"}
-```{r}
-#| fig.asp: .7
-#| output-location: fragment
-terra::focal(
-  rent_berlin,
-  w = matrix(1, 9, 9),
-  fun = mean,
-  na.rm = TRUE
-) |>
-  plot()
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| fig.asp: .7 
-#| output-location: fragment
-focal(
-  points_berlin_density, 
-  w = matrix(1, 9, 9), 
-  fun = mean,
-  na.rm = TRUE
-) |> 
-  plot()
-```
-:::
-::::
-
-Larger windows produce smoother surfaces but lose local detail — choose based on your research question.
-
-## Taking a step back
-
-Comparing the two columns, the difference is striking: the Census grid (left) captures fine-grained spatial variation because it covers the **entire population**, whereas our survey-based density (right) is driven by a sparse **sample** of point locations.
-
-::: {.smaller-text}
-::: {.fragment}
-**What does this mean in practice?**
-
-- Point-based density surfaces are useful for **exploratory visualization** and for detecting broad spatial clusters in your own data
-- They are **not a substitute** for high-resolution administrative data (Census, register data) when precise local estimates matter
-- The smoothing window size becomes a critical choice: too small → noisy artifacts from sparse data; too large → you blur away the very patterns you want to detect
-:::
-
-::: {.fragment}
-::: {.callout-tip}
-Always consider your **data source and sample size** before interpreting smoothed surfaces. A beautiful heat map can be misleading if the underlying point density is too low for the chosen resolution.
-:::
-:::
-:::
-
-## What is this argument `w`?
-
-It's magic. Just kidding, but it is indeed really powerful. It builds around the idea of connecting the value of a focal grid cell to the values of surrounding grid cells, as in the figure below. Hence, the name of the function `terra::focal()` where the argument is used.
+The idea is simple: replace each cell's value with a **summary of its neighbors**. A moving window slides across the entire raster — for each position, it collects the values inside the window and applies a function (e.g., `mean`).
 
 ![](../img/fig_focal_window.svg){.r-stretch fig-align="center"}
 
 ## It's just a simple base `R` matrix
 
-When using this matrix as input and applying the statistic `fun = mean`, we change the value of the focal grid cell to the mean of the values of itself and the 24 surrounding grid cells.
+The `w` argument defines the window. When using this matrix and `fun = mean`, we replace each cell with the mean of itself and its 24 neighbors.
 
 ```{r}
 #| output-location: fragment
@@ -761,12 +547,34 @@ weighted_w
 ```
 :::
 
-## Applying it to the rent grid data
+## Window size matters
+
+Now let's apply `focal()` to our rent data. The choice of window size is a trade-off: **larger windows** produce smoother surfaces but lose local detail.
+
+```{r}
+#| include: false
+# needed later for project() target
+rent_berlin_smooth <- terra::focal(rent_berlin, w = matrix(1, 5, 5), fun = mean, na.rm = TRUE)
+```
 
 :::: columns
-::: {.column width="50%"}
+::: {.column width="33%"}
 ```{r}
-#| fig.asp: .7
+#| fig.asp: .9
+#| output-location: fragment
+terra::focal(
+  rent_berlin,
+  w = matrix(1, 3, 3),
+  fun = mean,
+  na.rm = TRUE
+) |>
+  plot(main = "3×3")
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| fig.asp: .9
 #| output-location: fragment
 terra::focal(
   rent_berlin,
@@ -774,26 +582,193 @@ terra::focal(
   fun = mean,
   na.rm = TRUE
 ) |>
-  plot()
+  plot(main = "5×5")
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| fig.asp: .9
+#| output-location: fragment
+terra::focal(
+  rent_berlin,
+  w = matrix(1, 9, 9),
+  fun = mean,
+  na.rm = TRUE
+) |>
+  plot(main = "9×9")
+```
+:::
+::::
+
+::: {.fragment}
+Compare the 3×3 with the raw plot on the previous slide — the spatial structure (high rents in the west, lower in the east) becomes much clearer even with minimal smoothing.
+:::
+
+## From survey points to a density surface {.center style="text-align: center;"}
+
+## What if we don't have a grid?
+
+So far, we smoothed existing Census grid data. But what if we only have **point observations**, e.g., from a survey? We can create a density surface from scratch using `terra::rasterize()`.
+
+::: {.fragment}
+::: {.callout-note}
+Usually, when we talk about heat maps, we mean analyzing point patterns and whether they spatially cluster. `terra` might not be your best choice regarding more elaborate techniques to estimate density kernels and distance-based bandwidths between points to draw clusters. For this purpose, packages such as `spatstat` are better suited but require [learning about other data structures](https://r-spatial.org/book/11-PointPattern.html). That said, densities are more advanced ways of counting things in raster grid cells, and we can mimic this behavior also with `terra`. So, let's stick to this package and crop all of our points to the extent of Berlin.
+:::
+:::
+
+## The pipeline: points → grid → smooth
+
+![](../img/fig_point_to_raster_pipeline.svg){width="95%" fig-align="center"}
+
+::: {.fragment}
+```{r}
+#| echo: true
+#| output-location: column-fragment
+#| fig.asp: .5
+points_berlin <-
+  readRDS(
+    "./data/survey/synthetic_survey_geocoordinates.rds"
+  ) |>
+  sf::st_crop(berlin) # Step 1: crop to Berlin
+
+plot(sf::st_geometry(points_berlin))
+```
+:::
+
+## Create template and rasterize
+
+Our points are sparse — 1 km² cells would be mostly empty. So we count on a coarse 5 km grid first, then refine.
+
+```{r}
+#| echo: true
+#| output-location: column-fragment
+#| fig.asp: .8
+raster_template <-
+  points_berlin |>
+  sf::st_bbox() |> terra::ext() |>  # extent of points
+  terra::rast(resolution = 5000, crs = "EPSG:3035") # 5km grid
+
+points_berlin_density <-
+  terra::rasterize(
+    points_berlin,
+    raster_template,   # target grid
+    fun = "sum",       # count per cell
+    background = 0     # empty cells = 0
+  )
+
+plot(points_berlin_density)
+```
+
+## Step 4: Reproject and mask
+
+This doesn't look great yet. But we can reproject our 5 km grid onto a 1 km grid (matching the Census resolution) and mask to the Berlin border.
+
+```{r}
+#| echo: true
+#| output-location: column-fragment
+#| fig.asp: .55
+points_berlin_density <-
+  points_berlin_density |>
+  terra::project(rent_berlin) |> # match 1km grid
+  terra::mask(rent_berlin) # clip to Berlin
+
+plot(points_berlin_density)
+```
+
+## Step 5: Smooth — and compare to Census data
+
+Now we apply `focal()` to both our survey density and the Census rent data:
+
+:::: columns
+::: {.column width="50%"}
+```{r}
+#| fig.asp: .6
+#| output-location: fragment
+terra::focal(
+  rent_berlin,
+  w = matrix(1, 5, 5),
+  fun = mean,
+  na.rm = TRUE
+) |>
+  plot(main = "Census rent (5×5)")
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r}
-#| fig.asp: .7
+#| fig.asp: .6
 #| output-location: fragment
 focal(
-  rent_berlin,
-  w = weighted_w,
+  points_berlin_density,
+  w = matrix(1, 5, 5),
   fun = mean,
   na.rm = TRUE
 ) |>
-  plot()
+  plot(main = "Survey density (5×5)")
 ```
 :::
 ::::
 
-## Real life example: Detecting spatial boundaries
+## Taking a step back
+
+The Census grid (left) captures fine-grained variation because it covers the **entire population**. Our survey density (right) is driven by a **sparse sample** — the patterns look very different.
+
+::: {.fragment}
+**Keep in mind:**
+
+- Survey-based density surfaces are great for **exploratory visualization**, but they are **not a substitute** for high-resolution administrative data
+- Window size is a critical choice: too small → noise; too large → you blur away the signal
+
+::: {.callout-tip}
+Always consider your **data source and sample size** before interpreting smoothed surfaces.
+:::
+:::
+
+## New functions at a glance 🧰 (1/3)
+
+**Subsetting**
+
+| Function | What it does |
+|---|---|
+| `terra::crop(raster, extent)` | Cut raster to bounding box / extent |
+| `terra::mask(raster, polygon)` | Set cells outside polygon to `NA` |
+| `terra::ext()` | Inspect or compare spatial extents |
+| `sf::st_bbox() |> sf::st_as_sfc()` | Create a bounding-box geometry |
+
+## New functions at a glance 🧰 (2/3)
+
+**Extraction & Aggregation**
+
+| Function | What it does |
+|---|---|
+| `terra::extract(raster, points)` | Get raster values at point locations |
+| `sf::st_buffer(points, dist)` | Create circular buffers around points |
+| `terra::extract(..., fun = mean)` | Summarize buffer zones or polygons (mean, sum, …) |
+
+## New functions at a glance 🧰 (3/3)
+
+**Rasterize & Smooth**
+
+| Function | What it does |
+|---|---|
+| `terra::rasterize(points, grid, fun)` | Count / summarize points per cell |
+| `terra::project(raster, target)` | Reproject or resample to another grid |
+| `terra::focal(raster, w, fun)` | Moving-window smoothing / filter |
+| `w = matrix(1, n, n)` | Define an n × n focal window |
+| `sf::st_crop(points, polygon)` | Subset points to a study area |
+
+## Exercise 3_2: Extracting and Analyzing Raster Information {.center style="text-align: center;"}
+
+[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/3_2_Extracting_Analyzing_Raster_Information.html)
+
+![](../img/cat_quality.webp){width="15%" fig-align="center"}
+
+*AI-assisted picture*
+
+## Appendix {.center style="text-align: center;"}
+
+## Real life example: Detecting spatial boundaries {.center}
 
 Edge detection algorithms from image processing can be applied to raster data to identify sudden spatial changes. For instance, Legewie & Schaeffer (2016) used this technique to study ethnic neighborhood boundaries. We can apply the same idea to detect rent price boundaries — areas where average rents change abruptly, which may indicate gentrification fronts or distinct housing submarkets.
 
@@ -859,14 +834,6 @@ plot(rent_berlin_edges)
 ```
 :::
 ::::
-
-## Exercise 3_2: Extracting and Analyzing Raster Information {.center style="text-align: center;"}
-
-[🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/3_2_Extracting_Analyzing_Raster_Information.html)
-
-![](../img/cat_quality.webp){width="15%" fig-align="center"}
-
-*AI-assisted picture*
 
 ## Conversion {.center style="text-align: center;"}
 
