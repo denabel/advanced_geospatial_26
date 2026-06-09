@@ -64,6 +64,41 @@ We will show the use of packages we exploit in practice
 :::
 :::::
 
+## Housekeeping 🏠
+
+- 🎥 **Camera on** -- if feasible; it makes the workshop feel much more interactive
+- 🎙️ **Mute yourself** when not speaking to avoid background noise
+- ✋ **Raise your hand** if you have a question 
+- 💬 **Chat is your friend** -- feel free to post questions or comments anytime
+- ☕ **Breaks are sacred** -- we'll stick to the schedule, use them to recharge
+- 📂 **Work in `scripts/`** -- keep your own code there; but we may update other folders during the course
+- 🆘 **Stuck?** -- share your screen, and we'll debug together
+- 👥 **Breakout rooms** -- during exercises, we'll split into small groups so you can work together and help each other out
+
+## Course materials
+
+📥 [**Download**](https://github.com/denabel/advanced_geospatial_26/archive/refs/heads/main.zip)
+
+🌐 [**Browse online**](https://denabel.github.io/advanced_geospatial_26/)
+
+The repository contains everything you need:
+
+::: {.smaller-text}
+
+| Folder | Contents |
+|---|---|
+| `slides/` | Session slides (HTML, open in browser) |
+| `exercises/` | Exercises with tips & solutions (HTML) |
+| `data/` | Census grids, boundaries, survey data, … |
+| `scripts/` | **Your workspace** — write your code here! |
+| `R/` | Helper scripts (package installation, etc.) |
+
+:::
+
+::: {.callout-tip}
+Open **`advanced_geospatial_26.Rproj`** in RStudio first — this sets all file paths correctly so the code works out of the box.
+:::
+
 ## About us (Dennis)
 
 ::::: columns
@@ -124,7 +159,6 @@ We will show the use of packages we exploit in practice
 source("_ignore/sessions/course_content.R")
 course_content
 ```
-
 
 ## Now
 
