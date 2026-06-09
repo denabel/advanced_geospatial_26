@@ -18,6 +18,12 @@ editor_options:
   chunk_output_type: console
 ---
 
+::: callout-note
+## 🏡 Take-home exercise
+
+This exercise is designed for **after the course** — work on it at your own pace. It brings together everything you've learned across all sessions.
+:::
+
 In this session, we walked through a full research workflow — from accessing Earth observation data to linking it with survey data. Now it's your turn! Choose one of two paths:
 
 - **Path A** is open-ended: formulate your own spatial research question and tell a "spatial story" using the course data.

@@ -97,24 +97,16 @@ Our question: **Are people in countries that experienced unusual warming more co
 Why *anomalies* instead of absolute temperatures? A hot country isn't automatically more concerned — but a country that is *unusually* hot compared to its own history might be. The anomaly captures the deviation from "normal".
 
 ::: {.fragment}
+::: {.smaller-text}
 Here's the workflow we'll follow:
 
 1. **Survey data** (ISSP) → climate concern per country & year
-2. **EO data** (ERA5) → annual mean temperature per country & year
+2. **EO data** (ERA5) → annual mean temperature per country & year (focal: 1993, 2000, 2010, 2020)
 3. **Baseline** (1961–1990) → long-term "normal" temperature per country
 4. **Anomaly** = focal year temperature − baseline
 5. **Join & compare** — do anomalies track with concern?
 :::
-
-## EO indicators
-
-We want to investigate whether temperature anomalies in the year of the survey, compared to a long-running average, are associated with climate change concerns.
-
-1. *Indicator*: Temperature - annual average
-2. *Intensity*: Anomaly (mean deviation)
-3. *Focal time period*: 1993, 2000, 2010, 2020
-4. *Baseline period*: 1961-1990
-5. *Spatial buffer*: Country
+:::
 
 ## ERA5 data
 
@@ -122,28 +114,24 @@ The ERA5-Land Reanalysis from the Copernicus Climate Change Service is a suitabl
 
 ![](../img/eo_indicators.png){.r-stretch fig-align="center"}
 
-## Data access and preparation
+## Data access: Copernicus ERA5
 
-To access the data, we need an ECMWF account. Utilizing the `ecmwfr` package, we can access the data directly in `R`. Given that we want to aggregate the data at the country level, we first load country vector data and download the data according to the spatial extent of the countries included in the survey. The ISSP has a diverse membership from North and South America, Europe, Africa, and Asia. Thus, we can work with a global spatial extent when downloading the EO indicator.
-
-We also need some packages to load and prepare the world map and process the raster files (`rnaturalearth`, `sf`, `terra`, and `tidyverse`). We also need the `keyring` package to safely store our ECMWF-API key.
+To access ERA5 data, we use the `ecmwfr` package with a Copernicus API key. Since the ISSP covers countries across all continents, we download at global extent.
 
 ```{r}
 #| eval: false
-required_packages <- 
-  c("keyring", "rnaturalearth", "sf", "tidyverse", "terra", "devtools")
-
-new_packages <- 
-  required_packages[!(required_packages %in% installed.packages()[,"Package"])]
-
-if(length(new_packages)) install.packages(new_packages)
-
-lapply(required_packages, library, character.only = TRUE)
+# Store API key (one-time setup)
+keyring::key_set_with_value(service = "wf_api_key", password = "MY-API-KEY")
 ```
 
-## Country level shapefile
+::: {.callout-note}
+## 📦 Data already included
+The ERA5 files are pre-downloaded in `./data/era5/`. The following slides show how we obtained them so you understand the workflow — **you don't need to run this code yourself**.
+:::
 
-We load the vector data containing country-level polygons and subset it to the most relevant variables.
+## Country-level polygons
+
+We load world country polygons — these are our spatial units for aggregating the gridded temperature data.
 
 ```{r}
 #| echo: true
@@ -162,29 +150,6 @@ world <-
 
 plot(sf::st_geometry(world))
 ```
-
-## Accessing the Copernicus API
-
-A final step before we can access the data from the Copernicus API is to store our API key. The function automatically retrieves the key by setting it to `"wf_api_key"`.
-
-```{r}
-#| eval: false
-# Store as environment variable
-Sys.setenv(WF_API_KEY = "MY-API-KEY")
-
-api_key <- Sys.getenv("WF_API_KEY")
-
-keyring::key_set_with_value(service = "wf_api_key", password = api_key)
-```
-
-Now we can access the data. We loop the download over the four years of the survey program (1993, 2000, 2010, 2020) to create four separate files.
-
-::: {.fragment}
-::: {.callout-note}
-## 📦 Data already included
-The ERA5 files are pre-downloaded in `./data/era5/`. The following slides show how we obtained them so you understand the workflow — **you don't need to run this code yourself**.
-:::
-:::
 
 ## Downloading the data
 
@@ -226,20 +191,16 @@ for (yr in c("1993", "2000", "2010", "2020")) {
 ```
 :::
 
-## Importing the data
+## Importing and inspecting the data
 
-Importing the data into `R` should feel natural to us right now. We simply use `terra::rast()` for this endeavour.
+Each file contains 12 monthly layers for one year. Let's load all four focal years and inspect the 2020 cube.
 
 ```{r}
 temp_1993 <- terra::rast("./data/era5/era5_temperature1993.grib")
 temp_2000 <- terra::rast("./data/era5/era5_temperature2000.grib")
 temp_2010 <- terra::rast("./data/era5/era5_temperature2010.grib")
-temp_2020 <- terra::rast("./data/era5/era5_temperature2020.grib")
+temp_2020 <- terra::rast("./data/era5/era5_temperature2020.grib") 
 ```
-
-## Inspecting the data
-
-Let's inspect the datacube for 2020 and plot the first layer of the 2020 datacube (January 2020). The file's attributes tell us information on the dimensions (number of rows, columns, and layers), the resolution, spatial extent, the coordinate reference system, units, and time points.
 
 :::: columns
 ::: {.column width="50%"}
@@ -253,7 +214,7 @@ temp_2020
 ```{r}
 #| output-location: fragment
 #| fig.asp: .7
-plot(temp_2020[[1]])
+plot(temp_2020[[1]]) # January 2020
 ```
 :::
 ::::
@@ -270,7 +231,7 @@ for (yr in c("1993", "2000", "2010", "2020")) {
   temp_data <- get(paste0("temp_", yr))
   
   # Check CRS of both datasets and adjust if necessary
-  if(!identical(terra::crs(world), terra::crs(temp_data))) {
+  if (!identical(terra::crs(world), terra::crs(temp_data))) {
     world <- 
       world |>
       sf::st_transform(sf::st_crs(temp_data))
@@ -311,113 +272,37 @@ plot(world["temp_2020"])
 ```
 :::
 
-## Gathering the baseline data
+## Baseline: same workflow for 1961–1990
 
-Now that we have the focal values for all four survey years, we redo the process for the baseline period (1961-1990). (Again, this data is already pre-downloaded — the code is shown for reference.)
-
-::: {.smaller-text}
-```{r}
-#| eval: false
-# Specify API request
-request <- 
-  list(
-    data_format = "grib",
-    variable = "2m_temperature",
-    product_type = "monthly_averaged_reanalysis",
-    time = "00:00",
-    year = as.character(1961:1990),
-    month = 
-      c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"),
-    area = c(90, -180, -90, 180),
-    dataset_short_name = "reanalysis-era5-land-monthly-means",
-    target = "era5_temperature1961-1990.grib"
-  )
-
-# Download data from C3S
-file_path <- 
-  ecmwfr::wf_request(
-    request = request,
-    transfer = TRUE,
-    path = "./data/era5",
-    verbose = FALSE
-  )
-```
-:::
-
-## Importing the data
-
-Again, we use `terra::rast()` to import the data.
+We repeat the exact same process for the baseline period. The download code is analogous (see Appendix) — here we import and aggregate directly.
 
 ```{r}
-#| output-location: fragment
 temp_base <- terra::rast("./data/era5/era5_temperature1961-1990.grib")
-
-temp_base
-```
-
-
-## Aggregating to the country level
-
-We also aggregate these data at the country level and add them to our country polygon vector data.
-
-```{r}
-#| eval: false
-# Check CRS of both datasets and adjust if necessary
-if(!identical(terra::crs(world), terra::crs(temp_base))) {
-  world <- 
-    world |>
-    sf::st_transform(crs = sf::st_crs(temp_base))
-}
-
-# Collapse all into one layer by averaging across months and years
-annual_values <- terra::app(temp_base, fun = mean, na.rm = TRUE, cores = 4)
-
-# Aggregate by country
-country_values <- 
-  terra::extract(
-    annual_values,
-    world,
-    fun = mean,
-    na.rm = TRUE
-  )
-
-# Add values to vector data
-world$temp_base <- country_values[, 2]
 ```
 
 ```{r}
 #| echo: false
-# Check CRS of both datasets and adjust if necessary
 if(!identical(terra::crs(world), terra::crs(temp_base))) {
-  world <- 
-    world |>
-    sf::st_transform(crs = sf::st_crs(temp_base))
+  world <- world |> sf::st_transform(crs = sf::st_crs(temp_base))
 }
-
-# Collapse all into one layer by averaging across months and years
-annual_values_base <- 
-  readRDS("./data/era5/annual_values_base.rds")
-
-# Aggregate by country
-country_values <- 
-  terra::extract(
-    annual_values_base,
-    world,
-    fun = mean,
-    na.rm = TRUE
-  )
-
-# Add values to vector data
+annual_values_base <- readRDS("./data/era5/annual_values_base.rds")
+country_values <- terra::extract(annual_values_base, world, fun = mean, na.rm = TRUE)
 world$temp_base <- country_values[, 2]
 ```
 
+```{r}
+#| eval: false
+# Same pattern: app() to collapse months/years → extract() by country
+annual_values <- terra::app(temp_base, fun = mean, na.rm = TRUE, cores = 4)
+world$temp_base <- terra::extract(annual_values, world, fun = mean, na.rm = TRUE)[, 2]
+```
 
-## The result
-
+::: {.fragment}
 ```{r}
 #| output-location: fragment
 head(world)
 ```
+:::
 
 ## Calculating deviations
 
@@ -669,7 +554,9 @@ $\rightarrow$ But as a **workflow demonstration**, this shows how survey and EO 
 :::
 :::
 
-## Exercise 7_1: Data Integration {.center style="text-align: center;"}
+## Exercise 7_1: Data Integration 🏡 {.center style="text-align: center;"}
+
+This is a **take-home exercise** — work on it after the course at your own pace!
 
 [🖱 Click here to open the exercise](https://denabel.github.io/advanced_geospatial_26/exercises/7_1_Data_Integration.html)
 
