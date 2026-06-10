@@ -38,6 +38,8 @@ of workflow for data integration with users' datasets, such as survey data. This
 course is advanced and suitable for students and scientists who feel familiar 
 with R and have some basic knowledge of working with geodata. 
 
+> 📚 **New to geospatial data in R?** Check out our introductory course [Geospatial Techniques in R](https://github.com/StefanJuenger/gesis-workshop-geospatial-techniques-R-2026) — it covers the fundamentals this course builds on.
+
 ## 📦 What do you find here?
 This page comprises the official workshop repository with the most recent changes 
 to our materials. You can find all the course data, slides, and exercises here. 
